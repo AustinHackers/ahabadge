@@ -9112,6 +9112,103 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_vt500serie
 </deviceset>
 </devicesets>
 </library>
+<library name="Displays">
+<packages>
+<package name="NHD-C12832A1Z">
+<wire x1="-20.7" y1="-12.15" x2="-20.7" y2="12.15" width="0.127" layer="21"/>
+<wire x1="-20.7" y1="12.15" x2="20.7" y2="12.15" width="0.127" layer="21"/>
+<wire x1="20.7" y1="12.15" x2="20.7" y2="-12.15" width="0.127" layer="21"/>
+<wire x1="20.7" y1="-12.15" x2="-20.7" y2="-12.15" width="0.127" layer="21"/>
+<wire x1="-19.8" y1="-11.25" x2="19.8" y2="-11.25" width="0.127" layer="21"/>
+<wire x1="19.8" y1="-11.25" x2="19.8" y2="11.25" width="0.127" layer="21"/>
+<wire x1="19.8" y1="11.25" x2="-19.8" y2="11.25" width="0.127" layer="21"/>
+<wire x1="-19.8" y1="11.25" x2="-19.8" y2="-11.25" width="0.127" layer="21"/>
+<pad name="1" x="-12" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="2" x="-10.5" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="3" x="-9" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="4" x="-7.5" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="5" x="-6" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="6" x="-4.5" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="7" x="-3" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="8" x="-1.5" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="9" x="0" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="10" x="1.5" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="11" x="3" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="12" x="4.5" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="13" x="6" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="14" x="7.5" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="15" x="9" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="16" x="10.5" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="17" x="12" y="-11.55" drill="0.6" shape="offset" rot="R270"/>
+<pad name="A" x="-17.3" y="-9.6" drill="1.3"/>
+<pad name="K" x="17.3" y="-9.6" drill="1.3"/>
+</package>
+</packages>
+<symbols>
+<symbol name="NHD-C12832A1Z">
+<pin name="/CS1" x="0" y="-5.08" length="middle" rot="R90"/>
+<pin name="/RST" x="2.54" y="-5.08" length="middle" rot="R90"/>
+<pin name="A0" x="5.08" y="-5.08" length="middle" rot="R90"/>
+<pin name="SCL" x="7.62" y="-5.08" length="middle" rot="R90"/>
+<pin name="SI" x="10.16" y="-5.08" length="middle" rot="R90"/>
+<pin name="VDD" x="12.7" y="-5.08" length="middle" rot="R90"/>
+<pin name="VSS" x="15.24" y="-5.08" length="middle" rot="R90"/>
+<pin name="VOUT" x="17.78" y="-5.08" length="middle" rot="R90"/>
+<pin name="C1-" x="20.32" y="-5.08" length="middle" rot="R90"/>
+<pin name="C1+" x="22.86" y="-5.08" length="middle" rot="R90"/>
+<pin name="C2-" x="25.4" y="-5.08" length="middle" rot="R90"/>
+<pin name="C2+" x="27.94" y="-5.08" length="middle" rot="R90"/>
+<pin name="V4" x="40.64" y="2.54" length="middle" rot="R180"/>
+<pin name="V3" x="40.64" y="5.08" length="middle" rot="R180"/>
+<pin name="V2" x="40.64" y="7.62" length="middle" rot="R180"/>
+<pin name="V1" x="40.64" y="10.16" length="middle" rot="R180"/>
+<pin name="V0" x="40.64" y="12.7" length="middle" rot="R180"/>
+<pin name="K" x="-12.7" y="5.08" length="middle"/>
+<pin name="A" x="-12.7" y="10.16" length="middle"/>
+<wire x1="-7.62" y1="15.24" x2="35.56" y2="15.24" width="0.254" layer="94"/>
+<wire x1="35.56" y1="15.24" x2="35.56" y2="0" width="0.254" layer="94"/>
+<wire x1="35.56" y1="0" x2="-7.62" y2="0" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="0" x2="-7.62" y2="15.24" width="0.254" layer="94"/>
+<text x="-5.08" y="17.78" size="1.27" layer="95">&gt;NAME</text>
+<text x="0" y="10.16" size="1.27" layer="96">&gt;VALUE</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="NHD-C12832A1Z">
+<gates>
+<gate name="G$1" symbol="NHD-C12832A1Z" x="-15.24" y="-7.62"/>
+</gates>
+<devices>
+<device name="" package="NHD-C12832A1Z">
+<connects>
+<connect gate="G$1" pin="/CS1" pad="17"/>
+<connect gate="G$1" pin="/RST" pad="16"/>
+<connect gate="G$1" pin="A" pad="A"/>
+<connect gate="G$1" pin="A0" pad="15"/>
+<connect gate="G$1" pin="C1+" pad="8"/>
+<connect gate="G$1" pin="C1-" pad="9"/>
+<connect gate="G$1" pin="C2+" pad="7"/>
+<connect gate="G$1" pin="C2-" pad="6"/>
+<connect gate="G$1" pin="K" pad="K"/>
+<connect gate="G$1" pin="SCL" pad="14"/>
+<connect gate="G$1" pin="SI" pad="13"/>
+<connect gate="G$1" pin="V0" pad="1"/>
+<connect gate="G$1" pin="V1" pad="2"/>
+<connect gate="G$1" pin="V2" pad="3"/>
+<connect gate="G$1" pin="V3" pad="4"/>
+<connect gate="G$1" pin="V4" pad="5"/>
+<connect gate="G$1" pin="VDD" pad="12"/>
+<connect gate="G$1" pin="VOUT" pad="10"/>
+<connect gate="G$1" pin="VSS" pad="11"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -9149,6 +9246,7 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_vt500serie
 <part name="GND5" library="supply1" deviceset="GND" device=""/>
 <part name="R3" library="rcl" deviceset="R-EU_" device="R0603" value="0"/>
 <part name="P+5" library="supply1" deviceset="VCC" device=""/>
+<part name="LCD" library="Displays" deviceset="NHD-C12832A1Z" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -9183,6 +9281,7 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_vt500serie
 <instance part="GND5" gate="1" x="-10.16" y="68.58"/>
 <instance part="R3" gate="G$1" x="-10.16" y="91.44" rot="R90"/>
 <instance part="P+5" gate="VCC" x="-10.16" y="104.14"/>
+<instance part="LCD" gate="G$1" x="71.12" y="-22.86"/>
 </instances>
 <busses>
 </busses>
