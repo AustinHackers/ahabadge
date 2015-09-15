@@ -130,7 +130,11 @@
 </layers>
 <board>
 <plain>
-<wire x1="0" y1="0" x2="81.28" y2="0" width="0" layer="20"/>
+<wire x1="0" y1="0" x2="7.62" y2="0" width="0" layer="20"/>
+<wire x1="7.62" y1="0" x2="7.62" y2="10.795" width="0" layer="20"/>
+<wire x1="7.62" y1="10.795" x2="13.97" y2="10.795" width="0" layer="20"/>
+<wire x1="13.97" y1="10.795" x2="13.97" y2="0" width="0" layer="20"/>
+<wire x1="13.97" y1="0" x2="81.28" y2="0" width="0" layer="20"/>
 <wire x1="81.28" y1="0" x2="81.28" y2="71.12" width="0" layer="20"/>
 <wire x1="81.28" y1="71.12" x2="71.12" y2="101.6" width="0" layer="20"/>
 <wire x1="71.12" y1="101.6" x2="63.5" y2="101.6" width="0" layer="20"/>
@@ -174,18 +178,14 @@
 <vertex x="78.74" y="56.515"/>
 <vertex x="55.88" y="56.515"/>
 </polygon>
-<polygon width="0" layer="20">
-<vertex x="47.625" y="99.695"/>
-<vertex x="52.705" y="99.695"/>
-<vertex x="52.705" y="97.79"/>
-<vertex x="47.625" y="97.79"/>
-</polygon>
-<polygon width="0" layer="20">
-<vertex x="28.575" y="99.695"/>
-<vertex x="33.655" y="99.695"/>
-<vertex x="33.655" y="97.79"/>
-<vertex x="28.575" y="97.79"/>
-</polygon>
+<wire x1="28.575" y1="99.695" x2="33.655" y2="99.695" width="0" layer="46"/>
+<wire x1="33.655" y1="99.695" x2="33.655" y2="97.79" width="0" layer="46"/>
+<wire x1="33.655" y1="97.79" x2="28.575" y2="97.79" width="0" layer="46"/>
+<wire x1="28.575" y1="97.79" x2="28.575" y2="99.695" width="0" layer="46"/>
+<wire x1="47.625" y1="99.695" x2="52.705" y2="99.695" width="0" layer="46"/>
+<wire x1="52.705" y1="99.695" x2="52.705" y2="97.79" width="0" layer="46"/>
+<wire x1="52.705" y1="97.79" x2="47.625" y2="97.79" width="0" layer="46"/>
+<wire x1="47.625" y1="97.79" x2="47.625" y2="99.695" width="0" layer="46"/>
 </plain>
 <libraries>
 <library name="Freescale">
@@ -2016,7 +2016,7 @@ Metric Code Size 1608</description>
 <wire x1="2.9845" y1="-2.54" x2="-2.9845" y2="-2.54" width="0.127" layer="51"/>
 <text x="-3.81" y="3.81" size="1.27" layer="25">&gt;NAME</text>
 <text x="-3.81" y="2.54" size="1.27" layer="27">&gt;VALUE</text>
-<polygon width="0.127" layer="20">
+<polygon width="0.127" layer="48">
 <vertex x="-3.175" y="-1.905"/>
 <vertex x="3.175" y="-1.905"/>
 <vertex x="3.175" y="-12.7"/>

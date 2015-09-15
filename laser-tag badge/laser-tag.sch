@@ -7474,7 +7474,7 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <wire x1="2.9845" y1="-2.54" x2="-2.9845" y2="-2.54" width="0.127" layer="51"/>
 <text x="-3.81" y="3.81" size="1.27" layer="25">&gt;NAME</text>
 <text x="-3.81" y="2.54" size="1.27" layer="27">&gt;VALUE</text>
-<polygon width="0.127" layer="20">
+<polygon width="0.127" layer="48">
 <vertex x="-3.175" y="-1.905"/>
 <vertex x="3.175" y="-1.905"/>
 <vertex x="3.175" y="-12.7"/>
