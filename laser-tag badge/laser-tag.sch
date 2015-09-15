@@ -7468,12 +7468,18 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <wire x1="2.54" y1="-2.54" x2="-2.54" y2="-2.54" width="0.127" layer="51"/>
 <wire x1="-2.54" y1="-2.54" x2="-2.54" y2="1.27" width="0.127" layer="51"/>
 <wire x1="1.27" y1="0" x2="6.35" y2="0" width="0.127" layer="51"/>
-<wire x1="-3.81" y1="-2.54" x2="-3.81" y2="-12.7" width="0.127" layer="51"/>
-<wire x1="-3.81" y1="-12.7" x2="3.81" y2="-12.7" width="0.127" layer="51"/>
-<wire x1="3.81" y1="-12.7" x2="3.81" y2="-2.54" width="0.127" layer="51"/>
-<wire x1="3.81" y1="-2.54" x2="-3.81" y2="-2.54" width="0.127" layer="51"/>
-<text x="-3.81" y="2.54" size="1.27" layer="25">&gt;NAME</text>
-<text x="-3.81" y="-5.08" size="1.27" layer="27">&gt;VALUE</text>
+<wire x1="-2.9845" y1="-2.54" x2="-2.9845" y2="-12.7" width="0.127" layer="51"/>
+<wire x1="-2.9845" y1="-12.7" x2="2.9845" y2="-12.7" width="0.127" layer="51"/>
+<wire x1="2.9845" y1="-12.7" x2="2.9845" y2="-2.54" width="0.127" layer="51"/>
+<wire x1="2.9845" y1="-2.54" x2="-2.9845" y2="-2.54" width="0.127" layer="51"/>
+<text x="-3.81" y="3.81" size="1.27" layer="25">&gt;NAME</text>
+<text x="-3.81" y="2.54" size="1.27" layer="27">&gt;VALUE</text>
+<polygon width="0.127" layer="46">
+<vertex x="-3.175" y="-1.905"/>
+<vertex x="3.175" y="-1.905"/>
+<vertex x="3.175" y="-12.7"/>
+<vertex x="-3.175" y="-12.7"/>
+</polygon>
 </package>
 </packages>
 <symbols>
@@ -9247,6 +9253,19 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_vt500serie
 <part name="R3" library="rcl" deviceset="R-EU_" device="R0603" value="0"/>
 <part name="P+5" library="supply1" deviceset="VCC" device=""/>
 <part name="LCD" library="Displays" deviceset="NHD-C12832A1Z" device=""/>
+<part name="C6" library="rcl" deviceset="C-EU" device="C0603K"/>
+<part name="C7" library="rcl" deviceset="C-EU" device="C0603K"/>
+<part name="C8" library="rcl" deviceset="C-EU" device="C0603K"/>
+<part name="C9" library="rcl" deviceset="C-EU" device="C0603K"/>
+<part name="C10" library="rcl" deviceset="C-EU" device="C0603K"/>
+<part name="C11" library="rcl" deviceset="C-EU" device="C0603K"/>
+<part name="C12" library="rcl" deviceset="C-EU" device="C0603K"/>
+<part name="C13" library="rcl" deviceset="C-EU" device="C0603K"/>
+<part name="GND6" library="supply1" deviceset="GND" device=""/>
+<part name="GND7" library="supply1" deviceset="GND" device=""/>
+<part name="T2" library="transistor" deviceset="*-NPN-" device="SOT23-EBC"/>
+<part name="R4" library="rcl" deviceset="R-EU_" device="R0603" value="10"/>
+<part name="P+7" library="supply1" deviceset="VCC" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -9269,7 +9288,10 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_vt500serie
 <instance part="BREAKOUT2" gate="A" x="-68.58" y="43.18"/>
 <instance part="LD1" gate="A" x="-43.18" y="91.44" rot="R270"/>
 <instance part="P+1" gate="VCC" x="-43.18" y="104.14"/>
-<instance part="T1" gate="G$1" x="-40.64" y="76.2" rot="MR0"/>
+<instance part="T1" gate="G$1" x="-40.64" y="76.2" smashed="yes" rot="MR0">
+<attribute name="NAME" x="-43.18" y="76.2" size="1.778" layer="95" rot="MR0"/>
+<attribute name="VALUE" x="-30.48" y="81.28" size="1.778" layer="96" rot="MR0"/>
+</instance>
 <instance part="GND1" gate="1" x="-43.18" y="53.34"/>
 <instance part="PH1" gate="G$1" x="-25.4" y="91.44"/>
 <instance part="P+2" gate="VCC" x="-25.4" y="104.14"/>
@@ -9281,9 +9303,31 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_vt500serie
 <instance part="GND5" gate="1" x="-10.16" y="68.58"/>
 <instance part="R3" gate="G$1" x="-10.16" y="91.44" rot="R90"/>
 <instance part="P+5" gate="VCC" x="-10.16" y="104.14"/>
-<instance part="LCD" gate="G$1" x="71.12" y="-22.86"/>
+<instance part="LCD" gate="G$1" x="25.4" y="-17.78"/>
+<instance part="C6" gate="G$1" x="76.2" y="-10.16" rot="R90"/>
+<instance part="C7" gate="G$1" x="76.2" y="-5.08" rot="R90"/>
+<instance part="C8" gate="G$1" x="76.2" y="0" rot="R90"/>
+<instance part="C9" gate="G$1" x="76.2" y="-15.24" rot="R90"/>
+<instance part="C10" gate="G$1" x="76.2" y="-20.32" rot="R90"/>
+<instance part="C11" gate="G$1" x="43.18" y="-30.48" rot="R180"/>
+<instance part="C12" gate="G$1" x="48.26" y="-30.48" rot="R180"/>
+<instance part="C13" gate="G$1" x="53.34" y="-30.48" rot="R180"/>
+<instance part="GND6" gate="1" x="43.18" y="-43.18"/>
+<instance part="GND7" gate="1" x="-5.08" y="-43.18"/>
+<instance part="T2" gate="G$1" x="-2.54" y="-20.32" smashed="yes" rot="MR0">
+<attribute name="NAME" x="-5.08" y="-20.32" size="1.778" layer="95" rot="MR0"/>
+<attribute name="VALUE" x="7.62" y="-15.24" size="1.778" layer="96" rot="MR0"/>
+</instance>
+<instance part="R4" gate="G$1" x="-5.08" y="-33.02" rot="R90"/>
+<instance part="P+7" gate="VCC" x="10.16" y="-2.54"/>
 </instances>
 <busses>
+<bus name="PTE0,PTE20,PTE21,PTE22,PTE23,PTE31">
+<segment>
+<wire x1="5.08" y1="96.52" x2="5.08" y2="-35.56" width="0.762" layer="92"/>
+<wire x1="5.08" y1="-35.56" x2="33.02" y2="-35.56" width="0.762" layer="92"/>
+</segment>
+</bus>
 </busses>
 <nets>
 <net name="GND" class="0">
@@ -9375,6 +9419,41 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_vt500serie
 <pinref part="GND5" gate="1" pin="GND"/>
 <wire x1="-10.16" y1="73.66" x2="-10.16" y2="71.12" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="LCD" gate="G$1" pin="VSS"/>
+<pinref part="C11" gate="G$1" pin="1"/>
+<wire x1="43.18" y1="-33.02" x2="43.18" y2="-38.1" width="0.1524" layer="91"/>
+<wire x1="43.18" y1="-38.1" x2="40.64" y2="-38.1" width="0.1524" layer="91"/>
+<wire x1="40.64" y1="-38.1" x2="40.64" y2="-22.86" width="0.1524" layer="91"/>
+<junction x="43.18" y="-38.1"/>
+<pinref part="C8" gate="G$1" pin="2"/>
+<wire x1="81.28" y1="0" x2="83.82" y2="0" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="0" x2="83.82" y2="-5.08" width="0.1524" layer="91"/>
+<pinref part="C7" gate="G$1" pin="2"/>
+<wire x1="83.82" y1="-5.08" x2="81.28" y2="-5.08" width="0.1524" layer="91"/>
+<pinref part="C6" gate="G$1" pin="2"/>
+<wire x1="81.28" y1="-10.16" x2="83.82" y2="-10.16" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="-10.16" x2="83.82" y2="-5.08" width="0.1524" layer="91"/>
+<junction x="83.82" y="-5.08"/>
+<pinref part="C9" gate="G$1" pin="2"/>
+<wire x1="81.28" y1="-15.24" x2="83.82" y2="-15.24" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="-15.24" x2="83.82" y2="-10.16" width="0.1524" layer="91"/>
+<junction x="83.82" y="-10.16"/>
+<pinref part="C10" gate="G$1" pin="2"/>
+<wire x1="81.28" y1="-20.32" x2="83.82" y2="-20.32" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="-20.32" x2="83.82" y2="-15.24" width="0.1524" layer="91"/>
+<junction x="83.82" y="-15.24"/>
+<wire x1="43.18" y1="-38.1" x2="83.82" y2="-38.1" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="-38.1" x2="83.82" y2="-20.32" width="0.1524" layer="91"/>
+<junction x="83.82" y="-20.32"/>
+<pinref part="GND6" gate="1" pin="GND"/>
+<wire x1="43.18" y1="-38.1" x2="43.18" y2="-40.64" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="R4" gate="G$1" pin="1"/>
+<pinref part="GND7" gate="1" pin="GND"/>
+<wire x1="-5.08" y1="-38.1" x2="-5.08" y2="-40.64" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="VCC" class="0">
 <segment>
@@ -9460,6 +9539,17 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_vt500serie
 <pinref part="R3" gate="G$1" pin="2"/>
 <wire x1="-10.16" y1="101.6" x2="-10.16" y2="96.52" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="LCD" gate="G$1" pin="VDD"/>
+<wire x1="38.1" y1="-22.86" x2="38.1" y2="-25.4" width="0.1524" layer="91"/>
+<wire x1="38.1" y1="-25.4" x2="10.16" y2="-25.4" width="0.1524" layer="91"/>
+<pinref part="LCD" gate="G$1" pin="A"/>
+<wire x1="12.7" y1="-7.62" x2="10.16" y2="-7.62" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="-7.62" x2="10.16" y2="-5.08" width="0.1524" layer="91"/>
+<pinref part="P+7" gate="VCC" pin="VCC"/>
+<wire x1="10.16" y1="-25.4" x2="10.16" y2="-7.62" width="0.1524" layer="91"/>
+<junction x="10.16" y="-7.62"/>
+</segment>
 </net>
 <net name="PTA3" class="0">
 <segment>
@@ -9507,22 +9597,29 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_vt500serie
 <segment>
 <pinref part="U1" gate="A" pin="PTE0"/>
 <wire x1="10.16" y1="99.06" x2="7.62" y2="99.06" width="0.1524" layer="91"/>
+<wire x1="7.62" y1="99.06" x2="5.08" y2="96.52" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="1"/>
 <wire x1="-111.76" y1="60.96" x2="-116.84" y2="60.96" width="0.1524" layer="91"/>
 <label x="-116.84" y="60.96" size="1.778" layer="95" rot="R180"/>
 </segment>
+<segment>
+<pinref part="LCD" gate="G$1" pin="/RST"/>
+<label x="27.94" y="-25.4" size="1.778" layer="95" rot="R270"/>
+<wire x1="27.94" y1="-22.86" x2="27.94" y2="-33.02" width="0.1524" layer="91"/>
+<wire x1="27.94" y1="-33.02" x2="25.4" y2="-35.56" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="PTE1" class="0">
-<segment>
-<pinref part="U1" gate="A" pin="PTE1"/>
-<wire x1="10.16" y1="96.52" x2="7.62" y2="96.52" width="0.1524" layer="91"/>
-</segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="2"/>
 <wire x1="-104.14" y1="60.96" x2="-99.06" y2="60.96" width="0.1524" layer="91"/>
 <label x="-99.06" y="60.96" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U1" gate="A" pin="PTE1"/>
+<wire x1="10.16" y1="96.52" x2="7.62" y2="96.52" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="USB0_DP" class="0">
@@ -9577,44 +9674,72 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_vt500serie
 <segment>
 <pinref part="U1" gate="A" pin="PTE20"/>
 <wire x1="10.16" y1="78.74" x2="7.62" y2="78.74" width="0.1524" layer="91"/>
+<wire x1="7.62" y1="78.74" x2="5.08" y2="76.2" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="9"/>
 <wire x1="-111.76" y1="50.8" x2="-116.84" y2="50.8" width="0.1524" layer="91"/>
 <label x="-116.84" y="50.8" size="1.778" layer="95" rot="R180"/>
 </segment>
+<segment>
+<pinref part="LCD" gate="G$1" pin="/CS1"/>
+<label x="25.4" y="-25.4" size="1.778" layer="95" rot="R270"/>
+<wire x1="25.4" y1="-22.86" x2="25.4" y2="-33.02" width="0.1524" layer="91"/>
+<wire x1="25.4" y1="-33.02" x2="22.86" y2="-35.56" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="PTE21" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="PTE21"/>
 <wire x1="10.16" y1="76.2" x2="7.62" y2="76.2" width="0.1524" layer="91"/>
+<wire x1="7.62" y1="76.2" x2="5.08" y2="73.66" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="10"/>
 <wire x1="-104.14" y1="50.8" x2="-99.06" y2="50.8" width="0.1524" layer="91"/>
 <label x="-99.06" y="50.8" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="LCD" gate="G$1" pin="A0"/>
+<label x="30.48" y="-25.4" size="1.778" layer="95" rot="R270"/>
+<wire x1="30.48" y1="-22.86" x2="30.48" y2="-33.02" width="0.1524" layer="91"/>
+<wire x1="30.48" y1="-33.02" x2="27.94" y2="-35.56" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="PTE22" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="PTE22"/>
 <wire x1="10.16" y1="73.66" x2="7.62" y2="73.66" width="0.1524" layer="91"/>
+<wire x1="7.62" y1="73.66" x2="5.08" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="11"/>
 <wire x1="-111.76" y1="48.26" x2="-116.84" y2="48.26" width="0.1524" layer="91"/>
 <label x="-116.84" y="48.26" size="1.778" layer="95" rot="R180"/>
 </segment>
+<segment>
+<pinref part="LCD" gate="G$1" pin="SCL"/>
+<label x="33.02" y="-25.4" size="1.778" layer="95" rot="R270"/>
+<wire x1="33.02" y1="-22.86" x2="33.02" y2="-33.02" width="0.1524" layer="91"/>
+<wire x1="33.02" y1="-33.02" x2="30.48" y2="-35.56" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="PTE23" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="PTE23"/>
 <wire x1="10.16" y1="71.12" x2="7.62" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="7.62" y1="71.12" x2="5.08" y2="68.58" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="12"/>
 <wire x1="-104.14" y1="48.26" x2="-99.06" y2="48.26" width="0.1524" layer="91"/>
 <label x="-99.06" y="48.26" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="LCD" gate="G$1" pin="SI"/>
+<label x="35.56" y="-25.4" size="1.778" layer="95" rot="R270"/>
+<wire x1="35.56" y1="-22.86" x2="35.56" y2="-33.02" width="0.1524" layer="91"/>
+<wire x1="35.56" y1="-33.02" x2="33.02" y2="-35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="VREFH" class="0">
@@ -9675,11 +9800,18 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_vt500serie
 <segment>
 <pinref part="U1" gate="A" pin="PTE31"/>
 <wire x1="10.16" y1="53.34" x2="7.62" y2="53.34" width="0.1524" layer="91"/>
+<wire x1="7.62" y1="53.34" x2="5.08" y2="50.8" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="19"/>
 <wire x1="-111.76" y1="38.1" x2="-116.84" y2="38.1" width="0.1524" layer="91"/>
 <label x="-116.84" y="38.1" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<pinref part="T2" gate="G$1" pin="B"/>
+<wire x1="0" y1="-20.32" x2="2.54" y2="-20.32" width="0.1524" layer="91"/>
+<label x="-2.54" y="-17.78" size="1.778" layer="95"/>
+<wire x1="2.54" y1="-20.32" x2="5.08" y2="-17.78" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="PTE24" class="0">
@@ -10128,6 +10260,103 @@ Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_vt500serie
 <pinref part="BREAKOUT1" gate="A" pin="7"/>
 <wire x1="-111.76" y1="53.34" x2="-116.84" y2="53.34" width="0.1524" layer="91"/>
 <label x="-116.84" y="53.34" size="1.778" layer="95" rot="R180"/>
+</segment>
+</net>
+<net name="N$15" class="0">
+<segment>
+<pinref part="LCD" gate="G$1" pin="V0"/>
+<wire x1="66.04" y1="-5.08" x2="68.58" y2="-5.08" width="0.1524" layer="91"/>
+<wire x1="68.58" y1="-5.08" x2="68.58" y2="0" width="0.1524" layer="91"/>
+<pinref part="C8" gate="G$1" pin="1"/>
+<wire x1="68.58" y1="0" x2="73.66" y2="0" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$16" class="0">
+<segment>
+<pinref part="LCD" gate="G$1" pin="V1"/>
+<wire x1="66.04" y1="-7.62" x2="71.12" y2="-7.62" width="0.1524" layer="91"/>
+<wire x1="71.12" y1="-7.62" x2="71.12" y2="-5.08" width="0.1524" layer="91"/>
+<pinref part="C7" gate="G$1" pin="1"/>
+<wire x1="71.12" y1="-5.08" x2="73.66" y2="-5.08" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$17" class="0">
+<segment>
+<pinref part="LCD" gate="G$1" pin="V2"/>
+<pinref part="C6" gate="G$1" pin="1"/>
+<wire x1="66.04" y1="-10.16" x2="73.66" y2="-10.16" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$18" class="0">
+<segment>
+<pinref part="LCD" gate="G$1" pin="V3"/>
+<wire x1="66.04" y1="-12.7" x2="71.12" y2="-12.7" width="0.1524" layer="91"/>
+<wire x1="71.12" y1="-12.7" x2="71.12" y2="-15.24" width="0.1524" layer="91"/>
+<pinref part="C9" gate="G$1" pin="1"/>
+<wire x1="71.12" y1="-15.24" x2="73.66" y2="-15.24" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$19" class="0">
+<segment>
+<pinref part="LCD" gate="G$1" pin="V4"/>
+<wire x1="66.04" y1="-15.24" x2="68.58" y2="-15.24" width="0.1524" layer="91"/>
+<wire x1="68.58" y1="-15.24" x2="68.58" y2="-20.32" width="0.1524" layer="91"/>
+<pinref part="C10" gate="G$1" pin="1"/>
+<wire x1="68.58" y1="-20.32" x2="73.66" y2="-20.32" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$21" class="0">
+<segment>
+<pinref part="LCD" gate="G$1" pin="C2+"/>
+<pinref part="C13" gate="G$1" pin="2"/>
+<wire x1="53.34" y1="-22.86" x2="53.34" y2="-25.4" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$22" class="0">
+<segment>
+<pinref part="C13" gate="G$1" pin="1"/>
+<wire x1="53.34" y1="-33.02" x2="53.34" y2="-35.56" width="0.1524" layer="91"/>
+<pinref part="LCD" gate="G$1" pin="C2-"/>
+<wire x1="53.34" y1="-35.56" x2="50.8" y2="-35.56" width="0.1524" layer="91"/>
+<wire x1="50.8" y1="-35.56" x2="50.8" y2="-22.86" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$23" class="0">
+<segment>
+<pinref part="LCD" gate="G$1" pin="C1+"/>
+<pinref part="C12" gate="G$1" pin="2"/>
+<wire x1="48.26" y1="-22.86" x2="48.26" y2="-25.4" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$24" class="0">
+<segment>
+<pinref part="C12" gate="G$1" pin="1"/>
+<wire x1="48.26" y1="-33.02" x2="48.26" y2="-35.56" width="0.1524" layer="91"/>
+<pinref part="LCD" gate="G$1" pin="C1-"/>
+<wire x1="48.26" y1="-35.56" x2="45.72" y2="-35.56" width="0.1524" layer="91"/>
+<wire x1="45.72" y1="-35.56" x2="45.72" y2="-22.86" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$25" class="0">
+<segment>
+<pinref part="LCD" gate="G$1" pin="VOUT"/>
+<pinref part="C11" gate="G$1" pin="2"/>
+<wire x1="43.18" y1="-22.86" x2="43.18" y2="-25.4" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$13" class="0">
+<segment>
+<pinref part="LCD" gate="G$1" pin="K"/>
+<pinref part="T2" gate="G$1" pin="C"/>
+<wire x1="12.7" y1="-12.7" x2="-5.08" y2="-12.7" width="0.1524" layer="91"/>
+<wire x1="-5.08" y1="-12.7" x2="-5.08" y2="-15.24" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$14" class="0">
+<segment>
+<pinref part="T2" gate="G$1" pin="E"/>
+<pinref part="R4" gate="G$1" pin="2"/>
+<wire x1="-5.08" y1="-25.4" x2="-5.08" y2="-27.94" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
