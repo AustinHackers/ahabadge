@@ -9364,14 +9364,14 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <part name="R3" library="rcl" deviceset="R-EU_" device="R0603" value="0"/>
 <part name="P+5" library="supply1" deviceset="VCC" device=""/>
 <part name="LCD" library="Displays" deviceset="NHD-C12832A1Z" device=""/>
-<part name="C6" library="rcl" deviceset="C-EU" device="C0603K"/>
-<part name="C7" library="rcl" deviceset="C-EU" device="C0603K"/>
-<part name="C8" library="rcl" deviceset="C-EU" device="C0603K"/>
-<part name="C9" library="rcl" deviceset="C-EU" device="C0603K"/>
-<part name="C10" library="rcl" deviceset="C-EU" device="C0603K"/>
-<part name="C11" library="rcl" deviceset="C-EU" device="C0603K"/>
-<part name="C12" library="rcl" deviceset="C-EU" device="C0603K"/>
-<part name="C13" library="rcl" deviceset="C-EU" device="C0603K"/>
+<part name="C6" library="rcl" deviceset="C-EU" device="C0603K" value="1 uF"/>
+<part name="C7" library="rcl" deviceset="C-EU" device="C0603K" value="1 uF"/>
+<part name="C8" library="rcl" deviceset="C-EU" device="C0603K" value="1 uF"/>
+<part name="C9" library="rcl" deviceset="C-EU" device="C0603K" value="1 uF"/>
+<part name="C10" library="rcl" deviceset="C-EU" device="C0603K" value="1 uF"/>
+<part name="C11" library="rcl" deviceset="C-EU" device="C0603K" value="1 uF"/>
+<part name="C12" library="rcl" deviceset="C-EU" device="C0603K" value="1 uF"/>
+<part name="C13" library="rcl" deviceset="C-EU" device="C0603K" value="1 uF"/>
 <part name="GND6" library="supply1" deviceset="GND" device=""/>
 <part name="GND7" library="supply1" deviceset="GND" device=""/>
 <part name="T2" library="transistor" deviceset="*-NPN-" device="SOT23-EBC"/>
