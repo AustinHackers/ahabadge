@@ -9002,122 +9002,6 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 </deviceset>
 </devicesets>
 </library>
-<library name="photo-elements">
-<description>&lt;b&gt;Photocells&lt;/b&gt;&lt;p&gt;
-Manufakturer: PerkinElmer Optoelektronics&lt;br&gt;
-www.perkinelmer.com/opto</description>
-<packages>
-<package name="VT500">
-<description>&lt;b&gt;Photoconductive Cell&lt;/b&gt; VT500 Sereis&lt;p&gt;
-Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_vt500seriesdatasheet.pdf</description>
-<wire x1="-3" y1="2" x2="-3" y2="1.5" width="0.1016" layer="21" curve="180"/>
-<wire x1="-3" y1="1.5" x2="3" y2="1.5" width="0.1016" layer="21"/>
-<wire x1="3" y1="1.5" x2="3" y2="1" width="0.1016" layer="21" curve="-180"/>
-<wire x1="3" y1="1" x2="-2.5" y2="1" width="0.1016" layer="21"/>
-<wire x1="-2.5" y1="1" x2="-2.5" y2="0.5" width="0.1016" layer="21" curve="180"/>
-<wire x1="-2.5" y1="0.5" x2="2.25" y2="0.5" width="0.1016" layer="21"/>
-<wire x1="2.25" y1="0.5" x2="2.25" y2="0" width="0.1016" layer="21" curve="-180"/>
-<wire x1="2.25" y1="0" x2="-2.25" y2="0" width="0.1016" layer="21"/>
-<wire x1="-2.25" y1="0" x2="-2.25" y2="-0.5" width="0.1016" layer="21" curve="180"/>
-<wire x1="-2.25" y1="-0.5" x2="2.25" y2="-0.5" width="0.1016" layer="21"/>
-<wire x1="2.25" y1="-0.5" x2="2.25" y2="-1" width="0.1016" layer="21" curve="-180"/>
-<wire x1="2.25" y1="-1" x2="-3" y2="-1" width="0.1016" layer="21"/>
-<wire x1="-3" y1="-1" x2="-3" y2="-1.5" width="0.1016" layer="21" curve="180"/>
-<wire x1="-3" y1="-1.5" x2="4.75" y2="-1.5" width="0.1016" layer="21"/>
-<wire x1="4.75" y1="-1.5" x2="4.75" y2="-2" width="0.1016" layer="21" curve="-180"/>
-<wire x1="-3" y1="2" x2="4" y2="2" width="0.1016" layer="21"/>
-<wire x1="4" y1="2" x2="4" y2="2.5" width="0.1016" layer="21" curve="180"/>
-<wire x1="4" y1="2.5" x2="-4" y2="2.5" width="0.1016" layer="21"/>
-<wire x1="-4" y1="2.5" x2="-4" y2="3" width="0.1016" layer="21" curve="-180"/>
-<wire x1="-4" y1="3" x2="4" y2="3" width="0.1016" layer="21"/>
-<wire x1="4" y1="3" x2="4" y2="3.5" width="0.1016" layer="21" curve="180"/>
-<wire x1="4" y1="3.5" x2="-3.5" y2="3.5" width="0.1016" layer="21"/>
-<wire x1="-3.5" y1="3.5" x2="-3.5" y2="4" width="0.1016" layer="21" curve="-180"/>
-<wire x1="-3.5" y1="4" x2="3.5" y2="4" width="0.1016" layer="21"/>
-<wire x1="3.5" y1="4" x2="3.5" y2="4.5" width="0.1016" layer="21" curve="180"/>
-<wire x1="3.5" y1="4.5" x2="-2.5" y2="4.5" width="0.1016" layer="21"/>
-<wire x1="-2.5" y1="4.5" x2="-2.5" y2="5" width="0.1016" layer="21" curve="-180"/>
-<wire x1="-2.5" y1="5" x2="2.5" y2="5" width="0.1016" layer="21"/>
-<wire x1="2.5" y1="5" x2="2.5" y2="5.5" width="0.1016" layer="21" curve="180"/>
-<wire x1="2.5" y1="5.5" x2="-2" y2="5.5" width="0.1016" layer="21"/>
-<wire x1="-2" y1="5.5" x2="-2.5" y2="6" width="0.1016" layer="21" curve="-90"/>
-<wire x1="4.75" y1="-2" x2="-4.5" y2="-2" width="0.1016" layer="21"/>
-<wire x1="-4.5" y1="-2" x2="-4.5" y2="-2.5" width="0.1016" layer="21" curve="180"/>
-<wire x1="-4.5" y1="-2.5" x2="4" y2="-2.5" width="0.1016" layer="21"/>
-<wire x1="4" y1="-2.5" x2="4" y2="-3" width="0.1016" layer="21" curve="-180"/>
-<wire x1="4" y1="-3" x2="-4" y2="-3" width="0.1016" layer="21"/>
-<wire x1="-4" y1="-3" x2="-4" y2="-3.5" width="0.1016" layer="21" curve="180"/>
-<wire x1="-4" y1="-3.5" x2="3.5" y2="-3.5" width="0.1016" layer="21"/>
-<wire x1="3.5" y1="-3.5" x2="3.5" y2="-4" width="0.1016" layer="21" curve="-180"/>
-<wire x1="3.5" y1="-4" x2="-3.5" y2="-4" width="0.1016" layer="21"/>
-<wire x1="-3.5" y1="-4" x2="-3.5" y2="-4.5" width="0.1016" layer="21" curve="180"/>
-<wire x1="-3.5" y1="-4.5" x2="2.5" y2="-4.5" width="0.1016" layer="21"/>
-<wire x1="2.5" y1="-4.5" x2="2.5" y2="-5" width="0.1016" layer="21" curve="-180"/>
-<wire x1="2.5" y1="-5" x2="-2" y2="-5" width="0.1016" layer="21"/>
-<wire x1="-2" y1="-5" x2="-2" y2="-5.5" width="0.1016" layer="21" curve="180"/>
-<wire x1="-2" y1="-5.5" x2="2" y2="-5.5" width="0.1016" layer="21"/>
-<wire x1="2" y1="-5.5" x2="2.5" y2="-6" width="0.1016" layer="21" curve="-90"/>
-<circle x="0" y="0" radius="8.1503" width="0.2032" layer="21"/>
-<circle x="0" y="0" radius="6.5504" width="0.2032" layer="21"/>
-<pad name="1" x="-3.81" y="0" drill="0.8" diameter="1.4"/>
-<pad name="2" x="3.81" y="0" drill="0.8" diameter="1.4"/>
-<text x="-3.52" y="-9.33" size="1.27" layer="25">&gt;NAME</text>
-<text x="-5.29" y="8.08" size="1.27" layer="27">&gt;VALUE</text>
-</package>
-</packages>
-<symbols>
-<symbol name="PHOTOCELL">
-<wire x1="-3.048" y1="2.413" x2="-1.651" y2="1.016" width="0.1524" layer="94"/>
-<wire x1="-3.175" y1="1.27" x2="-1.778" y2="-0.127" width="0.1524" layer="94"/>
-<wire x1="0" y1="-2.54" x2="-1.016" y2="-1.905" width="0.254" layer="94"/>
-<wire x1="1.016" y1="-1.143" x2="-1.016" y2="-0.381" width="0.254" layer="94"/>
-<wire x1="-1.016" y1="-0.381" x2="1.016" y2="0.381" width="0.254" layer="94"/>
-<wire x1="1.016" y1="0.381" x2="-1.016" y2="1.143" width="0.254" layer="94"/>
-<wire x1="-1.016" y1="1.143" x2="1.016" y2="1.905" width="0.254" layer="94"/>
-<wire x1="0" y1="2.54" x2="1.016" y2="1.905" width="0.254" layer="94"/>
-<wire x1="-1.016" y1="-1.905" x2="1.016" y2="-1.143" width="0.254" layer="94"/>
-<text x="2.54" y="0" size="1.778" layer="95">&gt;NAME</text>
-<text x="2.54" y="-2.54" size="1.778" layer="96">&gt;VALUE</text>
-<pin name="1" x="0" y="5.08" visible="off" length="short" direction="pas" swaplevel="1" rot="R270"/>
-<pin name="2" x="0" y="-5.08" visible="off" length="short" direction="pas" swaplevel="1" rot="R90"/>
-<polygon width="0.1524" layer="94">
-<vertex x="-1.778" y="-0.127"/>
-<vertex x="-2.667" y="0.254"/>
-<vertex x="-2.159" y="0.762"/>
-</polygon>
-<polygon width="0.1524" layer="94">
-<vertex x="-1.651" y="1.016"/>
-<vertex x="-2.54" y="1.397"/>
-<vertex x="-2.032" y="1.905"/>
-</polygon>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="VT5*" prefix="PH">
-<description>&lt;b&gt;Photoconductive Cell&lt;/b&gt; VT500 Sereis&lt;p&gt;
-Source: http://optoelectronics.perkinelmer.com/content/Datasheets/DTS_vt500seriesdatasheet.pdf</description>
-<gates>
-<gate name="G$1" symbol="PHOTOCELL" x="0" y="0" swaplevel="1"/>
-</gates>
-<devices>
-<device name="" package="VT500">
-<connects>
-<connect gate="G$1" pin="1" pad="1"/>
-<connect gate="G$1" pin="2" pad="2"/>
-</connects>
-<technologies>
-<technology name="0N1"/>
-<technology name="0N2"/>
-<technology name="0N3"/>
-<technology name="3N1"/>
-<technology name="3N2"/>
-<technology name="3N3"/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="Displays">
 <packages>
 <package name="NHD-C12832A1Z">
@@ -9326,6 +9210,76 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 </deviceset>
 </devicesets>
 </library>
+<library name="opto-trans-siemens">
+<description>&lt;b&gt;Siemens Opto Transistors&lt;/b&gt;&lt;p&gt;
+&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
+<packages>
+<package name="SFH225">
+<description>&lt;B&gt;PHOTO DIODE&lt;/B&gt;</description>
+<wire x1="0.127" y1="2.54" x2="1.651" y2="2.032" width="0.1524" layer="21" curve="-36.869898"/>
+<wire x1="0.127" y1="-2.54" x2="1.651" y2="-2.032" width="0.1524" layer="21" curve="36.869898"/>
+<wire x1="1.651" y1="2.032" x2="1.651" y2="-2.032" width="0.1524" layer="21"/>
+<wire x1="-1.397" y1="2.032" x2="0.127" y2="2.54" width="0.1524" layer="21" curve="-38.659729"/>
+<wire x1="-1.397" y1="-2.032" x2="0.127" y2="-2.5399" width="0.1524" layer="21" curve="37.402814"/>
+<wire x1="-1.397" y1="-2.032" x2="-1.397" y2="2.032" width="0.1524" layer="21"/>
+<wire x1="1.143" y1="2.286" x2="1.143" y2="-2.159" width="0.1524" layer="21"/>
+<wire x1="1.143" y1="-2.159" x2="-1.143" y2="-2.159" width="0.1524" layer="21"/>
+<wire x1="1.143" y1="-2.159" x2="1.143" y2="-2.286" width="0.1524" layer="21"/>
+<pad name="A" x="0" y="1.27" drill="0.8128" shape="long"/>
+<pad name="K" x="0" y="-1.27" drill="0.8128" shape="long"/>
+<text x="1.905" y="-1.651" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<text x="1.905" y="0.508" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
+</package>
+</packages>
+<symbols>
+<symbol name="OED">
+<wire x1="1.27" y1="0" x2="0" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="-2.54" x2="-1.27" y2="0" width="0.254" layer="94"/>
+<wire x1="1.27" y1="-2.54" x2="0" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="-2.54" x2="-1.27" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="1.27" y1="0" x2="0" y2="0" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="0" y2="0" width="0.1524" layer="94"/>
+<wire x1="0" y1="0" x2="-1.27" y2="0" width="0.254" layer="94"/>
+<wire x1="0" y1="0" x2="0" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-3.683" y1="-3.048" x2="-2.286" y2="-1.651" width="0.1524" layer="94"/>
+<wire x1="-2.286" y1="-1.651" x2="-3.175" y2="-2.032" width="0.1524" layer="94"/>
+<wire x1="-3.175" y1="-2.032" x2="-2.667" y2="-2.54" width="0.1524" layer="94"/>
+<wire x1="-2.667" y1="-2.54" x2="-2.286" y2="-1.651" width="0.1524" layer="94"/>
+<wire x1="-2.413" y1="-0.508" x2="-3.302" y2="-0.889" width="0.1524" layer="94"/>
+<wire x1="-3.302" y1="-0.889" x2="-2.794" y2="-1.397" width="0.1524" layer="94"/>
+<wire x1="-2.794" y1="-1.397" x2="-2.413" y2="-0.508" width="0.1524" layer="94"/>
+<wire x1="-3.81" y1="-1.905" x2="-2.413" y2="-0.508" width="0.1524" layer="94"/>
+<text x="3.556" y="-4.318" size="1.778" layer="95" rot="R90">&gt;NAME</text>
+<text x="5.715" y="-4.318" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
+<pin name="C" x="0" y="-5.08" visible="off" length="short" direction="pas" rot="R90"/>
+<pin name="A" x="0" y="2.54" visible="off" length="point" direction="pas" rot="R270"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="SFH225" prefix="D">
+<description>&lt;B&gt;PHOTO DIODE&lt;/B&gt;</description>
+<gates>
+<gate name="1" symbol="OED" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="SFH225">
+<connects>
+<connect gate="1" pin="A" pad="A"/>
+<connect gate="1" pin="C" pad="K"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="MF" value="" constant="no"/>
+<attribute name="MPN" value="" constant="no"/>
+<attribute name="OC_FARNELL" value="unknown" constant="no"/>
+<attribute name="OC_NEWARK" value="unknown" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -9353,9 +9307,8 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <part name="P+1" library="supply1" deviceset="VCC" device=""/>
 <part name="T1" library="transistor" deviceset="*-NPN-" device="SOT23-EBC"/>
 <part name="GND1" library="supply1" deviceset="GND" device=""/>
-<part name="PH1" library="photo-elements" deviceset="VT5*" device="" technology="0N1"/>
 <part name="P+2" library="supply1" deviceset="VCC" device=""/>
-<part name="R1" library="rcl" deviceset="R-EU_" device="R0603"/>
+<part name="R1" library="rcl" deviceset="R-EU_" device="R0603" value="10k"/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
 <part name="USB" library="adafruit" deviceset="USB" device="MINIB"/>
 <part name="R2" library="rcl" deviceset="R-EU_" device="R0603" value="10"/>
@@ -9382,6 +9335,7 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <part name="S3" library="switch" deviceset="SKHMP*E010" device="" technology="S"/>
 <part name="S4" library="switch" deviceset="SKHMP*E010" device="" technology="S"/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
+<part name="D1" library="opto-trans-siemens" deviceset="SFH225" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -9409,7 +9363,6 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <attribute name="VALUE" x="-30.48" y="81.28" size="1.778" layer="96" rot="MR0"/>
 </instance>
 <instance part="GND1" gate="1" x="-43.18" y="53.34"/>
-<instance part="PH1" gate="G$1" x="-25.4" y="91.44"/>
 <instance part="P+2" gate="VCC" x="-25.4" y="104.14"/>
 <instance part="R1" gate="G$1" x="-25.4" y="76.2" rot="R90"/>
 <instance part="GND2" gate="1" x="-25.4" y="66.04"/>
@@ -9441,6 +9394,7 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <instance part="S3" gate="G$1" x="147.32" y="58.42"/>
 <instance part="S4" gate="G$1" x="147.32" y="73.66"/>
 <instance part="GND8" gate="1" x="157.48" y="17.78"/>
+<instance part="D1" gate="1" x="-25.4" y="91.44" rot="R180"/>
 </instances>
 <busses>
 <bus name="PTE0,PTE20,PTE21,PTE22,PTE23,PTE31">
@@ -9660,8 +9614,8 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 </segment>
 <segment>
 <pinref part="P+2" gate="VCC" pin="VCC"/>
-<pinref part="PH1" gate="G$1" pin="1"/>
 <wire x1="-25.4" y1="101.6" x2="-25.4" y2="96.52" width="0.1524" layer="91"/>
+<pinref part="D1" gate="1" pin="C"/>
 </segment>
 <segment>
 <pinref part="C1" gate="G$1" pin="1"/>
@@ -9926,15 +9880,15 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <label x="-116.84" y="40.64" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="PH1" gate="G$1" pin="2"/>
 <pinref part="R1" gate="G$1" pin="2"/>
-<wire x1="-25.4" y1="86.36" x2="-25.4" y2="83.82" width="0.1524" layer="91"/>
 <wire x1="-25.4" y1="83.82" x2="-25.4" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="-25.4" y1="83.82" x2="-20.32" y2="83.82" width="0.1524" layer="91"/>
 <junction x="-25.4" y="83.82"/>
 <pinref part="U1" gate="A" pin="PTE29"/>
 <wire x1="-20.32" y1="83.82" x2="-20.32" y2="58.42" width="0.1524" layer="91"/>
 <wire x1="-20.32" y1="58.42" x2="10.16" y2="58.42" width="0.1524" layer="91"/>
+<pinref part="D1" gate="1" pin="A"/>
+<wire x1="-25.4" y1="88.9" x2="-25.4" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="PTE30" class="0">
