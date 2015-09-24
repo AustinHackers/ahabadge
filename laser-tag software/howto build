@@ -1,0 +1,20 @@
+This is how I got hello_world building on my Ubuntu box.
+0) apt-get install cmake gcc-arm-none-eabi
+1) Download the Freescale KSDK 1.2.0 Mainline for Linux tarball
+2) Read KSDK_1.2.0/doc/Getting Started with Kinetis SDK (KSDK) v.1.2.pdf
+3) export ARMGCC_DIR=/usr
+   cd KSDK_1.2.0/lib/ksdk_platform_lib/armgcc/KL27Z4
+   ./build_debug.sh
+4) cd KSDK_1.2.0/examples/frdmkl27z/demo_apps/hello_world/armgcc
+   cp CMakeLists.txt CMakeLists.txt.orig
+   sed -i 's/KL27Z644/KL27Z4/g' CMakeLists.txt
+   sed -i 's/MKL27Z64/MKL27Z256/g' CMakeLists.txt
+   ./build_debug.sh
+5) openocd
+   in another terminal:
+   telnet localhost 4444
+   reset halt
+6) in another terminal:
+   gdb-multiarch -x gdb.init path/to/hello_world.elf
+   gdb) load
+   gdb) monitor reset
