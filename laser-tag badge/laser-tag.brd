@@ -153,7 +153,7 @@
 <wire x1="5.715" y1="10.795" x2="12.065" y2="10.795" width="0" layer="20"/>
 <wire x1="12.065" y1="10.795" x2="12.065" y2="0" width="0" layer="20"/>
 <wire x1="12.065" y1="0" x2="17.78" y2="0" width="0" layer="20"/>
-<circle x="40.64" y="0" radius="19.939" width="0.254" layer="21"/>
+<circle x="40.64" y="0" radius="19.939" width="0.254" layer="49"/>
 <wire x1="35.56" y1="22.225" x2="35.56" y2="1.27" width="0" layer="20"/>
 <wire x1="35.56" y1="1.27" x2="36.83" y2="0" width="0" layer="20" curve="90"/>
 <wire x1="36.83" y1="0" x2="44.45" y2="0" width="0" layer="20"/>
