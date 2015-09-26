@@ -153,34 +153,6 @@
 <wire x1="5.715" y1="10.795" x2="12.065" y2="10.795" width="0" layer="20"/>
 <wire x1="12.065" y1="10.795" x2="12.065" y2="0" width="0" layer="20"/>
 <wire x1="12.065" y1="0" x2="17.78" y2="0" width="0" layer="20"/>
-<polygon width="0.254" layer="29">
-<vertex x="10.16" y="79.375"/>
-<vertex x="13.97" y="90.805"/>
-<vertex x="17.78" y="79.375"/>
-</polygon>
-<polygon width="0.254" layer="29">
-<vertex x="8.255" y="73.66"/>
-<vertex x="19.685" y="73.66"/>
-<vertex x="25.4" y="56.515"/>
-<vertex x="2.54" y="56.515"/>
-</polygon>
-<polygon width="0.254" layer="29">
-<vertex x="35.56" y="75.565"/>
-<vertex x="45.72" y="75.565"/>
-<vertex x="45.72" y="56.515"/>
-<vertex x="35.56" y="56.515"/>
-</polygon>
-<polygon width="0.254" layer="29">
-<vertex x="67.31" y="90.805"/>
-<vertex x="63.5" y="79.375"/>
-<vertex x="71.12" y="79.375"/>
-</polygon>
-<polygon width="0.254" layer="29">
-<vertex x="61.595" y="73.66"/>
-<vertex x="73.025" y="73.66"/>
-<vertex x="78.74" y="56.515"/>
-<vertex x="55.88" y="56.515"/>
-</polygon>
 <circle x="40.64" y="0" radius="19.939" width="0.254" layer="21"/>
 <wire x1="35.56" y1="22.225" x2="35.56" y2="1.27" width="0" layer="20"/>
 <wire x1="35.56" y1="1.27" x2="36.83" y2="0" width="0" layer="20" curve="90"/>
