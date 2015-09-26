@@ -215,42 +215,6 @@
 <wire x1="5.1308" y1="5.1308" x2="4.2164" y2="5.1308" width="0.1524" layer="51"/>
 <wire x1="-5.1308" y1="5.1308" x2="-5.1308" y2="4.2164" width="0.1524" layer="51"/>
 <wire x1="-5.1308" y1="-4.2164" x2="-5.1308" y2="-5.1308" width="0.1524" layer="51"/>
-<polygon width="0" layer="51">
-<vertex x="-6.858" y="-0.5588"/>
-<vertex x="-6.858" y="-0.9398"/>
-<vertex x="-6.604" y="-0.9398"/>
-<vertex x="-6.604" y="-0.5588"/>
-</polygon>
-<polygon width="0" layer="51">
-<vertex x="-2.4384" y="-6.604"/>
-<vertex x="-2.4384" y="-6.858"/>
-<vertex x="-2.0574" y="-6.858"/>
-<vertex x="-2.0574" y="-6.604"/>
-</polygon>
-<polygon width="0" layer="51">
-<vertex x="2.5654" y="-6.604"/>
-<vertex x="2.5654" y="-6.858"/>
-<vertex x="2.9464" y="-6.858"/>
-<vertex x="2.9464" y="-6.604"/>
-</polygon>
-<polygon width="0" layer="51">
-<vertex x="6.858" y="-0.0508"/>
-<vertex x="6.858" y="-0.4318"/>
-<vertex x="6.604" y="-0.4318"/>
-<vertex x="6.604" y="-0.0508"/>
-</polygon>
-<polygon width="0" layer="51">
-<vertex x="3.048" y="6.604"/>
-<vertex x="3.048" y="6.858"/>
-<vertex x="3.429" y="6.858"/>
-<vertex x="3.429" y="6.604"/>
-</polygon>
-<polygon width="0" layer="51">
-<vertex x="-1.9304" y="6.604"/>
-<vertex x="-1.9304" y="6.858"/>
-<vertex x="-1.5494" y="6.858"/>
-<vertex x="-1.5494" y="6.604"/>
-</polygon>
 <text x="-7.5692" y="3.7338" size="1.27" layer="51" ratio="6" rot="SR0">*</text>
 <wire x1="3.6068" y1="5.0038" x2="3.8862" y2="5.0038" width="0.1524" layer="21"/>
 <wire x1="3.8862" y1="5.0038" x2="3.8862" y2="5.9944" width="0.1524" layer="21"/>
@@ -9276,7 +9240,7 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <library name="Graphics">
 <packages>
 <package name="AHA">
-<polygon width="0" layer="51">
+<polygon width="0.127" layer="21">
 <vertex x="-1.6764" y="24.56941875"/>
 <vertex x="-4.75741875" y="22.93111875"/>
 <vertex x="-4.549140625" y="18.84171875"/>
@@ -9420,7 +9384,7 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <vertex x="-1.882140625" y="18.30831875"/>
 <vertex x="-1.666240625" y="24.571959375"/>
 </polygon>
-<polygon width="0" layer="51">
+<polygon width="0.127" layer="21">
 <vertex x="14.90218125" y="13.30198125"/>
 <vertex x="14.90218125" y="9.10081875"/>
 <vertex x="16.334740625" y="4.879340625"/>
@@ -9451,7 +9415,7 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <vertex x="15.826740625" y="13.688059375"/>
 <vertex x="14.894559375" y="13.30198125"/>
 </polygon>
-<polygon width="0" layer="51">
+<polygon width="0.127" layer="21">
 <vertex x="-16.068040625" y="-0.492759375"/>
 <vertex x="-16.068040625" y="0.98551875"/>
 <vertex x="-18.6944" y="1.165859375"/>
