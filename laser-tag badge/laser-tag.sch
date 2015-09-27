@@ -1022,6 +1022,24 @@
 <text x="-2.81" y="10.67" size="1.27" layer="25" font="vector">&gt;NAME</text>
 <text x="-3.31" y="-1.73" size="1.27" layer="27" font="vector">&gt;VALUE</text>
 </package>
+<package name="WS2812B">
+<wire x1="2.5" y1="-2.5" x2="-2.5" y2="-2.5" width="0.127" layer="21"/>
+<wire x1="-2.5" y1="-2.5" x2="-2.5" y2="1.6" width="0.127" layer="21"/>
+<wire x1="-2.5" y1="1.6" x2="-2.5" y2="2.5" width="0.127" layer="21"/>
+<wire x1="-2.5" y1="2.5" x2="-1.6" y2="2.5" width="0.127" layer="21"/>
+<wire x1="-1.6" y1="2.5" x2="2.5" y2="2.5" width="0.127" layer="21"/>
+<wire x1="2.5" y1="2.5" x2="2.5" y2="-2.5" width="0.127" layer="21"/>
+<wire x1="-2.5" y1="1.6" x2="-1.6" y2="2.5" width="0.127" layer="21"/>
+<smd name="1-VDD" x="2.45" y="-1.65" dx="1.5" dy="0.9" layer="1" rot="R180"/>
+<smd name="2-DOUT" x="2.45" y="1.65" dx="1.5" dy="0.9" layer="1" rot="R180"/>
+<smd name="4-DIN" x="-2.45" y="-1.65" dx="1.5" dy="0.9" layer="1" rot="R180"/>
+<smd name="3-GND" x="-2.45" y="1.65" dx="1.5" dy="0.9" layer="1" rot="R180"/>
+<circle x="0" y="0" radius="1.7204625" width="0.127" layer="21"/>
+<text x="3.4925" y="1.5875" size="0.8128" layer="25" ratio="10" rot="R270">&gt;NAME</text>
+<wire x1="-1.6" y1="2.5" x2="-1.3" y2="2.8" width="0.127" layer="21"/>
+<wire x1="-1.3" y1="2.8" x2="-1.7" y2="3.2" width="0.127" layer="21"/>
+<wire x1="-1.7" y1="3.2" x2="-2.5" y2="2.5" width="0.127" layer="21"/>
+</package>
 </packages>
 <symbols>
 <symbol name="3V">
@@ -1071,6 +1089,30 @@
 <pin name="VBUS" x="10.16" y="5.08" visible="pin" length="short" direction="pwr" rot="R180"/>
 <pin name="GND" x="10.16" y="-5.08" visible="pin" length="short" direction="pwr" rot="R180"/>
 <pin name="ID" x="10.16" y="-2.54" visible="pin" length="short" rot="R180"/>
+</symbol>
+<symbol name="WS2812B">
+<pin name="DIN" x="-5.08" y="0" visible="pad" length="short" direction="in"/>
+<pin name="DOUT" x="5.08" y="0" visible="pad" length="short" direction="out" rot="R180"/>
+<pin name="VDD" x="0" y="5.08" visible="pad" length="short" rot="R270"/>
+<pin name="GND" x="0" y="-5.08" visible="pad" length="short" rot="R90"/>
+<wire x1="-2.54" y1="2.54" x2="2.54" y2="2.54" width="0.254" layer="94"/>
+<wire x1="2.54" y1="2.54" x2="2.54" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-2.54" x2="-2.54" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-2.54" x2="-2.54" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-2.032" y1="0.254" x2="-1.778" y2="0" width="0.254" layer="94"/>
+<wire x1="-1.778" y1="0" x2="-2.032" y2="-0.254" width="0.254" layer="94"/>
+<wire x1="1.778" y1="0.254" x2="2.032" y2="0" width="0.254" layer="94"/>
+<wire x1="2.032" y1="0" x2="1.778" y2="-0.254" width="0.254" layer="94"/>
+<wire x1="0" y1="1.778" x2="0" y2="0.508" width="0.254" layer="94"/>
+<wire x1="0" y1="0.508" x2="-0.762" y2="0.508" width="0.254" layer="94"/>
+<wire x1="-0.762" y1="0.508" x2="0" y2="-0.762" width="0.254" layer="94"/>
+<wire x1="0" y1="-0.762" x2="0.762" y2="0.508" width="0.254" layer="94"/>
+<wire x1="0.762" y1="0.508" x2="0" y2="0.508" width="0.254" layer="94"/>
+<wire x1="0" y1="-0.762" x2="0" y2="-1.778" width="0.254" layer="94"/>
+<wire x1="-0.762" y1="-0.762" x2="0.762" y2="-0.762" width="0.254" layer="94"/>
+<wire x1="0.762" y1="-1.27" x2="1.016" y2="-1.524" width="0.254" layer="94"/>
+<wire x1="1.016" y1="-1.016" x2="1.27" y2="-1.27" width="0.254" layer="94"/>
+<text x="2.54" y="3.048" size="0.6096" layer="95">&gt;NAME</text>
 </symbol>
 </symbols>
 <devicesets>
@@ -1142,6 +1184,24 @@ Thru-hole RA Female Mini-B USB Connector 4UConnector: 18732&lt;/p&gt;
 <connect gate="G$1" pin="GND" pad="GND"/>
 <connect gate="G$1" pin="ID" pad="ID"/>
 <connect gate="G$1" pin="VBUS" pad="VBUS"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="WS2812B" prefix="L">
+<gates>
+<gate name="G$1" symbol="WS2812B" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="WS2812B">
+<connects>
+<connect gate="G$1" pin="DIN" pad="4-DIN"/>
+<connect gate="G$1" pin="DOUT" pad="2-DOUT"/>
+<connect gate="G$1" pin="GND" pad="3-GND"/>
+<connect gate="G$1" pin="VDD" pad="1-VDD"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -9494,7 +9554,7 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <part name="BREAKOUT2" library="pinhead" deviceset="PINHD-2X16" device=""/>
 <part name="LD1" library="Photonics" deviceset="LD" device=""/>
 <part name="P+1" library="supply1" deviceset="VCC" device=""/>
-<part name="T1" library="transistor" deviceset="*-NPN-" device="SOT23-EBC"/>
+<part name="T1" library="transistor" deviceset="*-NPN-" device="SOT23-BEC" technology="BC850"/>
 <part name="GND1" library="supply1" deviceset="GND" device=""/>
 <part name="P+2" library="supply1" deviceset="VCC" device=""/>
 <part name="R1" library="rcl" deviceset="R-EU_" device="R0603" value="10k"/>
@@ -9516,7 +9576,7 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <part name="C13" library="rcl" deviceset="C-EU" device="C0603K" value="1 uF"/>
 <part name="GND6" library="supply1" deviceset="GND" device=""/>
 <part name="GND7" library="supply1" deviceset="GND" device=""/>
-<part name="T2" library="transistor" deviceset="*-NPN-" device="SOT23-EBC"/>
+<part name="T2" library="transistor" deviceset="*-NPN-" device="SOT23-BEC" technology="BC850"/>
 <part name="R4" library="rcl" deviceset="R-EU_" device="R0603" value="10"/>
 <part name="P+7" library="supply1" deviceset="VCC" device=""/>
 <part name="S1" library="switch" deviceset="SKHMP*E010" device="" technology="S"/>
@@ -9527,6 +9587,10 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <part name="D1" library="Photonics" deviceset="PDB-C154SM" device=""/>
 <part name="D2" library="Photonics" deviceset="PDB-C154SM" device=""/>
 <part name="U$1" library="Graphics" deviceset="AHA" device=""/>
+<part name="L1" library="adafruit" deviceset="WS2812B" device=""/>
+<part name="P+6" library="supply1" deviceset="VCC" device=""/>
+<part name="GND9" library="supply1" deviceset="GND" device=""/>
+<part name="C14" library="rcl" deviceset="C-EU" device="C0603K" value="0.1 uF"/>
 </parts>
 <sheets>
 <sheet>
@@ -9592,6 +9656,10 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <attribute name="NAME" x="-19.558" y="95.504" size="1.778" layer="95"/>
 </instance>
 <instance part="U$1" gate="G$1" x="-66.04" y="-10.16"/>
+<instance part="L1" gate="G$1" x="-22.86" y="38.1"/>
+<instance part="P+6" gate="VCC" x="-22.86" y="48.26"/>
+<instance part="GND9" gate="1" x="-22.86" y="27.94"/>
+<instance part="C14" gate="G$1" x="-60.96" y="91.44"/>
 </instances>
 <busses>
 <bus name="PTE0,PTE20,PTE21,PTE22,PTE23,PTE31">
@@ -9624,6 +9692,10 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <wire x1="-81.28" y1="81.28" x2="-71.12" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="-71.12" y1="81.28" x2="-71.12" y2="86.36" width="0.1524" layer="91"/>
 <junction x="-81.28" y="81.28"/>
+<pinref part="C14" gate="G$1" pin="2"/>
+<wire x1="-71.12" y1="81.28" x2="-60.96" y2="81.28" width="0.1524" layer="91"/>
+<wire x1="-60.96" y1="81.28" x2="-60.96" y2="86.36" width="0.1524" layer="91"/>
+<junction x="-71.12" y="81.28"/>
 </segment>
 <segment>
 <pinref part="GND4" gate="1" pin="GND"/>
@@ -9760,6 +9832,20 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <wire x1="154.94" y1="27.94" x2="157.48" y2="27.94" width="0.1524" layer="91"/>
 <junction x="157.48" y="27.94"/>
 </segment>
+<segment>
+<pinref part="GND9" gate="1" pin="GND"/>
+<pinref part="L1" gate="G$1" pin="GND"/>
+<wire x1="-22.86" y1="30.48" x2="-22.86" y2="33.02" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U1" gate="A" pin="VREFL"/>
+<wire x1="10.16" y1="63.5" x2="7.62" y2="63.5" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="BREAKOUT1" gate="A" pin="15"/>
+<wire x1="-111.76" y1="43.18" x2="-116.84" y2="43.18" width="0.1524" layer="91"/>
+<label x="-116.84" y="43.18" size="1.778" layer="95" rot="R180"/>
+</segment>
 </net>
 <net name="VCC" class="0">
 <segment>
@@ -9861,6 +9947,11 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <wire x1="10.16" y1="-25.4" x2="10.16" y2="-7.62" width="0.1524" layer="91"/>
 <junction x="10.16" y="-7.62"/>
 </segment>
+<segment>
+<pinref part="P+6" gate="VCC" pin="VCC"/>
+<pinref part="L1" gate="G$1" pin="VDD"/>
+<wire x1="-22.86" y1="45.72" x2="-22.86" y2="43.18" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="PTA3" class="0">
 <segment>
@@ -9930,7 +10021,12 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 </segment>
 <segment>
 <pinref part="U1" gate="A" pin="PTE1"/>
-<wire x1="10.16" y1="96.52" x2="7.62" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="96.52" x2="0" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="0" y1="96.52" x2="0" y2="50.8" width="0.1524" layer="91"/>
+<wire x1="0" y1="50.8" x2="-30.48" y2="50.8" width="0.1524" layer="91"/>
+<wire x1="-30.48" y1="50.8" x2="-30.48" y2="38.1" width="0.1524" layer="91"/>
+<pinref part="L1" gate="G$1" pin="DIN"/>
+<wire x1="-30.48" y1="38.1" x2="-27.94" y2="38.1" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="USB0_DP" class="0">
@@ -10063,16 +10159,10 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <wire x1="-104.14" y1="45.72" x2="-99.06" y2="45.72" width="0.1524" layer="91"/>
 <label x="-99.06" y="45.72" size="1.778" layer="95"/>
 </segment>
-</net>
-<net name="VREFL" class="0">
 <segment>
-<pinref part="U1" gate="A" pin="VREFL"/>
-<wire x1="10.16" y1="63.5" x2="7.62" y2="63.5" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="BREAKOUT1" gate="A" pin="15"/>
-<wire x1="-111.76" y1="43.18" x2="-116.84" y2="43.18" width="0.1524" layer="91"/>
-<label x="-116.84" y="43.18" size="1.778" layer="95" rot="R180"/>
+<pinref part="C14" gate="G$1" pin="1"/>
+<wire x1="-60.96" y1="93.98" x2="-60.96" y2="96.52" width="0.1524" layer="91"/>
+<label x="-60.96" y="96.52" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="PTE29" class="0">
