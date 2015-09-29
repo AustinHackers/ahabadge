@@ -35,6 +35,9 @@
 #include "board.h"
 #include "fsl_lptmr_driver.h"
 #include "fsl_debug_console.h"
+#include "fsl_dac_driver.h"
+#include "fsl_os_abstraction.h"
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -71,10 +74,6 @@ void lptmr_call_back(void)
  */
 int main (void)
 {
-    // RX buffers
-    //! @param receiveBuff Buffer used to hold received data
-    uint8_t receiveBuff;
-
     // LPTMR configurations
     lptmr_user_config_t lptmrConfig =
     {
@@ -106,14 +105,29 @@ int main (void)
     // Print the initial banner
     PRINTF("\r\nHello World!\n\n\r");
 
-    while(1)
-    {
-        // Main routine that simply echoes received characters forever
-
-        // First, get character
-        receiveBuff = GETCHAR();
-
-        // Now echo the received character
-        PUTCHAR(receiveBuff);
+    dac_converter_config_t MyDacUserConfigStruct;
+    // Fill the structure with configuration of software trigger. //
+    DAC_DRV_StructInitUserConfigNormal(&MyDacUserConfigStruct);
+    // Initialize the DAC Converter. //
+    DAC_DRV_Init(0, &MyDacUserConfigStruct);
+    // Output the DAC value. //
+    uint16_t p = 0x1000;
+    uint16_t i = 0x2ff;
+    int8_t d = 1;
+    while(1) {
+        if (i == 0x2ff) {
+            d = 1;
+        } else if (i == 0x4ff) {
+            d = -1;
+            p = p * 7 / 8;
+            if (p == 0) p = 0x1000;
+        }
+        i += d;
+        DAC_DRV_Output(0, i);
+        //OSA_TimeDelay(1);
+        uint16_t c;
+        for(c = 0; c < p; ++c);
     }
 }
+
+/* vim: set expandtab ts=4 sw=4: */
