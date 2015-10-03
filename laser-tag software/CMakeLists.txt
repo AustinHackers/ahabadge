@@ -89,22 +89,10 @@ ENDIF()
 
 # ADD_EXECUTABLE
 ADD_EXECUTABLE(hello_world 
-    "${ProjDirPath}/../KSDK_1.2.0/platform/utilities/src/fsl_misc_utilities.c"
     "${ProjDirPath}/../KSDK_1.2.0/platform/devices/MKL27Z4/startup/gcc/startup_MKL27Z4.S"
-    "${ProjDirPath}/../KSDK_1.2.0/platform/utilities/src/fsl_debug_console.c"
-    "${ProjDirPath}/../KSDK_1.2.0/platform/utilities/inc/fsl_debug_console.h"
-    "${ProjDirPath}/../KSDK_1.2.0/platform/utilities/src/print_scan.c"
-    "${ProjDirPath}/../KSDK_1.2.0/platform/utilities/src/print_scan.h"
     "${ProjDirPath}/../KSDK_1.2.0/platform/devices/MKL27Z4/startup/system_MKL27Z4.c"
     "${ProjDirPath}/../KSDK_1.2.0/platform/devices/startup.c"
     "${ProjDirPath}/../KSDK_1.2.0/platform/devices/startup.h"
-    "${ProjDirPath}/gpio_pins.c"
-    "${ProjDirPath}/gpio_pins.h"
-    "${ProjDirPath}/pin_mux.c"
-    "${ProjDirPath}/pin_mux.h"
-    "${ProjDirPath}/board.c"
-    "${ProjDirPath}/board.h"
-    "${ProjDirPath}/hardware_init.c"
     "${ProjDirPath}/main.c"
     "${ProjDirPath}/fsl_lptmr_irq.c"
 )

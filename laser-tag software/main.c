@@ -28,37 +28,90 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-///////////////////////////////////////////////////////////////////////////////
-//  Includes
-///////////////////////////////////////////////////////////////////////////////
-// SDK Included Files
-#include "board.h"
-#include "fsl_lptmr_driver.h"
-#include "fsl_debug_console.h"
+#include "fsl_clock_manager.h"
 #include "fsl_dac_driver.h"
+#include "fsl_dma_driver.h"
+#include "fsl_gpio_driver.h"
+#include "fsl_lptmr_driver.h"
 #include "fsl_os_abstraction.h"
+#include "fsl_pit_driver.h"
+#include "fsl_smc_hal.h"
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Definitions
-////////////////////////////////////////////////////////////////////////////////
-// Timer period: 500000uS
-#define TMR_PERIOD         500000U
-#if defined(TWR_KV46F150M)
-#define LPTMR0_IDX LPTMR_IDX
-#endif
+////////////////////////////
+// A bunch of config structs
 
+/* Configuration for enter VLPR mode. Core clock = 2MHz. */
+static const clock_manager_user_config_t g_defaultClockConfigVlpr = {   
+    .mcgliteConfig =
+    {    
+        .mcglite_mode       = kMcgliteModeLirc8M,   // Work in LIRC_8M mode.
+        .irclkEnable        = true,  // MCGIRCLK enable.
+        .irclkEnableInStop  = false, // MCGIRCLK disable in STOP mode.
+        .ircs               = kMcgliteLircSel2M, // Select LIRC_2M.
+        .fcrdiv             = kMcgliteLircDivBy1,    // FCRDIV is 0.
+        .lircDiv2           = kMcgliteLircDivBy1,    // LIRC_DIV2 is 0.
+        .hircEnableInNotHircMode         = false, // HIRC disable.
+    },
+    .simConfig =
+    {    
+        .er32kSrc  = kClockEr32kSrcOsc0,   // ERCLK32K selection, use OSC.
+        .outdiv1   = 0U,
+        .outdiv4   = 1U,
+    },
+    .oscerConfig =
+    {   
+        .enable       = false, // OSCERCLK disable.
+        .enableInStop = false, // OSCERCLK disable in STOP mode.
+    }
+};
 
-const gpio_output_pin_user_config_t lcdBacklight = {
+/* Configuration for enter RUN mode. Core clock = 48MHz. */
+static const clock_manager_user_config_t g_defaultClockConfigRun = {
+    .mcgliteConfig =
+    {   
+        .mcglite_mode        = kMcgliteModeHirc48M,   // Work in HIRC mode.
+        .irclkEnable        = false, // MCGIRCLK disable.
+        .irclkEnableInStop  = false, // MCGIRCLK disable in STOP mode.
+        .ircs               = kMcgliteLircSel2M, // Select LIRC_2M.
+        .fcrdiv             = kMcgliteLircDivBy1,    // FCRDIV is 0.
+        .lircDiv2           = kMcgliteLircDivBy1,    // LIRC_DIV2 is 0.
+        .hircEnableInNotHircMode         = true,  // HIRC disable.
+    },
+    .simConfig =
+    {   
+        .er32kSrc  = kClockEr32kSrcOsc0,  // ERCLK32K selection, use OSC.
+        .outdiv1   = 0U,
+        .outdiv4   = 1U,
+    },
+    .oscerConfig =
+    {
+        .enable       = false, // OSCERCLK disable.
+        .enableInStop = false, // OSCERCLK disable in STOP mode.
+    }
+};
+
+// LCD backlight GPIO pin
+static const gpio_output_pin_user_config_t g_lcdBacklight = {
     .pinName = GPIO_MAKE_PIN(GPIOE_IDX, 31U),
     .config.outputLogic = 1,
     .config.slewRate = kPortSlowSlewRate,
     .config.driveStrength = kPortLowDriveStrength,
 };
 
-////////////////////////////////////////////////////////////////////////////////
+// LPTMR configurations
+static const lptmr_user_config_t g_lptmrConfig = {
+    .timerMode = kLptmrTimerModeTimeCounter,
+    .freeRunningEnable = false,
+    .prescalerEnable = true,
+    .prescalerClockSource = kClockLptmrSrcLpoClk,
+    .prescalerValue = kLptmrPrescalerDivide2,
+    .isInterruptEnabled = true,
+};
+
+///////
 // Code
-////////////////////////////////////////////////////////////////////////////////
+
 /*!
  * @brief LPTMR interrupt call back function.
  * The function is used to toggle LED1.
@@ -66,7 +119,7 @@ const gpio_output_pin_user_config_t lcdBacklight = {
 void lptmr_call_back(void)
 {
     // Toggle LED1
-    GPIO_DRV_TogglePinOutput(lcdBacklight.pinName);
+    GPIO_DRV_TogglePinOutput(g_lcdBacklight.pinName);
 }
 
 /*!
@@ -74,60 +127,35 @@ void lptmr_call_back(void)
  */
 int main (void)
 {
-    // LPTMR configurations
-    lptmr_user_config_t lptmrConfig =
-    {
-        .timerMode = kLptmrTimerModeTimeCounter,
-        .freeRunningEnable = false,
-        .prescalerEnable = true,
-        .prescalerClockSource = kClockLptmrSrcLpoClk,
-        .prescalerValue = kLptmrPrescalerDivide2,
-        .isInterruptEnabled = true,
-    };
-    // LPTMR driver state information
+    /* enable clock for PORTs */
+    //CLOCK_SYS_EnablePortClock(PORTA_IDX);
+    //CLOCK_SYS_EnablePortClock(PORTC_IDX);
+
+    /* Set allowed power mode, allow all. */
+    SMC_HAL_SetProtection(SMC, kAllowPowerModeAll);
+
+    /* Set system clock configuration. */
+    CLOCK_SYS_SetConfiguration(&g_defaultClockConfigRun);
+
+    /* Initialize LPTMR */
     lptmr_state_t lptmrState;
-
-    // Initialize standard SDK demo application pins
-    hardware_init();
-
-    // Initialize LPTMR
-    LPTMR_DRV_Init(LPTMR0_IDX, &lptmrState, &lptmrConfig);
-    // Set timer period for TMR_PERIOD seconds
-    LPTMR_DRV_SetTimerPeriodUs(LPTMR0_IDX, TMR_PERIOD);
-    // Install interrupt call back function for LPTMR
+    LPTMR_DRV_Init(LPTMR0_IDX, &lptmrState, &g_lptmrConfig);
+    LPTMR_DRV_SetTimerPeriodUs(LPTMR0_IDX, 500000);
     LPTMR_DRV_InstallCallback(LPTMR0_IDX, lptmr_call_back);
-    // Start LPTMR
+
+    /* Initialize LCD backlight LED GPIO */
+    GPIO_DRV_OutputPinInit(&g_lcdBacklight);
+
+    /* Initialize the DAC Converter. */
+    dac_converter_config_t MyDacUserConfigStruct;
+    DAC_DRV_StructInitUserConfigNormal(&MyDacUserConfigStruct);
+    DAC_DRV_Init(0, &MyDacUserConfigStruct);
+
+    /* Start LPTMR */
     LPTMR_DRV_Start(LPTMR0_IDX);
 
-    // Initialize LED1
-    GPIO_DRV_OutputPinInit(&lcdBacklight);
-
-    // Print the initial banner
-    PRINTF("\r\nHello World!\n\n\r");
-
-    dac_converter_config_t MyDacUserConfigStruct;
-    // Fill the structure with configuration of software trigger. //
-    DAC_DRV_StructInitUserConfigNormal(&MyDacUserConfigStruct);
-    // Initialize the DAC Converter. //
-    DAC_DRV_Init(0, &MyDacUserConfigStruct);
-    // Output the DAC value. //
-    uint16_t p = 0x1000;
-    uint16_t i = 0x2ff;
-    int8_t d = 1;
-    while(1) {
-        if (i == 0x2ff) {
-            d = 1;
-        } else if (i == 0x4ff) {
-            d = -1;
-            p = p * 7 / 8;
-            if (p == 0) p = 0x1000;
-        }
-        i += d;
-        DAC_DRV_Output(0, i);
-        //OSA_TimeDelay(1);
-        uint16_t c;
-        for(c = 0; c < p; ++c);
-    }
+    // TODO: low power mode?
+    for(;;);
 }
 
 /* vim: set expandtab ts=4 sw=4: */
