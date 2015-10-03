@@ -91,6 +91,12 @@ static const clock_manager_user_config_t g_defaultClockConfigRun = {
     }
 };
 
+/* Idle the CPU in Very Low Power Wait (VLPW) */
+/* This should be the lowest power mode where the PIT still functions. */
+static const smc_power_mode_config_t g_idlePowerMode = {
+    .powerModeName = kPowerModeVlpw,
+};
+
 // LCD backlight GPIO pin
 static const gpio_output_pin_user_config_t g_lcdBacklight = {
     .pinName = GPIO_MAKE_PIN(GPIOE_IDX, 31U),
@@ -135,7 +141,7 @@ int main (void)
     SMC_HAL_SetProtection(SMC, kAllowPowerModeAll);
 
     /* Set system clock configuration. */
-    CLOCK_SYS_SetConfiguration(&g_defaultClockConfigRun);
+    CLOCK_SYS_SetConfiguration(&g_defaultClockConfigVlpr);
 
     /* Initialize LPTMR */
     lptmr_state_t lptmrState;
@@ -154,8 +160,10 @@ int main (void)
     /* Start LPTMR */
     LPTMR_DRV_Start(LPTMR0_IDX);
 
-    // TODO: low power mode?
-    for(;;);
+    /* We're done, everything else is triggered through interrupts */
+    for(;;) {
+        SMC_HAL_SetMode(SMC, &g_idlePowerMode);
+    }
 }
 
 /* vim: set expandtab ts=4 sw=4: */
