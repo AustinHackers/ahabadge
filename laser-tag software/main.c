@@ -115,6 +115,19 @@ static const lptmr_user_config_t g_lptmrConfig = {
     .isInterruptEnabled = true,
 };
 
+// PIT config
+static const pit_user_config_t g_pitChan0 = {
+    .periodUs = 8000,
+};
+
+// DAC buffer config for testing, we'll be using DMA soon
+static const dac_buffer_config_t g_dacBuff = {
+    .bufferEnable = true,
+    .triggerMode = kDacTriggerByHardware,
+    .buffWorkMode = kDacBuffWorkAsNormalMode,
+    .upperIdx = 1,
+};
+
 ///////
 // Code
 
@@ -126,6 +139,16 @@ void lptmr_call_back(void)
 {
     // Toggle LED1
     GPIO_DRV_TogglePinOutput(g_lcdBacklight.pinName);
+
+    // Toggle PIT timer
+    static bool enable;
+    enable = !enable;
+    if (enable) {
+        PIT_DRV_StartTimer(0, 0);
+    } else {
+        PIT_DRV_StopTimer(0, 0);
+        DAC_DRV_SetBuffCurIdx(0, 0);
+    }
 }
 
 /*!
@@ -152,17 +175,26 @@ int main (void)
     /* Initialize LCD backlight LED GPIO */
     GPIO_DRV_OutputPinInit(&g_lcdBacklight);
 
-    /* Initialize the DAC Converter. */
+    /* Initialize PIT */
+    PIT_DRV_Init(0, false);
+    PIT_DRV_InitChannel(0, 0, &g_pitChan0);
+
+    /* Initialize the DAC */
     dac_converter_config_t MyDacUserConfigStruct;
     DAC_DRV_StructInitUserConfigNormal(&MyDacUserConfigStruct);
     DAC_DRV_Init(0, &MyDacUserConfigStruct);
+    DAC_DRV_ConfigBuffer(0, &g_dacBuff);
+    uint16_t buf[] = { 0x2ff, 0x4ff };
+    DAC_DRV_SetBuffValue(0, 0, 2, buf);
 
     /* Start LPTMR */
     LPTMR_DRV_Start(LPTMR0_IDX);
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {
+#ifndef DEBUG
         SMC_HAL_SetMode(SMC, &g_idlePowerMode);
+#endif
     }
 }
 
