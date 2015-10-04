@@ -118,7 +118,7 @@ static const lptmr_user_config_t g_lptmrConfig = {
 
 // PIT config
 static const pit_user_config_t g_pitChan0 = {
-    .periodUs = 8000,
+    .periodUs = 10, // 100 kHz
 };
 
 
