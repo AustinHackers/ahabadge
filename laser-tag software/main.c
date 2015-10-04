@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2015 David Barksdale <amatus@amat.us>
  * Copyright (c) 2013 - 2014, Freescale Semiconductor, Inc.
  * All rights reserved.
  *
@@ -120,16 +121,11 @@ static const pit_user_config_t g_pitChan0 = {
     .periodUs = 8000,
 };
 
-// DAC buffer config for testing, we'll be using DMA soon
-static const dac_buffer_config_t g_dacBuff = {
-    .bufferEnable = true,
-    .triggerMode = kDacTriggerByHardware,
-    .buffWorkMode = kDacBuffWorkAsNormalMode,
-    .upperIdx = 1,
-};
 
 ///////
 // Code
+
+dma_channel_t g_chan;
 
 /*!
  * @brief LPTMR interrupt call back function.
@@ -144,10 +140,11 @@ void lptmr_call_back(void)
     static bool enable;
     enable = !enable;
     if (enable) {
+        DMA_HAL_SetTransferCount(g_dmaBase[0], g_chan.channel, 0xffff0);
         PIT_DRV_StartTimer(0, 0);
     } else {
         PIT_DRV_StopTimer(0, 0);
-        DAC_DRV_SetBuffCurIdx(0, 0);
+        DAC_DRV_Output(0, 0);
     }
 }
 
@@ -183,9 +180,28 @@ int main (void)
     dac_converter_config_t MyDacUserConfigStruct;
     DAC_DRV_StructInitUserConfigNormal(&MyDacUserConfigStruct);
     DAC_DRV_Init(0, &MyDacUserConfigStruct);
-    DAC_DRV_ConfigBuffer(0, &g_dacBuff);
-    uint16_t buf[] = { 0x2ff, 0x4ff };
-    DAC_DRV_SetBuffValue(0, 0, 2, buf);
+
+    /* Initialize DMA */
+    dma_state_t dma_state;
+    DMA_DRV_Init(&dma_state);
+    DMA_DRV_RequestChannel(kDmaAnyChannel, kDmaRequestMux0AlwaysOn60, &g_chan);
+    DMAMUX_HAL_SetPeriodTriggerCmd(g_dmamuxBase[0], g_chan.channel, true);
+    const uint32_t dac_dat = (intptr_t)&DAC_DATL_REG(g_dacBase[0], 0);
+    const uint16_t L_ON = 0x4ff;
+    const uint16_t L_OFF = 0x2ff;
+    const uint16_t laserbuf[16] __attribute__ ((aligned(32))) = {
+        L_OFF, L_ON,  L_OFF, L_ON,
+        L_OFF, L_OFF, L_ON,  L_ON,
+        L_OFF, L_OFF, L_OFF, L_ON,
+        L_ON,  L_ON,  L_OFF, L_ON,
+    };
+    DMA_DRV_ConfigTransfer(&g_chan, kDmaMemoryToPeripheral, 2,
+            (intptr_t)laserbuf, dac_dat, 0xffff0);
+    DMA_HAL_SetSourceModulo(g_dmaBase[0], g_chan.channel, kDmaModulo32Bytes);
+    DMA_HAL_SetAsyncDmaRequestCmd(g_dmaBase[0], g_chan.channel, true);
+    DMA_HAL_SetIntCmd(g_dmaBase[0], g_chan.channel, false);
+    DMA_HAL_SetDisableRequestAfterDoneCmd(g_dmaBase[0], g_chan.channel, false);
+    DMA_DRV_StartChannel(&g_chan);
 
     /* Start LPTMR */
     LPTMR_DRV_Start(LPTMR0_IDX);
