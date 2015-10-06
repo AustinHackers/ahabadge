@@ -30,6 +30,7 @@
  */
 
 #include "fsl_clock_manager.h"
+#include "fsl_cmp_driver.h"
 #include "fsl_dac_driver.h"
 #include "fsl_dma_driver.h"
 #include "fsl_gpio_driver.h"
@@ -118,13 +119,35 @@ static const lptmr_user_config_t g_lptmrConfig = {
 
 // PIT config
 static const pit_user_config_t g_pitChan0 = {
-    .periodUs = 10, // 100 kHz
+    .periodUs = 100, // 10 kHz
+};
+
+// CMP config
+static const cmp_comparator_config_t g_cmpConf = {
+    .hystersisMode = kCmpHystersisOfLevel0,
+    .pinoutEnable = true,
+    .pinoutUnfilteredEnable = false,
+    .invertEnable = false,
+    .highSpeedEnable = false,
+    .dmaEnable = false,
+    .risingIntEnable = true,
+    .fallingIntEnable = true,
+    .plusChnMux = kCmpInputChn5,
+    .minusChnMux = kCmpInputChnDac,
+    .triggerEnable = false,
+};
+
+static cmp_dac_config_t g_cmpDacConf = {
+    .dacEnable = true,
+    .refVoltSrcMode = kCmpDacRefVoltSrcOf2,
+    .dacValue = 32,
 };
 
 
 ///////
 // Code
 
+cmp_state_t g_cmpState;
 dma_channel_t g_chan;
 
 /*!
@@ -145,6 +168,18 @@ void lptmr_call_back(void)
     } else {
         PIT_DRV_StopTimer(0, 0);
         DAC_DRV_Output(0, 0);
+    }
+}
+
+
+void CMP0_IRQHandler(void)
+{
+    /* Clear flags. */
+    if (CMP_DRV_GetFlag(0, kCmpFlagOfCoutRising)) {
+        CMP_DRV_ClearFlag(0, kCmpFlagOfCoutRising);
+    }
+    if (CMP_DRV_GetFlag(0, kCmpFlagOfCoutFalling)) {
+        CMP_DRV_ClearFlag(0, kCmpFlagOfCoutFalling);
     }
 }
 
@@ -202,6 +237,12 @@ int main (void)
     DMA_HAL_SetIntCmd(g_dmaBase[0], g_chan.channel, false);
     DMA_HAL_SetDisableRequestAfterDoneCmd(g_dmaBase[0], g_chan.channel, false);
     DMA_DRV_StartChannel(&g_chan);
+
+    /* Initialize CMP */
+    CMP_DRV_Init(0, &g_cmpState, &g_cmpConf);
+    CMP_DRV_ConfigDacChn(0, &g_cmpDacConf);
+    PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 0, kPortMuxAlt5);
+    CMP_DRV_Start(0);
 
     /* Start LPTMR */
     LPTMR_DRV_Start(LPTMR0_IDX);
