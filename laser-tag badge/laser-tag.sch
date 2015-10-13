@@ -9679,11 +9679,17 @@ www.irf.com&lt;p&gt;
 <part name="GND9" library="supply1" deviceset="GND" device=""/>
 <part name="C14" library="rcl" deviceset="C-EU" device="C0603K" value="0.1 uF"/>
 <part name="Q1" library="transistor-small-signal" deviceset="BSS123" device="" value="2N7002ET1G"/>
+<part name="GND10" library="supply1" deviceset="GND" device=""/>
+<part name="R5" library="rcl" deviceset="R-EU_" device="R0603" value="100k"/>
+<part name="R6" library="rcl" deviceset="R-EU_" device="R0603" value="220k"/>
+<part name="P+8" library="supply1" deviceset="VCC" device=""/>
 </parts>
 <sheets>
 <sheet>
 <plain>
 <text x="-96.52" y="99.06" size="1.778" layer="91">Place near VDD pins</text>
+<text x="-45.72" y="-33.02" size="1.778" layer="91">DNP if not
+using VREF_OUT</text>
 </plain>
 <instances>
 <instance part="U1" gate="A" x="10.16" y="99.06"/>
@@ -9739,12 +9745,16 @@ www.irf.com&lt;p&gt;
 <instance part="D2" gate="G$1" x="-20.32" y="91.44" smashed="yes" rot="R180">
 <attribute name="NAME" x="-19.558" y="95.504" size="1.778" layer="95"/>
 </instance>
-<instance part="U$1" gate="G$1" x="-66.04" y="-10.16"/>
+<instance part="U$1" gate="G$1" x="27.94" y="109.22"/>
 <instance part="L1" gate="G$1" x="-22.86" y="38.1"/>
 <instance part="P+6" gate="VCC" x="-22.86" y="48.26"/>
 <instance part="GND9" gate="1" x="-22.86" y="27.94"/>
-<instance part="C14" gate="G$1" x="-60.96" y="91.44"/>
+<instance part="C14" gate="G$1" x="-53.34" y="-30.48"/>
 <instance part="Q1" gate="G$1" x="-5.08" y="-20.32"/>
+<instance part="GND10" gate="1" x="-60.96" y="-43.18"/>
+<instance part="R5" gate="G$1" x="-60.96" y="-30.48" rot="R90"/>
+<instance part="R6" gate="G$1" x="-60.96" y="-15.24" rot="R90"/>
+<instance part="P+8" gate="VCC" x="-60.96" y="-5.08"/>
 </instances>
 <busses>
 <bus name="PTE0,PTE20,PTE21,PTE22,PTE23,PTE31">
@@ -9756,6 +9766,16 @@ www.irf.com&lt;p&gt;
 </busses>
 <nets>
 <net name="GND" class="0">
+<segment>
+<pinref part="C14" gate="G$1" pin="2"/>
+<wire x1="-60.96" y1="-40.64" x2="-60.96" y2="-38.1" width="0.1524" layer="91"/>
+<wire x1="-60.96" y1="-38.1" x2="-53.34" y2="-38.1" width="0.1524" layer="91"/>
+<wire x1="-53.34" y1="-38.1" x2="-53.34" y2="-35.56" width="0.1524" layer="91"/>
+<pinref part="GND10" gate="1" pin="GND"/>
+<pinref part="R5" gate="G$1" pin="1"/>
+<wire x1="-60.96" y1="-38.1" x2="-60.96" y2="-35.56" width="0.1524" layer="91"/>
+<junction x="-60.96" y="-38.1"/>
+</segment>
 <segment>
 <pinref part="BAT" gate="G$1" pin="-"/>
 <pinref part="GND3" gate="1" pin="GND"/>
@@ -9777,10 +9797,6 @@ www.irf.com&lt;p&gt;
 <wire x1="-81.28" y1="81.28" x2="-71.12" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="-71.12" y1="81.28" x2="-71.12" y2="86.36" width="0.1524" layer="91"/>
 <junction x="-81.28" y="81.28"/>
-<pinref part="C14" gate="G$1" pin="2"/>
-<wire x1="-71.12" y1="81.28" x2="-60.96" y2="81.28" width="0.1524" layer="91"/>
-<wire x1="-60.96" y1="81.28" x2="-60.96" y2="86.36" width="0.1524" layer="91"/>
-<junction x="-71.12" y="81.28"/>
 </segment>
 <segment>
 <pinref part="GND4" gate="1" pin="GND"/>
@@ -10037,6 +10053,11 @@ www.irf.com&lt;p&gt;
 <pinref part="L1" gate="G$1" pin="VDD"/>
 <wire x1="-22.86" y1="45.72" x2="-22.86" y2="43.18" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="R6" gate="G$1" pin="2"/>
+<pinref part="P+8" gate="VCC" pin="VCC"/>
+<wire x1="-60.96" y1="-10.16" x2="-60.96" y2="-7.62" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="PTA3" class="0">
 <segment>
@@ -10246,8 +10267,14 @@ www.irf.com&lt;p&gt;
 </segment>
 <segment>
 <pinref part="C14" gate="G$1" pin="1"/>
-<wire x1="-60.96" y1="93.98" x2="-60.96" y2="96.52" width="0.1524" layer="91"/>
-<label x="-60.96" y="96.52" size="1.778" layer="95" rot="R90"/>
+<wire x1="-53.34" y1="-27.94" x2="-53.34" y2="-22.86" width="0.1524" layer="91"/>
+<label x="-53.34" y="-22.86" size="1.778" layer="95"/>
+<pinref part="R5" gate="G$1" pin="2"/>
+<pinref part="R6" gate="G$1" pin="1"/>
+<wire x1="-60.96" y1="-25.4" x2="-60.96" y2="-22.86" width="0.1524" layer="91"/>
+<wire x1="-60.96" y1="-22.86" x2="-60.96" y2="-20.32" width="0.1524" layer="91"/>
+<wire x1="-60.96" y1="-22.86" x2="-53.34" y2="-22.86" width="0.1524" layer="91"/>
+<junction x="-60.96" y="-22.86"/>
 </segment>
 </net>
 <net name="PTE29" class="0">
@@ -10887,4 +10914,10 @@ www.irf.com&lt;p&gt;
 </sheets>
 </schematic>
 </drawing>
+<compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
+</compatibility>
 </eagle>

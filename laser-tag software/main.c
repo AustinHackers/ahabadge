@@ -139,7 +139,7 @@ static const cmp_comparator_config_t g_cmpConf = {
 
 static cmp_dac_config_t g_cmpDacConf = {
     .dacEnable = true,
-    .refVoltSrcMode = kCmpDacRefVoltSrcOf2,
+    .refVoltSrcMode = kCmpDacRefVoltSrcOf1,
     .dacValue = 32,
 };
 
