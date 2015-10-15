@@ -169,6 +169,12 @@ void lptmr_call_back(void)
         PIT_DRV_StopTimer(0, 0);
         DAC_DRV_Output(0, 0);
     }
+
+    // AGC decay
+    if (g_cmpDacConf.dacValue > 0) {
+        g_cmpDacConf.dacValue--;
+        CMP_DRV_ConfigDacChn(0, &g_cmpDacConf);
+    }
 }
 
 
@@ -180,6 +186,14 @@ void CMP0_IRQHandler(void)
     }
     if (CMP_DRV_GetFlag(0, kCmpFlagOfCoutFalling)) {
         CMP_DRV_ClearFlag(0, kCmpFlagOfCoutFalling);
+    }
+
+    // AGC rise
+    if (CMP_DRV_GetOutputLogic(0)) {
+        if (g_cmpDacConf.dacValue < 63) {
+            g_cmpDacConf.dacValue++;
+            CMP_DRV_ConfigDacChn(0, &g_cmpDacConf);
+        }
     }
 }
 
