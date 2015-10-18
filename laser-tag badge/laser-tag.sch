@@ -9690,6 +9690,8 @@ www.irf.com&lt;p&gt;
 <text x="-96.52" y="99.06" size="1.778" layer="91">Place near VDD pins</text>
 <text x="-45.72" y="-33.02" size="1.778" layer="91">DNP if not
 using VREF_OUT</text>
+<text x="73.66" y="30.48" size="1.778" layer="91">Ports B and E do not
+support interrupts</text>
 </plain>
 <instances>
 <instance part="U1" gate="A" x="10.16" y="99.06"/>
@@ -9757,9 +9759,9 @@ using VREF_OUT</text>
 <instance part="P+8" gate="VCC" x="-60.96" y="-5.08"/>
 </instances>
 <busses>
-<bus name="PTE0,PTE20,PTE21,PTE22,PTE23,PTE31">
+<bus name="PTE20,PTE21,PTE22,PTE23,PTE24,PTE31">
 <segment>
-<wire x1="5.08" y1="96.52" x2="5.08" y2="-35.56" width="0.762" layer="92"/>
+<wire x1="5.08" y1="76.2" x2="5.08" y2="-35.56" width="0.762" layer="92"/>
 <wire x1="5.08" y1="-35.56" x2="33.02" y2="-35.56" width="0.762" layer="92"/>
 </segment>
 </bus>
@@ -10103,20 +10105,13 @@ using VREF_OUT</text>
 </net>
 <net name="PTE0" class="0">
 <segment>
-<pinref part="U1" gate="A" pin="PTE0"/>
-<wire x1="10.16" y1="99.06" x2="7.62" y2="99.06" width="0.1524" layer="91"/>
-<wire x1="7.62" y1="99.06" x2="5.08" y2="96.52" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="BREAKOUT1" gate="A" pin="1"/>
 <wire x1="-111.76" y1="60.96" x2="-116.84" y2="60.96" width="0.1524" layer="91"/>
 <label x="-116.84" y="60.96" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="LCD" gate="G$1" pin="/RST"/>
-<label x="27.94" y="-25.4" size="1.778" layer="95" rot="R270"/>
-<wire x1="27.94" y1="-22.86" x2="27.94" y2="-33.02" width="0.1524" layer="91"/>
-<wire x1="27.94" y1="-33.02" x2="25.4" y2="-35.56" width="0.1524" layer="91"/>
+<pinref part="U1" gate="A" pin="PTE0"/>
+<wire x1="10.16" y1="99.06" x2="7.62" y2="99.06" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="PTE1" class="0">
@@ -10127,12 +10122,7 @@ using VREF_OUT</text>
 </segment>
 <segment>
 <pinref part="U1" gate="A" pin="PTE1"/>
-<wire x1="10.16" y1="96.52" x2="0" y2="96.52" width="0.1524" layer="91"/>
-<wire x1="0" y1="96.52" x2="0" y2="50.8" width="0.1524" layer="91"/>
-<wire x1="0" y1="50.8" x2="-30.48" y2="50.8" width="0.1524" layer="91"/>
-<wire x1="-30.48" y1="50.8" x2="-30.48" y2="38.1" width="0.1524" layer="91"/>
-<pinref part="L1" gate="G$1" pin="DIN"/>
-<wire x1="-30.48" y1="38.1" x2="-27.94" y2="38.1" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="96.52" x2="7.62" y2="96.52" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="USB0_DP" class="0">
@@ -10338,17 +10328,29 @@ using VREF_OUT</text>
 <segment>
 <pinref part="U1" gate="A" pin="PTE24"/>
 <wire x1="10.16" y1="50.8" x2="7.62" y2="50.8" width="0.1524" layer="91"/>
+<wire x1="7.62" y1="50.8" x2="5.08" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="20"/>
 <wire x1="-104.14" y1="38.1" x2="-99.06" y2="38.1" width="0.1524" layer="91"/>
 <label x="-99.06" y="38.1" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="LCD" gate="G$1" pin="/RST"/>
+<wire x1="27.94" y1="-22.86" x2="27.94" y2="-33.02" width="0.1524" layer="91"/>
+<wire x1="27.94" y1="-33.02" x2="25.4" y2="-35.56" width="0.1524" layer="91"/>
+<label x="27.94" y="-25.4" size="1.778" layer="95" rot="R270"/>
+</segment>
 </net>
 <net name="PTE25" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="PTE25"/>
-<wire x1="10.16" y1="48.26" x2="7.62" y2="48.26" width="0.1524" layer="91"/>
+<wire x1="0" y1="50.8" x2="-30.48" y2="50.8" width="0.1524" layer="91"/>
+<wire x1="-30.48" y1="50.8" x2="-30.48" y2="38.1" width="0.1524" layer="91"/>
+<pinref part="L1" gate="G$1" pin="DIN"/>
+<wire x1="-30.48" y1="38.1" x2="-27.94" y2="38.1" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="48.26" x2="0" y2="48.26" width="0.1524" layer="91"/>
+<wire x1="0" y1="48.26" x2="0" y2="50.8" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="21"/>
