@@ -3200,16 +3200,14 @@ design rules under a new name.</description>
 <wire x1="27.94" y1="33.02" x2="26.67" y2="34.29" width="0.254" layer="16"/>
 </signal>
 <signal name="PTB3">
-<contactref element="U1" pad="38"/>
 <contactref element="BREAKOUT2" pad="6"/>
-<wire x1="37.5464125" y1="40.858628125" x2="31.115" y2="34.42721875" width="0.254" layer="16"/>
 <wire x1="31.115" y1="34.42721875" x2="31.115" y2="33.02" width="0.254" layer="16"/>
 <wire x1="31.115" y1="33.02" x2="29.845" y2="31.75" width="0.254" layer="16"/>
 <wire x1="29.845" y1="31.75" x2="29.21" y2="31.75" width="0.254" layer="16"/>
 <contactref element="S4" pad="2"/>
 <contactref element="S4" pad="1"/>
 <wire x1="63.11" y1="50.51" x2="71.51" y2="50.51" width="0" layer="19" extent="1-1"/>
-<wire x1="37.5464125" y1="40.858628125" x2="63.11" y2="50.51" width="0" layer="19" extent="1-16"/>
+<wire x1="31.115" y1="34.42721875" x2="63.11" y2="50.51" width="0" layer="19" extent="1-16"/>
 </signal>
 <signal name="PTB2">
 <contactref element="U1" pad="37"/>
@@ -3221,10 +3219,6 @@ design rules under a new name.</description>
 <wire x1="30.48" y1="31.115" x2="29.845" y2="30.48" width="0.254" layer="16"/>
 <wire x1="29.845" y1="30.48" x2="27.94" y2="30.48" width="0.254" layer="16"/>
 <wire x1="27.94" y1="30.48" x2="26.67" y2="31.75" width="0.254" layer="16"/>
-<contactref element="S3" pad="2"/>
-<contactref element="S3" pad="1"/>
-<wire x1="63.11" y1="61.94" x2="71.51" y2="61.94" width="0" layer="19" extent="1-1"/>
-<wire x1="37.899965625" y1="40.505075" x2="63.11" y2="61.94" width="0" layer="19" extent="1-16"/>
 </signal>
 <signal name="PTB1">
 <contactref element="U1" pad="36"/>
@@ -3235,10 +3229,6 @@ design rules under a new name.</description>
 <wire x1="31.115" y1="31.75" x2="31.115" y2="30.48" width="0.254" layer="16"/>
 <wire x1="31.115" y1="30.48" x2="29.845" y2="29.21" width="0.254" layer="16"/>
 <wire x1="29.845" y1="29.21" x2="29.21" y2="29.21" width="0.254" layer="16"/>
-<contactref element="S2" pad="2"/>
-<contactref element="S2" pad="1"/>
-<wire x1="9.77" y1="50.51" x2="18.17" y2="50.51" width="0" layer="19" extent="1-1"/>
-<wire x1="32.385" y1="34.28300625" x2="18.17" y2="50.51" width="0" layer="19" extent="1-16"/>
 </signal>
 <signal name="PTB0">
 <contactref element="U1" pad="35"/>
@@ -3253,10 +3243,6 @@ design rules under a new name.</description>
 <wire x1="29.845" y1="27.94" x2="28.575" y2="27.94" width="0.254" layer="16"/>
 <wire x1="28.575" y1="27.94" x2="27.305" y2="29.21" width="0.254" layer="16"/>
 <wire x1="27.305" y1="29.21" x2="26.67" y2="29.21" width="0.254" layer="16"/>
-<contactref element="S1" pad="2"/>
-<contactref element="S1" pad="1"/>
-<wire x1="9.77" y1="61.94" x2="18.17" y2="61.94" width="0" layer="19" extent="1-1"/>
-<wire x1="38.60706875" y1="39.79796875" x2="18.17" y2="61.94" width="0" layer="19" extent="1-16"/>
 </signal>
 <signal name="PTA19">
 <contactref element="U1" pad="33"/>
@@ -3405,6 +3391,22 @@ design rules under a new name.</description>
 <contactref element="LCD" pad="13"/>
 <contactref element="J10" pad="2"/>
 <wire x1="46.355" y1="67.5894" x2="46.64" y2="69.73" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$2">
+<contactref element="U1" pad="38"/>
+</signal>
+<signal name="N$4">
+<contactref element="S3" pad="2"/>
+<contactref element="S3" pad="1"/>
+<wire x1="63.11" y1="61.94" x2="71.51" y2="61.94" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$12">
+<contactref element="S2" pad="2"/>
+<contactref element="S2" pad="1"/>
+<wire x1="9.77" y1="50.51" x2="18.17" y2="50.51" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$20">
+<contactref element="S1" pad="1"/>
 </signal>
 </signals>
 </board>

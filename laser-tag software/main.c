@@ -107,6 +107,14 @@ static const gpio_output_pin_user_config_t g_lcdBacklight = {
     .config.driveStrength = kPortLowDriveStrength,
 };
 
+// Switch1 GPIO pin
+static const gpio_input_pin_user_config_t g_switch1 = {
+    .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 1U),
+    .config.isPullEnable = true,
+    .config.pullSelect = kPortPullUp,
+    .config.interrupt = kPortIntEitherEdge,
+};
+
 // LPTMR configurations
 static const lptmr_user_config_t g_lptmrConfig = {
     .timerMode = kLptmrTimerModeTimeCounter,
@@ -130,8 +138,8 @@ static const cmp_comparator_config_t g_cmpConf = {
     .invertEnable = false,
     .highSpeedEnable = false,
     .dmaEnable = false,
-    .risingIntEnable = true,
-    .fallingIntEnable = true,
+    .risingIntEnable = false,
+    .fallingIntEnable = false,
     .plusChnMux = kCmpInputChn5,
     .minusChnMux = kCmpInputChnDac,
     .triggerEnable = false,
@@ -139,7 +147,7 @@ static const cmp_comparator_config_t g_cmpConf = {
 
 static cmp_dac_config_t g_cmpDacConf = {
     .dacEnable = true,
-    .refVoltSrcMode = kCmpDacRefVoltSrcOf1,
+    .refVoltSrcMode = kCmpDacRefVoltSrcOf2,
     .dacValue = 32,
 };
 
@@ -159,41 +167,31 @@ void lptmr_call_back(void)
     // Toggle LED1
     GPIO_DRV_TogglePinOutput(g_lcdBacklight.pinName);
 
-    // Toggle PIT timer
-    static bool enable;
-    enable = !enable;
-    if (enable) {
-        DMA_HAL_SetTransferCount(g_dmaBase[0], g_chan.channel, 0xffff0);
-        PIT_DRV_StartTimer(0, 0);
-    } else {
-        PIT_DRV_StopTimer(0, 0);
-        DAC_DRV_Output(0, 0);
-    }
-
-    // AGC decay
-    if (g_cmpDacConf.dacValue > 0) {
-        g_cmpDacConf.dacValue--;
-        CMP_DRV_ConfigDacChn(0, &g_cmpDacConf);
-    }
-}
-
-
-void CMP0_IRQHandler(void)
-{
-    /* Clear flags. */
-    if (CMP_DRV_GetFlag(0, kCmpFlagOfCoutRising)) {
-        CMP_DRV_ClearFlag(0, kCmpFlagOfCoutRising);
-    }
-    if (CMP_DRV_GetFlag(0, kCmpFlagOfCoutFalling)) {
-        CMP_DRV_ClearFlag(0, kCmpFlagOfCoutFalling);
-    }
-
-    // AGC rise
+    // AGC adjust
     if (CMP_DRV_GetOutputLogic(0)) {
         if (g_cmpDacConf.dacValue < 63) {
             g_cmpDacConf.dacValue++;
             CMP_DRV_ConfigDacChn(0, &g_cmpDacConf);
         }
+    } else {
+        if (g_cmpDacConf.dacValue > 0) {
+            g_cmpDacConf.dacValue--;
+            CMP_DRV_ConfigDacChn(0, &g_cmpDacConf);
+        }
+    }
+}
+
+void PORTA_IRQHandler(void)
+{
+    /* Clear interrupt flag.*/
+    PORT_HAL_ClearPortIntFlag(PORTA_BASE_PTR);
+
+    if (GPIO_DRV_ReadPinInput(g_switch1.pinName)) {
+        PIT_DRV_StopTimer(0, 0);
+        DAC_DRV_Output(0, 0);
+    } else {
+        DMA_HAL_SetTransferCount(g_dmaBase[0], g_chan.channel, 0xffff0);
+        PIT_DRV_StartTimer(0, 0);
     }
 }
 
@@ -215,7 +213,7 @@ int main (void)
     /* Initialize LPTMR */
     lptmr_state_t lptmrState;
     LPTMR_DRV_Init(LPTMR0_IDX, &lptmrState, &g_lptmrConfig);
-    LPTMR_DRV_SetTimerPeriodUs(LPTMR0_IDX, 500000);
+    LPTMR_DRV_SetTimerPeriodUs(LPTMR0_IDX, 100000);
     LPTMR_DRV_InstallCallback(LPTMR0_IDX, lptmr_call_back);
 
     /* Initialize LCD backlight LED GPIO */
@@ -257,6 +255,9 @@ int main (void)
     CMP_DRV_ConfigDacChn(0, &g_cmpDacConf);
     PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 0, kPortMuxAlt5);
     CMP_DRV_Start(0);
+
+    /* Buttons */
+    GPIO_DRV_InputPinInit(&g_switch1);
 
     /* Start LPTMR */
     LPTMR_DRV_Start(LPTMR0_IDX);
