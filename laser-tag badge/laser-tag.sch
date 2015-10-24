@@ -7455,6 +7455,24 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <vertex x="-3.175" y="-12.7"/>
 </polygon>
 </package>
+<package name="PDB-C156-FLUSH">
+<smd name="C" x="1.27" y="0" dx="5.08" dy="1.016" layer="1" rot="R270"/>
+<smd name="A" x="-1.27" y="0" dx="5.08" dy="1.016" layer="1" rot="R270"/>
+<wire x1="1.524" y1="-2.286" x2="1.016" y2="-2.286" width="0.127" layer="21"/>
+<wire x1="1.016" y1="-2.286" x2="1.016" y2="3.81" width="0.127" layer="21"/>
+<wire x1="1.016" y1="3.81" x2="-1.016" y2="3.81" width="0.127" layer="21"/>
+<wire x1="-1.016" y1="3.81" x2="-1.016" y2="-2.286" width="0.127" layer="21"/>
+<wire x1="-1.016" y1="-2.286" x2="-1.524" y2="-2.286" width="0.127" layer="21"/>
+<wire x1="-1.524" y1="-2.286" x2="-1.524" y2="3.81" width="0.127" layer="21"/>
+<wire x1="-1.524" y1="3.81" x2="-2.54" y2="3.81" width="0.127" layer="21"/>
+<wire x1="-2.54" y1="3.81" x2="-2.54" y2="11.176" width="0.127" layer="21"/>
+<wire x1="-2.54" y1="11.176" x2="1.778" y2="11.176" width="0.127" layer="21"/>
+<wire x1="1.778" y1="11.176" x2="2.54" y2="10.414" width="0.127" layer="21"/>
+<wire x1="2.54" y1="10.414" x2="2.54" y2="3.81" width="0.127" layer="21"/>
+<wire x1="2.54" y1="3.81" x2="1.524" y2="3.81" width="0.127" layer="21"/>
+<wire x1="1.524" y1="3.81" x2="1.524" y2="-2.286" width="0.127" layer="21"/>
+<text x="-2.54" y="3.81" size="1.27" layer="25">&gt;NAME</text>
+</package>
 </packages>
 <symbols>
 <symbol name="LD">
@@ -7478,6 +7496,28 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <text x="-5.08" y="-7.62" size="1.778" layer="95">&gt;NAME</text>
 <text x="-5.08" y="-10.16" size="1.778" layer="96">&gt;VALUE</text>
 </symbol>
+<symbol name="OED">
+<wire x1="1.27" y1="0" x2="0" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="-2.54" x2="-1.27" y2="0" width="0.254" layer="94"/>
+<wire x1="1.27" y1="-2.54" x2="0" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="-2.54" x2="-1.27" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="1.27" y1="0" x2="0" y2="0" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="0" y2="0" width="0.1524" layer="94"/>
+<wire x1="0" y1="0" x2="-1.27" y2="0" width="0.254" layer="94"/>
+<wire x1="0" y1="0" x2="0" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-3.683" y1="-3.048" x2="-2.286" y2="-1.651" width="0.1524" layer="94"/>
+<wire x1="-2.286" y1="-1.651" x2="-3.175" y2="-2.032" width="0.1524" layer="94"/>
+<wire x1="-3.175" y1="-2.032" x2="-2.667" y2="-2.54" width="0.1524" layer="94"/>
+<wire x1="-2.667" y1="-2.54" x2="-2.286" y2="-1.651" width="0.1524" layer="94"/>
+<wire x1="-2.413" y1="-0.508" x2="-3.302" y2="-0.889" width="0.1524" layer="94"/>
+<wire x1="-3.302" y1="-0.889" x2="-2.794" y2="-1.397" width="0.1524" layer="94"/>
+<wire x1="-2.794" y1="-1.397" x2="-2.413" y2="-0.508" width="0.1524" layer="94"/>
+<wire x1="-3.81" y1="-1.905" x2="-2.413" y2="-0.508" width="0.1524" layer="94"/>
+<text x="3.556" y="-4.318" size="1.778" layer="95" rot="R90">&gt;NAME</text>
+<text x="5.715" y="-4.318" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
+<pin name="C" x="0" y="-5.08" visible="off" length="short" direction="pas" rot="R90"/>
+<pin name="A" x="0" y="2.54" visible="off" length="point" direction="pas" rot="R270"/>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="LD">
@@ -7489,6 +7529,22 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <connects>
 <connect gate="A" pin="A" pad="A"/>
 <connect gate="A" pin="C" pad="C"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="PDB-C156">
+<gates>
+<gate name="G$1" symbol="OED" x="0" y="2.54"/>
+</gates>
+<devices>
+<device name="" package="PDB-C156-FLUSH">
+<connects>
+<connect gate="G$1" pin="A" pad="A"/>
+<connect gate="G$1" pin="C" pad="C"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -9590,76 +9646,6 @@ www.irf.com&lt;p&gt;
 </deviceset>
 </devicesets>
 </library>
-<library name="opto-trans-siemens">
-<description>&lt;b&gt;Siemens Opto Transistors&lt;/b&gt;&lt;p&gt;
-&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
-<packages>
-<package name="SFH225">
-<description>&lt;B&gt;PHOTO DIODE&lt;/B&gt;</description>
-<wire x1="0.127" y1="2.54" x2="1.651" y2="2.032" width="0.1524" layer="21" curve="-36.869898"/>
-<wire x1="0.127" y1="-2.54" x2="1.651" y2="-2.032" width="0.1524" layer="21" curve="36.869898"/>
-<wire x1="1.651" y1="2.032" x2="1.651" y2="-2.032" width="0.1524" layer="21"/>
-<wire x1="-1.397" y1="2.032" x2="0.127" y2="2.54" width="0.1524" layer="21" curve="-38.659729"/>
-<wire x1="-1.397" y1="-2.032" x2="0.127" y2="-2.5399" width="0.1524" layer="21" curve="37.402814"/>
-<wire x1="-1.397" y1="-2.032" x2="-1.397" y2="2.032" width="0.1524" layer="21"/>
-<wire x1="1.143" y1="2.286" x2="1.143" y2="-2.159" width="0.1524" layer="21"/>
-<wire x1="1.143" y1="-2.159" x2="-1.143" y2="-2.159" width="0.1524" layer="21"/>
-<wire x1="1.143" y1="-2.159" x2="1.143" y2="-2.286" width="0.1524" layer="21"/>
-<pad name="A" x="0" y="1.27" drill="0.8128" shape="long"/>
-<pad name="K" x="0" y="-1.27" drill="0.8128" shape="long"/>
-<text x="1.905" y="-1.651" size="1.27" layer="25" ratio="10">&gt;NAME</text>
-<text x="1.905" y="0.508" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
-</package>
-</packages>
-<symbols>
-<symbol name="OED">
-<wire x1="1.27" y1="0" x2="0" y2="-2.54" width="0.254" layer="94"/>
-<wire x1="0" y1="-2.54" x2="-1.27" y2="0" width="0.254" layer="94"/>
-<wire x1="1.27" y1="-2.54" x2="0" y2="-2.54" width="0.254" layer="94"/>
-<wire x1="0" y1="-2.54" x2="-1.27" y2="-2.54" width="0.254" layer="94"/>
-<wire x1="1.27" y1="0" x2="0" y2="0" width="0.254" layer="94"/>
-<wire x1="0" y1="2.54" x2="0" y2="0" width="0.1524" layer="94"/>
-<wire x1="0" y1="0" x2="-1.27" y2="0" width="0.254" layer="94"/>
-<wire x1="0" y1="0" x2="0" y2="-2.54" width="0.254" layer="94"/>
-<wire x1="-3.683" y1="-3.048" x2="-2.286" y2="-1.651" width="0.1524" layer="94"/>
-<wire x1="-2.286" y1="-1.651" x2="-3.175" y2="-2.032" width="0.1524" layer="94"/>
-<wire x1="-3.175" y1="-2.032" x2="-2.667" y2="-2.54" width="0.1524" layer="94"/>
-<wire x1="-2.667" y1="-2.54" x2="-2.286" y2="-1.651" width="0.1524" layer="94"/>
-<wire x1="-2.413" y1="-0.508" x2="-3.302" y2="-0.889" width="0.1524" layer="94"/>
-<wire x1="-3.302" y1="-0.889" x2="-2.794" y2="-1.397" width="0.1524" layer="94"/>
-<wire x1="-2.794" y1="-1.397" x2="-2.413" y2="-0.508" width="0.1524" layer="94"/>
-<wire x1="-3.81" y1="-1.905" x2="-2.413" y2="-0.508" width="0.1524" layer="94"/>
-<text x="3.556" y="-4.318" size="1.778" layer="95" rot="R90">&gt;NAME</text>
-<text x="5.715" y="-4.318" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
-<pin name="C" x="0" y="-5.08" visible="off" length="short" direction="pas" rot="R90"/>
-<pin name="A" x="0" y="2.54" visible="off" length="point" direction="pas" rot="R270"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="SFH225" prefix="D">
-<description>&lt;B&gt;PHOTO DIODE&lt;/B&gt;</description>
-<gates>
-<gate name="1" symbol="OED" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="SFH225">
-<connects>
-<connect gate="1" pin="A" pad="A"/>
-<connect gate="1" pin="C" pad="K"/>
-</connects>
-<technologies>
-<technology name="">
-<attribute name="MF" value="" constant="no"/>
-<attribute name="MPN" value="" constant="no"/>
-<attribute name="OC_FARNELL" value="unknown" constant="no"/>
-<attribute name="OC_NEWARK" value="unknown" constant="no"/>
-</technology>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 </libraries>
 <attributes>
 </attributes>
@@ -9722,9 +9708,9 @@ www.irf.com&lt;p&gt;
 <part name="J8" library="Jumpers" deviceset="JUMPER_SOLDER_1X2_CLOSED" device=""/>
 <part name="J9" library="Jumpers" deviceset="JUMPER_SOLDER_1X2_CLOSED" device=""/>
 <part name="J10" library="Jumpers" deviceset="JUMPER_SOLDER_1X2_CLOSED" device=""/>
-<part name="D1" library="opto-trans-siemens" deviceset="SFH225" device="" value="PDB-C156"/>
-<part name="D2" library="opto-trans-siemens" deviceset="SFH225" device="" value="PDB-C156"/>
 <part name="J2" library="Jumpers" deviceset="JUMPER_SOLDER_1X2_OPEN" device=""/>
+<part name="PD1" library="Photonics" deviceset="PDB-C156" device=""/>
+<part name="PD2" library="Photonics" deviceset="PDB-C156" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -9789,9 +9775,9 @@ support interrupts</text>
 <instance part="J8" gate="J" x="30.48" y="-27.94" rot="R90"/>
 <instance part="J9" gate="J" x="33.02" y="-27.94" rot="R90"/>
 <instance part="J10" gate="J" x="35.56" y="-27.94" rot="R90"/>
-<instance part="D1" gate="1" x="-25.4" y="91.44" rot="R180"/>
-<instance part="D2" gate="1" x="-20.32" y="91.44" rot="R180"/>
 <instance part="J2" gate="J" x="-10.16" y="91.44" rot="R90"/>
+<instance part="PD1" gate="G$1" x="-25.4" y="91.44" rot="R180"/>
+<instance part="PD2" gate="G$1" x="-20.32" y="91.44" rot="R180"/>
 </instances>
 <busses>
 <bus name="PTE20,PTE21,PTE22,PTE23,PTE24,PTE31">
@@ -10025,8 +10011,8 @@ support interrupts</text>
 <wire x1="-20.32" y1="96.52" x2="-20.32" y2="99.06" width="0.1524" layer="91"/>
 <wire x1="-20.32" y1="99.06" x2="-25.4" y2="99.06" width="0.1524" layer="91"/>
 <junction x="-25.4" y="99.06"/>
-<pinref part="D1" gate="1" pin="C"/>
-<pinref part="D2" gate="1" pin="C"/>
+<pinref part="PD1" gate="G$1" pin="C"/>
+<pinref part="PD2" gate="G$1" pin="C"/>
 </segment>
 <segment>
 <pinref part="C1" gate="G$1" pin="1"/>
@@ -10289,8 +10275,8 @@ support interrupts</text>
 <wire x1="-20.32" y1="86.36" x2="-25.4" y2="86.36" width="0.1524" layer="91"/>
 <junction x="-25.4" y="86.36"/>
 <pinref part="J3" gate="J" pin="1"/>
-<pinref part="D1" gate="1" pin="A"/>
-<pinref part="D2" gate="1" pin="A"/>
+<pinref part="PD1" gate="G$1" pin="A"/>
+<pinref part="PD2" gate="G$1" pin="A"/>
 </segment>
 <segment>
 <pinref part="U1" gate="A" pin="PTE29"/>
