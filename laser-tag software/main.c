@@ -35,6 +35,7 @@
 #include "fsl_dma_driver.h"
 #include "fsl_gpio_driver.h"
 #include "fsl_lptmr_driver.h"
+#include "fsl_lpuart_driver.h"
 #include "fsl_os_abstraction.h"
 #include "fsl_pit_driver.h"
 #include "fsl_smc_hal.h"
@@ -99,7 +100,7 @@ static const smc_power_mode_config_t g_idlePowerMode = {
     .powerModeName = kPowerModeVlpw,
 };
 
-// LCD backlight GPIO pin
+/* LCD backlight GPIO pin */
 static const gpio_output_pin_user_config_t g_lcdBacklight = {
     .pinName = GPIO_MAKE_PIN(GPIOE_IDX, 31U),
     .config.outputLogic = 1,
@@ -107,7 +108,7 @@ static const gpio_output_pin_user_config_t g_lcdBacklight = {
     .config.driveStrength = kPortLowDriveStrength,
 };
 
-// Switch1 GPIO pin
+/* Switch1 GPIO pin */
 static const gpio_input_pin_user_config_t g_switch1 = {
     .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 1U),
     .config.isPullEnable = true,
@@ -115,7 +116,7 @@ static const gpio_input_pin_user_config_t g_switch1 = {
     .config.interrupt = kPortIntEitherEdge,
 };
 
-// LPTMR configurations
+/* LPTMR configurations */
 static const lptmr_user_config_t g_lptmrConfig = {
     .timerMode = kLptmrTimerModeTimeCounter,
     .freeRunningEnable = false,
@@ -125,17 +126,17 @@ static const lptmr_user_config_t g_lptmrConfig = {
     .isInterruptEnabled = true,
 };
 
-// PIT config
+/* PIT config */
 static const pit_user_config_t g_pitChan0 = {
-    .periodUs = 100, // 10 kHz
+    .periodUs = 104, // 9615 Hz (9600 baud 0.16% error)
 };
 
-// CMP config
+/* CMP config */
 static const cmp_comparator_config_t g_cmpConf = {
     .hystersisMode = kCmpHystersisOfLevel0,
     .pinoutEnable = true,
     .pinoutUnfilteredEnable = false,
-    .invertEnable = false,
+    .invertEnable = true,
     .highSpeedEnable = false,
     .dmaEnable = false,
     .risingIntEnable = false,
@@ -145,30 +146,42 @@ static const cmp_comparator_config_t g_cmpConf = {
     .triggerEnable = false,
 };
 
+/* CMP DAC config */
 static cmp_dac_config_t g_cmpDacConf = {
     .dacEnable = true,
     .refVoltSrcMode = kCmpDacRefVoltSrcOf2,
     .dacValue = 32,
 };
 
+/* LPUART0 config */
+static lpuart_user_config_t g_lpuartConfig = {
+    .clockSource = kClockLpuartSrcMcgIrClk,
+    .baudRate = 9600,
+    .parityMode = kLpuartParityEven,
+    .stopBitCount = kLpuartOneStopBit,
+    .bitCountPerChar = kLpuart9BitsPerChar,
+};
+
 
 ///////
 // Code
 
-cmp_state_t g_cmpState;
-dma_channel_t g_chan;
+static cmp_state_t g_cmpState;
+static dma_channel_t g_chan;
+static lpuart_state_t g_lpuartState;
+static uint8_t rxBuff[1];
 
 /*!
  * @brief LPTMR interrupt call back function.
  * The function is used to toggle LED1.
  */
-void lptmr_call_back(void)
+static void lptmr_call_back(void)
 {
     // Toggle LED1
     GPIO_DRV_TogglePinOutput(g_lcdBacklight.pinName);
 
     // AGC adjust
-    if (CMP_DRV_GetOutputLogic(0)) {
+    if (CMP_DRV_GetOutputLogic(0) != g_cmpConf.invertEnable) {
         if (g_cmpDacConf.dacValue < 63) {
             g_cmpDacConf.dacValue++;
             CMP_DRV_ConfigDacChn(0, &g_cmpDacConf);
@@ -193,6 +206,17 @@ void PORTA_IRQHandler(void)
         DMA_HAL_SetTransferCount(g_dmaBase[0], g_chan.channel, 0xffff0);
         PIT_DRV_StartTimer(0, 0);
     }
+}
+
+static void lpuartRxCallback(uint32_t instance, void *lpuartState)
+{
+    LPUART_Type *base = g_lpuartBase[instance];
+    uint32_t stat = LPUART_RD_STAT(base);
+    bool noise = stat & LPUART_STAT_NF_MASK;
+    bool frame_error = stat & LPUART_STAT_FE_MASK;
+    bool parity_error = stat & LPUART_STAT_PF_MASK;
+    LPUART_WR_STAT(base, (stat & 0x3e000000) |
+            LPUART_STAT_NF_MASK | LPUART_STAT_FE_MASK | LPUART_STAT_PF_MASK);
 }
 
 /*!
@@ -237,10 +261,10 @@ int main (void)
     const uint16_t L_ON = 0x4ff;
     const uint16_t L_OFF = 0x2ff;
     const uint16_t laserbuf[16] __attribute__ ((aligned(32))) = {
-        L_OFF, L_ON,  L_OFF, L_ON,
-        L_OFF, L_OFF, L_ON,  L_ON,
-        L_OFF, L_OFF, L_OFF, L_ON,
+        L_ON,  L_ON,  L_ON,  L_OFF,
         L_ON,  L_ON,  L_OFF, L_ON,
+        L_ON,  L_ON,  L_OFF, L_OFF,
+        L_OFF, L_OFF, L_OFF, L_OFF,
     };
     DMA_DRV_ConfigTransfer(&g_chan, kDmaMemoryToPeripheral, 2,
             (intptr_t)laserbuf, dac_dat, 0xffff0);
@@ -249,6 +273,7 @@ int main (void)
     DMA_HAL_SetIntCmd(g_dmaBase[0], g_chan.channel, false);
     DMA_HAL_SetDisableRequestAfterDoneCmd(g_dmaBase[0], g_chan.channel, false);
     DMA_DRV_StartChannel(&g_chan);
+    DAC_DRV_Output(0, 0);
 
     /* Initialize CMP */
     CMP_DRV_Init(0, &g_cmpState, &g_cmpConf);
@@ -261,6 +286,11 @@ int main (void)
 
     /* Start LPTMR */
     LPTMR_DRV_Start(LPTMR0_IDX);
+
+    /* Setup LPUART0 */
+    LPUART_DRV_Init(1, &g_lpuartState, &g_lpuartConfig);
+    LPUART_DRV_InstallRxCallback(1, lpuartRxCallback, rxBuff, NULL, true);
+    PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 1, kPortMuxAlt3);
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {
