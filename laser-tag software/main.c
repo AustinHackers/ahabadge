@@ -39,6 +39,7 @@
 #include "fsl_os_abstraction.h"
 #include "fsl_pit_driver.h"
 #include "fsl_smc_hal.h"
+#include "fsl_spi_master_driver.h"
 
 
 ////////////////////////////
@@ -102,15 +103,23 @@ static const smc_power_mode_config_t g_idlePowerMode = {
 
 /* LCD backlight GPIO pin */
 static const gpio_output_pin_user_config_t g_lcdBacklight = {
-    .pinName = GPIO_MAKE_PIN(GPIOE_IDX, 31U),
+    .pinName = GPIO_MAKE_PIN(GPIOE_IDX, 31),
     .config.outputLogic = 1,
+    .config.slewRate = kPortSlowSlewRate,
+    .config.driveStrength = kPortLowDriveStrength,
+};
+
+/* LCD A0 GPIO pin */
+static const gpio_output_pin_user_config_t g_lcdA0 = {
+    .pinName = GPIO_MAKE_PIN(GPIOD_IDX, 6),
+    .config.outputLogic = 0,
     .config.slewRate = kPortSlowSlewRate,
     .config.driveStrength = kPortLowDriveStrength,
 };
 
 /* Switch1 GPIO pin */
 static const gpio_input_pin_user_config_t g_switch1 = {
-    .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 1U),
+    .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 1),
     .config.isPullEnable = true,
     .config.pullSelect = kPortPullUp,
     .config.interrupt = kPortIntEitherEdge,
@@ -162,6 +171,14 @@ static lpuart_user_config_t g_lpuartConfig = {
     .bitCountPerChar = kLpuart9BitsPerChar,
 };
 
+/* LCD SPI config */
+static spi_master_user_config_t g_spi1Config = {
+    .bitsPerSec = 100000, // 100 kbps
+    .polarity = kSpiClockPolarity_ActiveLow,
+    .phase = kSpiClockPhase_SecondEdge,
+    .direction = kSpiMsbFirst,
+    .bitCount = kSpi8BitMode,
+};
 
 ///////
 // Code
@@ -170,6 +187,7 @@ static cmp_state_t g_cmpState;
 static dma_channel_t g_chan;
 static lpuart_state_t g_lpuartState;
 static uint8_t rxBuff[1];
+static spi_master_state_t g_spi1State;
 
 /*!
  * @brief LPTMR interrupt call back function.
@@ -225,8 +243,11 @@ static void lpuartRxCallback(uint32_t instance, void *lpuartState)
 int main (void)
 {
     /* enable clock for PORTs */
-    //CLOCK_SYS_EnablePortClock(PORTA_IDX);
+    CLOCK_SYS_EnablePortClock(PORTA_IDX);
+    //CLOCK_SYS_EnablePortClock(PORTB_IDX);
     //CLOCK_SYS_EnablePortClock(PORTC_IDX);
+    CLOCK_SYS_EnablePortClock(PORTD_IDX);
+    CLOCK_SYS_EnablePortClock(PORTE_IDX);
 
     /* Set allowed power mode, allow all. */
     SMC_HAL_SetProtection(SMC, kAllowPowerModeAll);
@@ -239,9 +260,6 @@ int main (void)
     LPTMR_DRV_Init(LPTMR0_IDX, &lptmrState, &g_lptmrConfig);
     LPTMR_DRV_SetTimerPeriodUs(LPTMR0_IDX, 100000);
     LPTMR_DRV_InstallCallback(LPTMR0_IDX, lptmr_call_back);
-
-    /* Initialize LCD backlight LED GPIO */
-    GPIO_DRV_OutputPinInit(&g_lcdBacklight);
 
     /* Initialize PIT */
     PIT_DRV_Init(0, false);
@@ -291,6 +309,41 @@ int main (void)
     LPUART_DRV_Init(1, &g_lpuartState, &g_lpuartConfig);
     LPUART_DRV_InstallRxCallback(1, lpuartRxCallback, rxBuff, NULL, true);
     PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 1, kPortMuxAlt3);
+
+    /* Setup LCD */
+    GPIO_DRV_OutputPinInit(&g_lcdBacklight);
+    GPIO_DRV_OutputPinInit(&g_lcdA0);
+    PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 4, kPortMuxAlt2); // CS
+    PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 5, kPortMuxAlt2); // SCL
+    PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 7, kPortMuxAlt5); // SI
+    SPI_DRV_MasterInit(1, &g_spi1State);
+    uint32_t baud;
+    SPI_DRV_MasterConfigureBus(1, &g_spi1Config, &baud);
+    uint8_t buff[] = {
+        0x80, 0x21, // Set electronic "volume" to 33/63
+        0x2f, // Set power control: booster on, regulator on, follower on
+        0xaf, // Display ON
+        0x40, // Set display line start address to 0
+        //0xa5, // all points ON
+    };
+    SPI_DRV_MasterTransferBlocking(1, NULL, buff, NULL, sizeof(buff), 1000);
+
+    // Try to write something to the display
+    int i;
+    for (i = 0; i < 4; ++i) {
+        int j;
+        uint8_t buff[] = {
+            0xb + i, // Set page address to i
+            0x00, 0x10 // Set column address to 0
+        };
+        GPIO_DRV_ClearPinOutput(g_lcdA0.pinName);
+        SPI_DRV_MasterTransferBlocking(1, NULL, buff, NULL, sizeof(buff), 1000);
+        GPIO_DRV_SetPinOutput(g_lcdA0.pinName);
+        for (j = 0; j < 128; ++j) {
+            uint8_t byte = 0x33;
+            SPI_DRV_MasterTransferBlocking(1, NULL, &byte, NULL, 1, 1000);
+        }
+    }
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {

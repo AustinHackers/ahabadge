@@ -9780,12 +9780,6 @@ support interrupts</text>
 <instance part="PD2" gate="G$1" x="-20.32" y="91.44" rot="R180"/>
 </instances>
 <busses>
-<bus name="PTE20,PTE21,PTE22,PTE23,PTE24,PTE31">
-<segment>
-<wire x1="5.08" y1="76.2" x2="5.08" y2="-43.18" width="0.762" layer="92"/>
-<wire x1="5.08" y1="-43.18" x2="33.02" y2="-43.18" width="0.762" layer="92"/>
-</segment>
-</bus>
 </busses>
 <nets>
 <net name="GND" class="0">
@@ -10098,6 +10092,11 @@ support interrupts</text>
 <wire x1="-63.5" y1="60.96" x2="-58.42" y2="60.96" width="0.1524" layer="91"/>
 <label x="-58.42" y="60.96" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="J7" gate="J" pin="1"/>
+<wire x1="27.94" y1="-35.56" x2="27.94" y2="-33.02" width="0.1524" layer="91"/>
+<label x="27.94" y="-35.56" size="1.778" layer="95" rot="R270"/>
+</segment>
 </net>
 <net name="PTE0" class="0">
 <segment>
@@ -10129,6 +10128,7 @@ support interrupts</text>
 <segment>
 <pinref part="U1" gate="A" pin="USB0_DP"/>
 <wire x1="10.16" y1="88.9" x2="7.62" y2="88.9" width="0.1524" layer="91"/>
+<junction x="7.62" y="88.9"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="5"/>
@@ -10145,6 +10145,7 @@ support interrupts</text>
 <segment>
 <pinref part="U1" gate="A" pin="USB0_DM"/>
 <wire x1="10.16" y1="86.36" x2="7.62" y2="86.36" width="0.1524" layer="91"/>
+<junction x="7.62" y="86.36"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="6"/>
@@ -10161,6 +10162,7 @@ support interrupts</text>
 <segment>
 <pinref part="U1" gate="A" pin="VREGIN"/>
 <wire x1="10.16" y1="81.28" x2="7.62" y2="81.28" width="0.1524" layer="91"/>
+<junction x="7.62" y="81.28"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="8"/>
@@ -10177,72 +10179,44 @@ support interrupts</text>
 <segment>
 <pinref part="U1" gate="A" pin="PTE20"/>
 <wire x1="10.16" y1="78.74" x2="7.62" y2="78.74" width="0.1524" layer="91"/>
-<wire x1="7.62" y1="78.74" x2="5.08" y2="76.2" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="9"/>
 <wire x1="-111.76" y1="50.8" x2="-116.84" y2="50.8" width="0.1524" layer="91"/>
 <label x="-116.84" y="50.8" size="1.778" layer="95" rot="R180"/>
 </segment>
-<segment>
-<wire x1="25.4" y1="-40.64" x2="22.86" y2="-43.18" width="0.1524" layer="91"/>
-<pinref part="J6" gate="J" pin="1"/>
-<wire x1="25.4" y1="-40.64" x2="25.4" y2="-33.02" width="0.1524" layer="91"/>
-<label x="25.4" y="-33.02" size="1.778" layer="95" rot="R270"/>
-</segment>
 </net>
 <net name="PTE21" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="PTE21"/>
 <wire x1="10.16" y1="76.2" x2="7.62" y2="76.2" width="0.1524" layer="91"/>
-<wire x1="7.62" y1="76.2" x2="5.08" y2="73.66" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="10"/>
 <wire x1="-104.14" y1="50.8" x2="-99.06" y2="50.8" width="0.1524" layer="91"/>
 <label x="-99.06" y="50.8" size="1.778" layer="95"/>
 </segment>
-<segment>
-<wire x1="30.48" y1="-40.64" x2="27.94" y2="-43.18" width="0.1524" layer="91"/>
-<pinref part="J8" gate="J" pin="1"/>
-<wire x1="30.48" y1="-40.64" x2="30.48" y2="-33.02" width="0.1524" layer="91"/>
-<label x="30.48" y="-33.02" size="1.778" layer="95" rot="R270"/>
-</segment>
 </net>
 <net name="PTE22" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="PTE22"/>
 <wire x1="10.16" y1="73.66" x2="7.62" y2="73.66" width="0.1524" layer="91"/>
-<wire x1="7.62" y1="73.66" x2="5.08" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="11"/>
 <wire x1="-111.76" y1="48.26" x2="-116.84" y2="48.26" width="0.1524" layer="91"/>
 <label x="-116.84" y="48.26" size="1.778" layer="95" rot="R180"/>
 </segment>
-<segment>
-<wire x1="33.02" y1="-40.64" x2="30.48" y2="-43.18" width="0.1524" layer="91"/>
-<pinref part="J9" gate="J" pin="1"/>
-<wire x1="33.02" y1="-40.64" x2="33.02" y2="-33.02" width="0.1524" layer="91"/>
-<label x="33.02" y="-33.02" size="1.778" layer="95" rot="R270"/>
-</segment>
 </net>
 <net name="PTE23" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="PTE23"/>
 <wire x1="10.16" y1="71.12" x2="7.62" y2="71.12" width="0.1524" layer="91"/>
-<wire x1="7.62" y1="71.12" x2="5.08" y2="68.58" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="12"/>
 <wire x1="-104.14" y1="48.26" x2="-99.06" y2="48.26" width="0.1524" layer="91"/>
 <label x="-99.06" y="48.26" size="1.778" layer="95"/>
-</segment>
-<segment>
-<wire x1="35.56" y1="-40.64" x2="33.02" y2="-43.18" width="0.1524" layer="91"/>
-<pinref part="J10" gate="J" pin="1"/>
-<wire x1="35.56" y1="-40.64" x2="35.56" y2="-33.02" width="0.1524" layer="91"/>
-<label x="35.56" y="-33.02" size="1.778" layer="95" rot="R270"/>
 </segment>
 </net>
 <net name="VREFH" class="0">
@@ -10302,7 +10276,7 @@ support interrupts</text>
 <segment>
 <pinref part="U1" gate="A" pin="PTE31"/>
 <wire x1="10.16" y1="53.34" x2="7.62" y2="53.34" width="0.1524" layer="91"/>
-<wire x1="7.62" y1="53.34" x2="5.08" y2="50.8" width="0.1524" layer="91"/>
+<junction x="7.62" y="53.34"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="19"/>
@@ -10310,30 +10284,20 @@ support interrupts</text>
 <label x="-116.84" y="38.1" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<wire x1="-12.7" y1="-10.16" x2="2.54" y2="-10.16" width="0.1524" layer="91"/>
-<wire x1="2.54" y1="-10.16" x2="5.08" y2="-7.62" width="0.1524" layer="91"/>
-<label x="-12.7" y="-10.16" size="1.778" layer="95"/>
+<label x="-12.7" y="-22.86" size="1.778" layer="95" rot="R180"/>
 <pinref part="Q1" gate="G$1" pin="G"/>
 <wire x1="-10.16" y1="-22.86" x2="-12.7" y2="-22.86" width="0.1524" layer="91"/>
-<wire x1="-12.7" y1="-10.16" x2="-12.7" y2="-22.86" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="PTE24" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="PTE24"/>
 <wire x1="10.16" y1="50.8" x2="7.62" y2="50.8" width="0.1524" layer="91"/>
-<wire x1="7.62" y1="50.8" x2="5.08" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="20"/>
 <wire x1="-104.14" y1="38.1" x2="-99.06" y2="38.1" width="0.1524" layer="91"/>
 <label x="-99.06" y="38.1" size="1.778" layer="95"/>
-</segment>
-<segment>
-<wire x1="27.94" y1="-40.64" x2="25.4" y2="-43.18" width="0.1524" layer="91"/>
-<pinref part="J7" gate="J" pin="1"/>
-<wire x1="27.94" y1="-40.64" x2="27.94" y2="-33.02" width="0.1524" layer="91"/>
-<label x="27.94" y="-33.02" size="1.778" layer="95" rot="R270"/>
 </segment>
 </net>
 <net name="PTE25" class="0">
@@ -10351,6 +10315,7 @@ support interrupts</text>
 <segment>
 <pinref part="U1" gate="A" pin="PTA1"/>
 <wire x1="10.16" y1="43.18" x2="7.62" y2="43.18" width="0.1524" layer="91"/>
+<junction x="7.62" y="43.18"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="23"/>
@@ -10436,44 +10401,68 @@ support interrupts</text>
 <segment>
 <pinref part="U1" gate="A" pin="PTA7"/>
 <wire x1="116.84" y1="99.06" x2="119.38" y2="99.06" width="0.1524" layer="91"/>
+<junction x="119.38" y="99.06"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT2" gate="A" pin="32"/>
 <wire x1="-63.5" y1="22.86" x2="-58.42" y2="22.86" width="0.1524" layer="91"/>
 <label x="-58.42" y="22.86" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="J10" gate="J" pin="1"/>
+<wire x1="35.56" y1="-35.56" x2="35.56" y2="-33.02" width="0.1524" layer="91"/>
+<label x="35.56" y="-35.56" size="1.778" layer="95" rot="R270"/>
+</segment>
 </net>
 <net name="PTD6" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="PTD6/LLWU_P15"/>
 <wire x1="116.84" y1="96.52" x2="119.38" y2="96.52" width="0.1524" layer="91"/>
+<junction x="119.38" y="96.52"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT2" gate="A" pin="31"/>
 <wire x1="-71.12" y1="22.86" x2="-76.2" y2="22.86" width="0.1524" layer="91"/>
 <label x="-76.2" y="22.86" size="1.778" layer="95" rot="R180"/>
 </segment>
+<segment>
+<pinref part="J8" gate="J" pin="1"/>
+<wire x1="30.48" y1="-35.56" x2="30.48" y2="-33.02" width="0.1524" layer="91"/>
+<label x="30.48" y="-35.56" size="1.778" layer="95" rot="R270"/>
+</segment>
 </net>
 <net name="PTD5" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="PTD5"/>
 <wire x1="116.84" y1="93.98" x2="119.38" y2="93.98" width="0.1524" layer="91"/>
+<junction x="119.38" y="93.98"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT2" gate="A" pin="30"/>
 <wire x1="-63.5" y1="25.4" x2="-58.42" y2="25.4" width="0.1524" layer="91"/>
 <label x="-58.42" y="25.4" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="J9" gate="J" pin="1"/>
+<wire x1="33.02" y1="-35.56" x2="33.02" y2="-33.02" width="0.1524" layer="91"/>
+<label x="33.02" y="-35.56" size="1.778" layer="95" rot="R270"/>
+</segment>
 </net>
 <net name="PTD4" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="PTD4/LLWU_P14"/>
 <wire x1="116.84" y1="91.44" x2="119.38" y2="91.44" width="0.1524" layer="91"/>
+<junction x="119.38" y="91.44"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT2" gate="A" pin="29"/>
 <wire x1="-71.12" y1="25.4" x2="-76.2" y2="25.4" width="0.1524" layer="91"/>
 <label x="-76.2" y="25.4" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<pinref part="J6" gate="J" pin="1"/>
+<wire x1="25.4" y1="-35.56" x2="25.4" y2="-33.02" width="0.1524" layer="91"/>
+<label x="25.4" y="-35.56" size="1.778" layer="95" rot="R270"/>
 </segment>
 </net>
 <net name="PTD3" class="0">
