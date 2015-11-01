@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.05" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
+<grid distance="1" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
@@ -85,6 +85,88 @@
 <pad name="A" x="-17.3" y="-9.6" drill="1.3"/>
 <pad name="K" x="17.3" y="-9.6" drill="1.3"/>
 </package>
+<package name="E1260CS021_SLOT">
+<description>&lt;b&gt;WR-FPC 0.5mm SMT ZIF Horizontal Bottom Contact, 40 Pins</description>
+<wire x1="13.3" y1="-4.1" x2="13.3" y2="1.5" width="0.127" layer="21"/>
+<wire x1="-13.3" y1="1.5" x2="-13.3" y2="-4.1" width="0.127" layer="21"/>
+<wire x1="13.3" y1="1.5" x2="-13.3" y2="1.5" width="0.127" layer="21"/>
+<wire x1="-13.3" y1="-4.1" x2="13.3" y2="-4.1" width="0.127" layer="21"/>
+<wire x1="-13.2" y1="0.2" x2="13.2" y2="0.2" width="0.127" layer="51"/>
+<wire x1="-13.2" y1="-4.1" x2="13.2" y2="-4.1" width="0.127" layer="51"/>
+<wire x1="13.2" y1="0.2" x2="13.2" y2="-4.1" width="0.127" layer="51"/>
+<wire x1="-13.2" y1="-4.1" x2="-13.2" y2="0.2" width="0.127" layer="51"/>
+<smd name="Z2" x="11.68" y="-1.38" dx="2.7" dy="3" layer="1"/>
+<smd name="Z1" x="-11.68" y="-1.38" dx="2.7" dy="3" layer="1"/>
+<smd name="40" x="-9.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="39" x="-9.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="38" x="-8.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="37" x="-8.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="36" x="-7.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="35" x="-7.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="34" x="-6.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="33" x="-6.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="32" x="-5.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="31" x="-5.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="30" x="-4.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="29" x="-4.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="28" x="-3.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="27" x="-3.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="26" x="-2.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="25" x="-2.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="24" x="-1.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="23" x="-1.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="22" x="-0.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="21" x="-0.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="20" x="0.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="19" x="0.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="18" x="1.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="17" x="1.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="16" x="2.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="15" x="2.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="14" x="3.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="13" x="3.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="12" x="4.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="11" x="4.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="10" x="5.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="9" x="5.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="8" x="6.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="7" x="6.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="6" x="7.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="5" x="7.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="4" x="8.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="3" x="8.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="2" x="9.25" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<smd name="1" x="9.75" y="0.6" dx="0.3" dy="1.2" layer="1"/>
+<text x="-3.444" y="2.2101" size="1.27" layer="25">&gt;NAME</text>
+<text x="-3.944" y="-6.0866" size="1.27" layer="27">&gt;VALUE</text>
+<text x="9.3" y="1.7" size="1.27" layer="51">1</text>
+<wire x1="11.5" y1="-22" x2="11" y2="-22.5" width="0.127" layer="20" curve="-90"/>
+<wire x1="11" y1="-22.5" x2="-11" y2="-22.5" width="0.127" layer="20"/>
+<wire x1="-11" y1="-22.5" x2="-11.5" y2="-22" width="0.127" layer="20" curve="-90"/>
+<wire x1="-11.5" y1="-22" x2="-11" y2="-21.5" width="0.127" layer="20" curve="-90"/>
+<wire x1="-11" y1="-21.5" x2="11" y2="-21.5" width="0.127" layer="20"/>
+<wire x1="11" y1="-21.5" x2="11.5" y2="-22" width="0.127" layer="20" curve="-90"/>
+<wire x1="-32" y1="22.9" x2="32" y2="22.9" width="0.127" layer="22"/>
+<wire x1="32" y1="22.9" x2="32" y2="-20" width="0.127" layer="22"/>
+<wire x1="32" y1="-20" x2="-32" y2="-20" width="0.127" layer="22"/>
+<wire x1="-32" y1="-20" x2="-32" y2="22.9" width="0.127" layer="22"/>
+<polygon width="0.127" layer="40">
+<vertex x="-32" y="-20"/>
+<vertex x="-12" y="-20"/>
+<vertex x="-12" y="-23"/>
+<vertex x="12" y="-23"/>
+<vertex x="12" y="-20"/>
+<vertex x="32" y="-20"/>
+<vertex x="32" y="23"/>
+<vertex x="-32" y="23"/>
+</polygon>
+<polygon width="0.127" layer="39">
+<vertex x="-12" y="-23"/>
+<vertex x="12" y="-23"/>
+<vertex x="12" y="-1"/>
+<vertex x="-12" y="-1"/>
+</polygon>
+</package>
 </packages>
 <symbols>
 <symbol name="NHD-C12832A1Z">
@@ -114,6 +196,54 @@
 <text x="-5.08" y="17.78" size="1.27" layer="95">&gt;NAME</text>
 <text x="0" y="10.16" size="1.27" layer="96">&gt;VALUE</text>
 </symbol>
+<symbol name="E1260CS021">
+<wire x1="-12.7" y1="-50.8" x2="12.7" y2="-50.8" width="0.254" layer="94"/>
+<wire x1="12.7" y1="-50.8" x2="12.7" y2="53.34" width="0.254" layer="94"/>
+<wire x1="12.7" y1="53.34" x2="-12.7" y2="53.34" width="0.254" layer="94"/>
+<wire x1="-12.7" y1="53.34" x2="-12.7" y2="-50.8" width="0.254" layer="94"/>
+<pin name="/CS" x="-17.78" y="50.8" length="middle" direction="in"/>
+<pin name="BUSY" x="-17.78" y="48.26" length="middle" direction="out"/>
+<pin name="ID" x="-17.78" y="45.72" length="middle" direction="in"/>
+<pin name="SCLK" x="-17.78" y="43.18" length="middle" direction="in"/>
+<pin name="SI" x="-17.78" y="40.64" length="middle" direction="in"/>
+<pin name="SO" x="-17.78" y="38.1" length="middle" direction="out"/>
+<pin name="/RESET" x="-17.78" y="35.56" length="middle" direction="in"/>
+<pin name="PWRON" x="-17.78" y="33.02" length="middle" direction="nc"/>
+<pin name="VCL" x="-17.78" y="30.48" length="middle" direction="pas"/>
+<pin name="C42P" x="-17.78" y="27.94" length="middle" direction="nc"/>
+<pin name="C42M" x="-17.78" y="25.4" length="middle" direction="nc"/>
+<pin name="C41P" x="-17.78" y="22.86" length="middle" direction="pas"/>
+<pin name="C41M" x="-17.78" y="20.32" length="middle" direction="pas"/>
+<pin name="C31M" x="-17.78" y="17.78" length="middle" direction="pas"/>
+<pin name="C31P" x="-17.78" y="15.24" length="middle" direction="pas"/>
+<pin name="C21M" x="-17.78" y="12.7" length="middle" direction="pas"/>
+<pin name="C21P" x="-17.78" y="10.16" length="middle" direction="pas"/>
+<pin name="C16M" x="-17.78" y="7.62" length="middle" direction="pas"/>
+<pin name="C16P" x="-17.78" y="5.08" length="middle" direction="pas"/>
+<pin name="C15M" x="-17.78" y="2.54" length="middle" direction="pas"/>
+<pin name="C15P" x="-17.78" y="0" length="middle" direction="pas"/>
+<pin name="C14M" x="-17.78" y="-2.54" length="middle" direction="pas"/>
+<pin name="C14P" x="-17.78" y="-5.08" length="middle" direction="pas"/>
+<pin name="C13M" x="-17.78" y="-7.62" length="middle" direction="pas"/>
+<pin name="C13P" x="-17.78" y="-10.16" length="middle" direction="pas"/>
+<pin name="C12M" x="-17.78" y="-12.7" length="middle" direction="pas"/>
+<pin name="C12P" x="-17.78" y="-15.24" length="middle" direction="pas"/>
+<pin name="C11M" x="-17.78" y="-17.78" length="middle" direction="pas"/>
+<pin name="C11P" x="-17.78" y="-20.32" length="middle" direction="pas"/>
+<pin name="VCOM_DRIVER" x="-17.78" y="-22.86" length="middle" direction="pas"/>
+<pin name="VCC" x="-17.78" y="-25.4" length="middle" direction="pwr"/>
+<pin name="VDD" x="-17.78" y="-27.94" length="middle" direction="pwr"/>
+<pin name="VSS" x="-17.78" y="-30.48" length="middle" direction="pwr"/>
+<pin name="VGH" x="-17.78" y="-33.02" length="middle" direction="pas"/>
+<pin name="VGL" x="-17.78" y="-35.56" length="middle" direction="pas"/>
+<pin name="VDH" x="-17.78" y="-38.1" length="middle" direction="pas"/>
+<pin name="VDL" x="-17.78" y="-40.64" length="middle" direction="pas"/>
+<pin name="BORDER" x="-17.78" y="-43.18" length="middle" direction="in"/>
+<pin name="VST" x="-17.78" y="-45.72" length="middle" direction="pwr"/>
+<pin name="VCOM_PANEL" x="-17.78" y="-48.26" length="middle" direction="pas"/>
+<text x="-7.62" y="58.42" size="1.27" layer="95">&gt;NAME</text>
+<text x="-7.62" y="55.88" size="1.27" layer="96">&gt;VALUE</text>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="NHD-C12832A1Z">
@@ -142,6 +272,60 @@
 <connect gate="G$1" pin="VDD" pad="12"/>
 <connect gate="G$1" pin="VOUT" pad="10"/>
 <connect gate="G$1" pin="VSS" pad="11"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="E1260CS021">
+<gates>
+<gate name="G$1" symbol="E1260CS021" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="E1260CS021_SLOT">
+<connects>
+<connect gate="G$1" pin="/CS" pad="1"/>
+<connect gate="G$1" pin="/RESET" pad="7"/>
+<connect gate="G$1" pin="BORDER" pad="38"/>
+<connect gate="G$1" pin="BUSY" pad="2"/>
+<connect gate="G$1" pin="C11M" pad="28"/>
+<connect gate="G$1" pin="C11P" pad="29"/>
+<connect gate="G$1" pin="C12M" pad="26"/>
+<connect gate="G$1" pin="C12P" pad="27"/>
+<connect gate="G$1" pin="C13M" pad="24"/>
+<connect gate="G$1" pin="C13P" pad="25"/>
+<connect gate="G$1" pin="C14M" pad="22"/>
+<connect gate="G$1" pin="C14P" pad="23"/>
+<connect gate="G$1" pin="C15M" pad="20"/>
+<connect gate="G$1" pin="C15P" pad="21"/>
+<connect gate="G$1" pin="C16M" pad="18"/>
+<connect gate="G$1" pin="C16P" pad="19"/>
+<connect gate="G$1" pin="C21M" pad="16"/>
+<connect gate="G$1" pin="C21P" pad="17"/>
+<connect gate="G$1" pin="C31M" pad="14"/>
+<connect gate="G$1" pin="C31P" pad="15"/>
+<connect gate="G$1" pin="C41M" pad="13"/>
+<connect gate="G$1" pin="C41P" pad="12"/>
+<connect gate="G$1" pin="C42M" pad="11"/>
+<connect gate="G$1" pin="C42P" pad="10"/>
+<connect gate="G$1" pin="ID" pad="3"/>
+<connect gate="G$1" pin="PWRON" pad="8"/>
+<connect gate="G$1" pin="SCLK" pad="4"/>
+<connect gate="G$1" pin="SI" pad="5"/>
+<connect gate="G$1" pin="SO" pad="6"/>
+<connect gate="G$1" pin="VCC" pad="31"/>
+<connect gate="G$1" pin="VCL" pad="9"/>
+<connect gate="G$1" pin="VCOM_DRIVER" pad="30"/>
+<connect gate="G$1" pin="VCOM_PANEL" pad="40"/>
+<connect gate="G$1" pin="VDD" pad="32"/>
+<connect gate="G$1" pin="VDH" pad="36"/>
+<connect gate="G$1" pin="VDL" pad="37"/>
+<connect gate="G$1" pin="VGH" pad="34"/>
+<connect gate="G$1" pin="VGL" pad="35"/>
+<connect gate="G$1" pin="VSS" pad="33"/>
+<connect gate="G$1" pin="VST" pad="39"/>
 </connects>
 <technologies>
 <technology name=""/>
