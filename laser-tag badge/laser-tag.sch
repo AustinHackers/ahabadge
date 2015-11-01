@@ -9286,12 +9286,12 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <text x="-3.444" y="2.2101" size="1.27" layer="25">&gt;NAME</text>
 <text x="-3.944" y="-6.0866" size="1.27" layer="27">&gt;VALUE</text>
 <text x="9.3" y="1.7" size="1.27" layer="51">1</text>
-<wire x1="11.5" y1="-22" x2="11" y2="-22.5" width="0.127" layer="20" curve="-90"/>
-<wire x1="11" y1="-22.5" x2="-11" y2="-22.5" width="0.127" layer="20"/>
-<wire x1="-11" y1="-22.5" x2="-11.5" y2="-22" width="0.127" layer="20" curve="-90"/>
-<wire x1="-11.5" y1="-22" x2="-11" y2="-21.5" width="0.127" layer="20" curve="-90"/>
-<wire x1="-11" y1="-21.5" x2="11" y2="-21.5" width="0.127" layer="20"/>
-<wire x1="11" y1="-21.5" x2="11.5" y2="-22" width="0.127" layer="20" curve="-90"/>
+<wire x1="11.5" y1="-22" x2="11" y2="-22.5" width="0" layer="20" curve="-90"/>
+<wire x1="11" y1="-22.5" x2="-11" y2="-22.5" width="0" layer="20"/>
+<wire x1="-11" y1="-22.5" x2="-11.5" y2="-22" width="0" layer="20" curve="-90"/>
+<wire x1="-11.5" y1="-22" x2="-11" y2="-21.5" width="0" layer="20" curve="-90"/>
+<wire x1="-11" y1="-21.5" x2="11" y2="-21.5" width="0" layer="20"/>
+<wire x1="11" y1="-21.5" x2="11.5" y2="-22" width="0" layer="20" curve="-90"/>
 <wire x1="-32" y1="22.9" x2="32" y2="22.9" width="0.127" layer="22"/>
 <wire x1="32" y1="22.9" x2="32" y2="-20" width="0.127" layer="22"/>
 <wire x1="32" y1="-20" x2="-32" y2="-20" width="0.127" layer="22"/>
