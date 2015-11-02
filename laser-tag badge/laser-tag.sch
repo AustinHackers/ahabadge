@@ -9649,6 +9649,7 @@ www.irf.com&lt;p&gt;
 <part name="D1" library="diode" deviceset="CGRM400*-G" device="" technology="1" value="NRVTS245ESFT1G"/>
 <part name="Q1" library="transistor-small-signal" deviceset="BSS123" device=""/>
 <part name="Q2" library="transistor-small-signal" deviceset="BSS123" device=""/>
+<part name="J4" library="Jumpers" deviceset="JUMPER_SOLDER_1X2_CLOSED" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -9716,6 +9717,7 @@ support interrupts</text>
 <instance part="D1" gate="G$1" x="-25.4" y="-99.06" rot="R270"/>
 <instance part="Q1" gate="G$1" x="-50.8" y="-101.6"/>
 <instance part="Q2" gate="G$1" x="-63.5" y="-101.6"/>
+<instance part="J4" gate="J" x="2.54" y="63.5"/>
 </instances>
 <busses>
 </busses>
@@ -9755,7 +9757,10 @@ support interrupts</text>
 </segment>
 <segment>
 <pinref part="U1" gate="A" pin="VSSA"/>
-<wire x1="10.16" y1="60.96" x2="7.62" y2="60.96" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="60.96" x2="-5.08" y2="60.96" width="0.1524" layer="91"/>
+<wire x1="-5.08" y1="60.96" x2="-5.08" y2="63.5" width="0.1524" layer="91"/>
+<pinref part="J4" gate="J" pin="1"/>
+<wire x1="-5.08" y1="63.5" x2="-2.54" y2="63.5" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="U1" gate="A" pin="VSS_3"/>
@@ -9826,15 +9831,6 @@ support interrupts</text>
 <pinref part="S1" gate="G$1" pin="2.1"/>
 <wire x1="154.94" y1="27.94" x2="157.48" y2="27.94" width="0.1524" layer="91"/>
 <junction x="157.48" y="27.94"/>
-</segment>
-<segment>
-<pinref part="U1" gate="A" pin="VREFL"/>
-<wire x1="10.16" y1="63.5" x2="7.62" y2="63.5" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="BREAKOUT1" gate="A" pin="15"/>
-<wire x1="-111.76" y1="43.18" x2="-116.84" y2="43.18" width="0.1524" layer="91"/>
-<label x="-116.84" y="43.18" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
 <pinref part="P1" gate="G$1" pin="VSS"/>
@@ -10661,11 +10657,22 @@ support interrupts</text>
 <segment>
 <pinref part="U1" gate="A" pin="PTA19"/>
 <wire x1="116.84" y1="20.32" x2="119.38" y2="20.32" width="0.1524" layer="91"/>
+<junction x="119.38" y="20.32"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT2" gate="A" pin="1"/>
 <wire x1="-71.12" y1="60.96" x2="-76.2" y2="60.96" width="0.1524" layer="91"/>
 <label x="-76.2" y="60.96" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<pinref part="Q1" gate="G$1" pin="G"/>
+<wire x1="-55.88" y1="-104.14" x2="-58.42" y2="-104.14" width="0.1524" layer="91"/>
+<wire x1="-58.42" y1="-104.14" x2="-58.42" y2="-106.68" width="0.1524" layer="91"/>
+<wire x1="-58.42" y1="-106.68" x2="-71.12" y2="-106.68" width="0.1524" layer="91"/>
+<wire x1="-71.12" y1="-106.68" x2="-71.12" y2="-104.14" width="0.1524" layer="91"/>
+<pinref part="Q2" gate="G$1" pin="G"/>
+<wire x1="-71.12" y1="-104.14" x2="-68.58" y2="-104.14" width="0.1524" layer="91"/>
+<label x="-71.12" y="-104.14" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="N$9" class="0">
@@ -10918,22 +10925,16 @@ support interrupts</text>
 <wire x1="-2.54" y1="-73.66" x2="12.7" y2="-73.66" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$32" class="0">
+<net name="VREFL" class="0">
 <segment>
-<pinref part="P1" gate="G$1" pin="BUSY"/>
-<wire x1="12.7" y1="-5.08" x2="7.62" y2="-5.08" width="0.1524" layer="91"/>
-<label x="7.62" y="-5.08" size="1.778" layer="95" rot="R180"/>
+<pinref part="U1" gate="A" pin="VREFL"/>
+<wire x1="10.16" y1="63.5" x2="7.62" y2="63.5" width="0.1524" layer="91"/>
+<pinref part="J4" gate="J" pin="2"/>
 </segment>
-</net>
-<net name="N$30" class="0">
 <segment>
-<pinref part="Q1" gate="G$1" pin="G"/>
-<wire x1="-55.88" y1="-104.14" x2="-58.42" y2="-104.14" width="0.1524" layer="91"/>
-<wire x1="-58.42" y1="-104.14" x2="-58.42" y2="-106.68" width="0.1524" layer="91"/>
-<wire x1="-58.42" y1="-106.68" x2="-71.12" y2="-106.68" width="0.1524" layer="91"/>
-<wire x1="-71.12" y1="-106.68" x2="-71.12" y2="-104.14" width="0.1524" layer="91"/>
-<pinref part="Q2" gate="G$1" pin="G"/>
-<wire x1="-71.12" y1="-104.14" x2="-68.58" y2="-104.14" width="0.1524" layer="91"/>
+<pinref part="BREAKOUT1" gate="A" pin="15"/>
+<wire x1="-111.76" y1="43.18" x2="-116.84" y2="43.18" width="0.1524" layer="91"/>
+<label x="-116.84" y="43.18" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 </nets>
