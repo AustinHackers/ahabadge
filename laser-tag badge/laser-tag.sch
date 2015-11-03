@@ -9584,6 +9584,87 @@ www.irf.com&lt;p&gt;
 </deviceset>
 </devicesets>
 </library>
+<library name="Switches">
+<packages>
+<package name="TPA511GLFS">
+<smd name="7" x="-5.75" y="1.7" dx="1" dy="1.4" layer="1"/>
+<smd name="6" x="-5.75" y="0" dx="1" dy="1.4" layer="1"/>
+<smd name="2" x="-5.75" y="-2.6" dx="1" dy="1.4" layer="1"/>
+<smd name="1" x="-5.75" y="-4.3" dx="1" dy="1.4" layer="1"/>
+<smd name="5" x="3.15" y="1.7" dx="1" dy="1.4" layer="1"/>
+<smd name="3" x="3.15" y="-2.6" dx="1" dy="1.4" layer="1"/>
+<smd name="4" x="3.15" y="-4.3" dx="1" dy="1.4" layer="1"/>
+<wire x1="2.725" y1="2.7" x2="-5.325" y2="2.7" width="0.127" layer="21"/>
+<wire x1="-5.325" y1="2.7" x2="-5.325" y2="-5.3" width="0.127" layer="21"/>
+<wire x1="-5.325" y1="-5.3" x2="2.725" y2="-5.3" width="0.127" layer="21"/>
+<wire x1="2.725" y1="-5.3" x2="2.725" y2="2.7" width="0.127" layer="21"/>
+<circle x="0" y="0" radius="1" width="0.127" layer="21"/>
+<text x="-5.25" y="3" size="1.27" layer="25">&gt;NAME</text>
+<text x="-5.25" y="-6.75" size="1.27" layer="27">&gt;VALUE</text>
+</package>
+</packages>
+<symbols>
+<symbol name="TPA511GLFS">
+<pin name="1" x="-10.16" y="2.54" visible="off" length="middle"/>
+<pin name="2" x="-10.16" y="-2.54" visible="off" length="middle"/>
+<pin name="SELECT" x="12.7" y="5.08" visible="off" length="middle" rot="R180"/>
+<pin name="LEFT" x="12.7" y="2.54" visible="off" length="middle" rot="R180"/>
+<pin name="DOWN" x="12.7" y="0" visible="off" length="middle" rot="R180"/>
+<pin name="RIGHT" x="12.7" y="-2.54" visible="off" length="middle" rot="R180"/>
+<pin name="UP" x="12.7" y="-5.08" visible="off" length="middle" rot="R180"/>
+<wire x1="-5.08" y1="5.08" x2="-5.08" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="2.54" x2="-5.08" y2="0" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="0" x2="0" y2="0" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="2.54" x2="0" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="5.08" x2="0" y2="5.08" width="0.254" layer="94"/>
+<wire x1="7.62" y1="5.08" x2="2.54" y2="5.08" width="0.254" layer="94"/>
+<wire x1="7.62" y1="2.54" x2="2.54" y2="2.54" width="0.254" layer="94"/>
+<wire x1="7.62" y1="0" x2="2.54" y2="0" width="0.254" layer="94"/>
+<wire x1="7.62" y1="-2.54" x2="2.54" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="7.62" y1="-5.08" x2="2.54" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="-2.54" x2="0" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="-2.54" x2="-5.08" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="-5.08" x2="0" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="0" y1="5.08" x2="2.54" y2="6.35" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="2.54" y2="3.81" width="0.254" layer="94"/>
+<wire x1="0" y1="0" x2="2.54" y2="1.27" width="0.254" layer="94"/>
+<wire x1="0" y1="-2.54" x2="2.54" y2="-1.27" width="0.254" layer="94"/>
+<wire x1="0" y1="-5.08" x2="2.54" y2="-3.81" width="0.254" layer="94"/>
+<text x="-7.62" y="3.048" size="1.27" layer="97">1</text>
+<text x="-7.62" y="-2.032" size="1.27" layer="97">2</text>
+<text x="5.08" y="5.588" size="1.27" layer="97">SELECT</text>
+<text x="5.08" y="3.048" size="1.27" layer="97">LEFT</text>
+<text x="5.08" y="0.508" size="1.27" layer="97">DOWN</text>
+<text x="5.08" y="-2.032" size="1.27" layer="97">RIGHT</text>
+<text x="5.08" y="-4.572" size="1.27" layer="97">UP</text>
+<text x="-5.08" y="10.16" size="1.778" layer="95">&gt;NAME</text>
+<text x="-5.08" y="7.62" size="1.778" layer="96">&gt;VALUE</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="TPA511GLFS">
+<gates>
+<gate name="G$1" symbol="TPA511GLFS" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="TPA511GLFS">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+<connect gate="G$1" pin="DOWN" pad="4"/>
+<connect gate="G$1" pin="LEFT" pad="7"/>
+<connect gate="G$1" pin="RIGHT" pad="6"/>
+<connect gate="G$1" pin="SELECT" pad="5"/>
+<connect gate="G$1" pin="UP" pad="3"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -9650,6 +9731,7 @@ www.irf.com&lt;p&gt;
 <part name="Q1" library="transistor-small-signal" deviceset="BSS123" device=""/>
 <part name="Q2" library="transistor-small-signal" deviceset="BSS123" device=""/>
 <part name="J4" library="Jumpers" deviceset="JUMPER_SOLDER_1X2_CLOSED" device=""/>
+<part name="S3" library="Switches" deviceset="TPA511GLFS" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -9718,6 +9800,7 @@ support interrupts</text>
 <instance part="Q1" gate="G$1" x="-50.8" y="-101.6"/>
 <instance part="Q2" gate="G$1" x="-63.5" y="-101.6"/>
 <instance part="J4" gate="J" x="2.54" y="63.5"/>
+<instance part="S3" gate="G$1" x="144.78" y="63.5" rot="R180"/>
 </instances>
 <busses>
 </busses>
@@ -9831,6 +9914,14 @@ support interrupts</text>
 <pinref part="S1" gate="G$1" pin="2.1"/>
 <wire x1="154.94" y1="27.94" x2="157.48" y2="27.94" width="0.1524" layer="91"/>
 <junction x="157.48" y="27.94"/>
+<wire x1="157.48" y1="43.18" x2="157.48" y2="60.96" width="0.1524" layer="91"/>
+<junction x="157.48" y="43.18"/>
+<pinref part="S3" gate="G$1" pin="1"/>
+<wire x1="157.48" y1="60.96" x2="154.94" y2="60.96" width="0.1524" layer="91"/>
+<pinref part="S3" gate="G$1" pin="2"/>
+<wire x1="154.94" y1="66.04" x2="157.48" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="157.48" y1="66.04" x2="157.48" y2="60.96" width="0.1524" layer="91"/>
+<junction x="157.48" y="60.96"/>
 </segment>
 <segment>
 <pinref part="P1" gate="G$1" pin="VSS"/>
@@ -10259,66 +10350,105 @@ support interrupts</text>
 <segment>
 <pinref part="U1" gate="A" pin="PTA2"/>
 <wire x1="10.16" y1="40.64" x2="7.62" y2="40.64" width="0.1524" layer="91"/>
+<junction x="7.62" y="40.64"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="24"/>
 <wire x1="-104.14" y1="33.02" x2="-99.06" y2="33.02" width="0.1524" layer="91"/>
 <label x="-99.06" y="33.02" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="S2" gate="G$1" pin="1.1"/>
+<wire x1="142.24" y1="43.18" x2="139.7" y2="43.18" width="0.1524" layer="91"/>
+<wire x1="139.7" y1="43.18" x2="139.7" y2="40.64" width="0.1524" layer="91"/>
+<pinref part="S2" gate="G$1" pin="1.2"/>
+<wire x1="139.7" y1="40.64" x2="142.24" y2="40.64" width="0.1524" layer="91"/>
+<label x="139.7" y="40.64" size="1.778" layer="95" rot="R180"/>
+</segment>
 </net>
 <net name="PTA4" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="PTA4"/>
 <wire x1="10.16" y1="35.56" x2="7.62" y2="35.56" width="0.1524" layer="91"/>
+<junction x="7.62" y="35.56"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="26"/>
 <wire x1="-104.14" y1="30.48" x2="-99.06" y2="30.48" width="0.1524" layer="91"/>
 <label x="-99.06" y="30.48" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="S3" gate="G$1" pin="RIGHT"/>
+<wire x1="132.08" y1="66.04" x2="129.54" y2="66.04" width="0.1524" layer="91"/>
+<label x="129.54" y="66.04" size="1.778" layer="95" rot="R180"/>
+</segment>
 </net>
 <net name="PTA5" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="PTA5"/>
 <wire x1="10.16" y1="33.02" x2="7.62" y2="33.02" width="0.1524" layer="91"/>
+<junction x="7.62" y="33.02"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="27"/>
 <wire x1="-111.76" y1="27.94" x2="-116.84" y2="27.94" width="0.1524" layer="91"/>
 <label x="-116.84" y="27.94" size="1.778" layer="95" rot="R180"/>
 </segment>
+<segment>
+<pinref part="S3" gate="G$1" pin="LEFT"/>
+<wire x1="132.08" y1="60.96" x2="129.54" y2="60.96" width="0.1524" layer="91"/>
+<label x="129.54" y="60.96" size="1.778" layer="95" rot="R180"/>
+</segment>
 </net>
 <net name="PTA12" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="PTA12"/>
 <wire x1="10.16" y1="30.48" x2="7.62" y2="30.48" width="0.1524" layer="91"/>
+<junction x="7.62" y="30.48"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="28"/>
 <wire x1="-104.14" y1="27.94" x2="-99.06" y2="27.94" width="0.1524" layer="91"/>
 <label x="-99.06" y="27.94" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="S3" gate="G$1" pin="DOWN"/>
+<wire x1="132.08" y1="63.5" x2="129.54" y2="63.5" width="0.1524" layer="91"/>
+<label x="129.54" y="63.5" size="1.778" layer="95" rot="R180"/>
+</segment>
 </net>
 <net name="PTA13" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="PTA13"/>
 <wire x1="10.16" y1="27.94" x2="7.62" y2="27.94" width="0.1524" layer="91"/>
+<junction x="7.62" y="27.94"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="29"/>
 <wire x1="-111.76" y1="25.4" x2="-116.84" y2="25.4" width="0.1524" layer="91"/>
 <label x="-116.84" y="25.4" size="1.778" layer="95" rot="R180"/>
 </segment>
+<segment>
+<pinref part="S3" gate="G$1" pin="UP"/>
+<wire x1="132.08" y1="68.58" x2="129.54" y2="68.58" width="0.1524" layer="91"/>
+<label x="129.54" y="68.58" size="1.778" layer="95" rot="R180"/>
+</segment>
 </net>
 <net name="PTA18" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="PTA18"/>
 <wire x1="10.16" y1="20.32" x2="7.62" y2="20.32" width="0.1524" layer="91"/>
+<junction x="7.62" y="20.32"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="32"/>
 <wire x1="-104.14" y1="22.86" x2="-99.06" y2="22.86" width="0.1524" layer="91"/>
 <label x="-99.06" y="22.86" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="S3" gate="G$1" pin="SELECT"/>
+<wire x1="132.08" y1="58.42" x2="129.54" y2="58.42" width="0.1524" layer="91"/>
+<label x="129.54" y="58.42" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="PTD7" class="0">
