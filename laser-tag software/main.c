@@ -33,6 +33,7 @@
 #include "fsl_cmp_driver.h"
 #include "fsl_dac_driver.h"
 #include "fsl_dma_driver.h"
+#include "fsl_flexio_driver.h"
 #include "fsl_gpio_driver.h"
 #include "fsl_lptmr_driver.h"
 #include "fsl_lpuart_driver.h"
@@ -45,14 +46,14 @@
 ////////////////////////////
 // A bunch of config structs
 
-/* Configuration for enter VLPR mode. Core clock = 2MHz. */
+/* Configuration for enter VLPR mode. Core clock = 4MHz. */
 static const clock_manager_user_config_t g_defaultClockConfigVlpr = {   
     .mcgliteConfig =
     {    
         .mcglite_mode       = kMcgliteModeLirc8M,   // Work in LIRC_8M mode.
         .irclkEnable        = true,  // MCGIRCLK enable.
         .irclkEnableInStop  = false, // MCGIRCLK disable in STOP mode.
-        .ircs               = kMcgliteLircSel2M, // Select LIRC_2M.
+        .ircs               = kMcgliteLircSel8M, // Select LIRC_8M.
         .fcrdiv             = kMcgliteLircDivBy1,    // FCRDIV is 0.
         .lircDiv2           = kMcgliteLircDivBy1,    // LIRC_DIV2 is 0.
         .hircEnableInNotHircMode         = false, // HIRC disable.
@@ -60,8 +61,8 @@ static const clock_manager_user_config_t g_defaultClockConfigVlpr = {
     .simConfig =
     {    
         .er32kSrc  = kClockEr32kSrcOsc0,   // ERCLK32K selection, use OSC.
-        .outdiv1   = 0U,
-        .outdiv4   = 1U,
+        .outdiv1   = 1U, // divide by 2, core clock = 8 MHz / 2
+        .outdiv4   = 3U, // divide by 4, bus clock = 4 MHz / 4
     },
     .oscerConfig =
     {   
@@ -99,22 +100,6 @@ static const clock_manager_user_config_t g_defaultClockConfigRun = {
 /* This should be the lowest power mode where the PIT still functions. */
 static const smc_power_mode_config_t g_idlePowerMode = {
     .powerModeName = kPowerModeVlpw,
-};
-
-/* LCD backlight GPIO pin */
-static const gpio_output_pin_user_config_t g_lcdBacklight = {
-    .pinName = GPIO_MAKE_PIN(GPIOE_IDX, 31),
-    .config.outputLogic = 1,
-    .config.slewRate = kPortSlowSlewRate,
-    .config.driveStrength = kPortLowDriveStrength,
-};
-
-/* LCD A0 GPIO pin */
-static const gpio_output_pin_user_config_t g_lcdA0 = {
-    .pinName = GPIO_MAKE_PIN(GPIOD_IDX, 6),
-    .config.outputLogic = 0,
-    .config.slewRate = kPortSlowSlewRate,
-    .config.driveStrength = kPortLowDriveStrength,
 };
 
 /* Switch1 GPIO pin */
@@ -171,23 +156,49 @@ static lpuart_user_config_t g_lpuartConfig = {
     .bitCountPerChar = kLpuart9BitsPerChar,
 };
 
-/* LCD SPI config */
-static spi_master_user_config_t g_spi1Config = {
-    .bitsPerSec = 100000, // 100 kbps
-    .polarity = kSpiClockPolarity_ActiveLow,
-    .phase = kSpiClockPhase_SecondEdge,
-    .direction = kSpiMsbFirst,
-    .bitCount = kSpi8BitMode,
+/* FlexIO config for RGB LED */
+static flexio_user_config_t g_flexioConfig = {
+    .useInt = false,
+    .onDozeEnable = true,
+    .onDebugEnable = false,
+    .fastAccessEnable = true,
+};
+
+static flexio_timer_config_t g_timerConfig = {
+    .trgsel = FLEXIO_HAL_TIMER_TRIGGER_SEL_SHIFTnSTAT(0),
+    .trgpol = kFlexioTimerTriggerPolarityActiveLow,
+    .trgsrc = kFlexioTimerTriggerSourceInternal,
+    .pincfg = kFlexioPinConfigOutputDisabled,
+    .timod = kFlexioTimerModeDual8BitBaudBit,
+    .timout = kFlexioTimerOutputOneNotAffectedByReset,
+    .timdec = kFlexioTimerDecSrcOnFlexIOClockShiftTimerOutput,
+    .timrst = kFlexioTimerResetNever,
+    .timdis = kFlexioTimerDisableOnTimerCompare,
+    .timena = kFlexioTimerEnableOnTriggerHigh,
+    .tstop = kFlexioTimerStopBitDisabled,
+    .tstart = kFlexioTimerStartBitDisabled,
+    .timcmp = (32 * 2 - 1) << 8 | (2 - 1), // 32 bits at 2 MHz
+};
+
+static flexio_shifter_config_t g_shifterConfig = {
+    .timsel = 0,
+    .timpol = kFlexioShifterTimerPolarityOnPositive,
+    .pincfg = kFlexioPinConfigOutput,
+    .pinsel = 4,
+    .pinpol = kFlexioPinActiveHigh,
+    .smode = kFlexioShifterModeTransmit,
+    .sstop = kFlexioShifterStopBitDisable,
+    .sstart = kFlexioShifterStartBitDisabledLoadDataOnEnable,
 };
 
 ///////
 // Code
 
 static cmp_state_t g_cmpState;
-static dma_channel_t g_chan;
+static dma_channel_t g_dacChan, g_fioChan;
 static lpuart_state_t g_lpuartState;
 static uint8_t rxBuff[1];
-static spi_master_state_t g_spi1State;
+static uint32_t shift0_buf[3];
 
 /*!
  * @brief LPTMR interrupt call back function.
@@ -195,9 +206,6 @@ static spi_master_state_t g_spi1State;
  */
 static void lptmr_call_back(void)
 {
-    // Toggle LED1
-    GPIO_DRV_TogglePinOutput(g_lcdBacklight.pinName);
-
     // AGC adjust
     if (CMP_DRV_GetOutputLogic(0) != g_cmpConf.invertEnable) {
         if (g_cmpDacConf.dacValue < 63) {
@@ -221,7 +229,7 @@ void PORTA_IRQHandler(void)
         PIT_DRV_StopTimer(0, 0);
         DAC_DRV_Output(0, 0);
     } else {
-        DMA_HAL_SetTransferCount(g_dmaBase[0], g_chan.channel, 0xffff0);
+        DMA_HAL_SetTransferCount(g_dmaBase[0], g_dacChan.channel, 0xffff0);
         PIT_DRV_StartTimer(0, 0);
     }
 }
@@ -235,6 +243,11 @@ static void lpuartRxCallback(uint32_t instance, void *lpuartState)
     bool parity_error = stat & LPUART_STAT_PF_MASK;
     LPUART_WR_STAT(base, (stat & 0x3e000000) |
             LPUART_STAT_NF_MASK | LPUART_STAT_FE_MASK | LPUART_STAT_PF_MASK);
+}
+
+static void fioDmaCallback(void *param, dma_channel_status_t status)
+{
+    DMA_DRV_StopChannel(&g_fioChan);
 }
 
 /*!
@@ -270,11 +283,12 @@ int main (void)
     DAC_DRV_StructInitUserConfigNormal(&MyDacUserConfigStruct);
     DAC_DRV_Init(0, &MyDacUserConfigStruct);
 
-    /* Initialize DMA */
+    /* Initialize DAC DMA channel */
     dma_state_t dma_state;
     DMA_DRV_Init(&dma_state);
-    DMA_DRV_RequestChannel(kDmaAnyChannel, kDmaRequestMux0AlwaysOn60, &g_chan);
-    DMAMUX_HAL_SetPeriodTriggerCmd(g_dmamuxBase[0], g_chan.channel, true);
+    DMA_DRV_RequestChannel(kDmaAnyChannel, kDmaRequestMux0AlwaysOn60,
+            &g_dacChan);
+    DMAMUX_HAL_SetPeriodTriggerCmd(g_dmamuxBase[0], g_dacChan.channel, true);
     const uint32_t dac_dat = (intptr_t)&DAC_DATL_REG(g_dacBase[0], 0);
     const uint16_t L_ON = 0x4ff;
     const uint16_t L_OFF = 0x2ff;
@@ -284,13 +298,14 @@ int main (void)
         L_ON,  L_ON,  L_OFF, L_OFF,
         L_OFF, L_OFF, L_OFF, L_OFF,
     };
-    DMA_DRV_ConfigTransfer(&g_chan, kDmaMemoryToPeripheral, 2,
+    DMA_DRV_ConfigTransfer(&g_dacChan, kDmaMemoryToPeripheral, 2,
             (intptr_t)laserbuf, dac_dat, 0xffff0);
-    DMA_HAL_SetSourceModulo(g_dmaBase[0], g_chan.channel, kDmaModulo32Bytes);
-    DMA_HAL_SetAsyncDmaRequestCmd(g_dmaBase[0], g_chan.channel, true);
-    DMA_HAL_SetIntCmd(g_dmaBase[0], g_chan.channel, false);
-    DMA_HAL_SetDisableRequestAfterDoneCmd(g_dmaBase[0], g_chan.channel, false);
-    DMA_DRV_StartChannel(&g_chan);
+    DMA_HAL_SetSourceModulo(g_dmaBase[0], g_dacChan.channel, kDmaModulo32Bytes);
+    DMA_HAL_SetAsyncDmaRequestCmd(g_dmaBase[0], g_dacChan.channel, true);
+    DMA_HAL_SetIntCmd(g_dmaBase[0], g_dacChan.channel, false);
+    DMA_HAL_SetDisableRequestAfterDoneCmd(g_dmaBase[0], g_dacChan.channel,
+            false);
+    DMA_DRV_StartChannel(&g_dacChan);
     DAC_DRV_Output(0, 0);
 
     /* Initialize CMP */
@@ -310,45 +325,46 @@ int main (void)
     LPUART_DRV_InstallRxCallback(1, lpuartRxCallback, rxBuff, NULL, true);
     PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 1, kPortMuxAlt3);
 
-    /* Setup LCD */
-    GPIO_DRV_OutputPinInit(&g_lcdBacklight);
-    GPIO_DRV_OutputPinInit(&g_lcdA0);
-    PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 4, kPortMuxAlt2); // CS
-    PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 5, kPortMuxAlt2); // SCL
-    PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 7, kPortMuxAlt5); // SI
-    SPI_DRV_MasterInit(1, &g_spi1State);
-    uint32_t baud;
-    SPI_DRV_MasterConfigureBus(1, &g_spi1Config, &baud);
-    uint8_t buff[] = {
-        0x80, 0x21, // Set electronic "volume" to 33/63
-        0x2f, // Set power control: booster on, regulator on, follower on
-        0xaf, // Display ON
-        0x40, // Set display line start address to 0
-        //0xa5, // all points ON
-    };
-    SPI_DRV_MasterTransferBlocking(1, NULL, buff, NULL, sizeof(buff), 1000);
+    /* Setup FlexIO for the WS2812B */
+    FLEXIO_Type *fiobase = g_flexioBase[0];
+    CLOCK_SYS_SetFlexioSrc(0, kClockFlexioSrcMcgIrClk);
+    FLEXIO_DRV_Init(0, &g_flexioConfig);
+    FLEXIO_HAL_ConfigureTimer(fiobase, 0, &g_timerConfig);
+    FLEXIO_HAL_ConfigureShifter(fiobase, 0, &g_shifterConfig);
+    PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 20, kPortMuxAlt6);
+    //FLEXIO_DRV_RegisterCallback(0, 0, shift0_int_handler, NULL);
+    FLEXIO_DRV_Start(0);
 
-    // Try to write something to the display
-    int i;
-    for (i = 0; i < 4; ++i) {
-        int j;
-        uint8_t buff[] = {
-            0xb + i, // Set page address to i
-            0x00, 0x10 // Set column address to 0
-        };
-        GPIO_DRV_ClearPinOutput(g_lcdA0.pinName);
-        SPI_DRV_MasterTransferBlocking(1, NULL, buff, NULL, sizeof(buff), 1000);
-        GPIO_DRV_SetPinOutput(g_lcdA0.pinName);
-        for (j = 0; j < 128; ++j) {
-            uint8_t byte = 0x33;
-            SPI_DRV_MasterTransferBlocking(1, NULL, &byte, NULL, 1, 1000);
-        }
+    FLEXIO_HAL_SetShifterStatusDmaCmd(fiobase, 1, true);
+    uint32_t chan;
+    chan = DMA_DRV_RequestChannel(kDmaAnyChannel, kDmaRequestMux0FlexIOChannel0,
+            &g_fioChan);
+    if (chan == kDmaInvalidChannel) {
+        while(1);
     }
+    DMA_DRV_RegisterCallback(&g_fioChan, fioDmaCallback, NULL);
+
+    uint8_t green = 32;
+    uint8_t red = 0;
+    uint8_t blue = 32;
+    uint32_t color = (green << 16) | (red << 8) | blue;
+    int i;
+    for (i = 0; i < 24; ++i) {
+        shift0_buf[i / 10] <<= 3;
+        shift0_buf[i / 10] |= 4 | ((color >> (22 - i)) & 2);
+    }
+    shift0_buf[2] <<= 3 * 6;
+
+    DMA_DRV_ConfigTransfer(&g_fioChan, kDmaMemoryToPeripheral, 4,
+            (intptr_t)&shift0_buf,
+            (intptr_t)&FLEXIO_SHIFTBUFBIS_REG(fiobase, 0), sizeof(shift0_buf));
+    DMA_DRV_StartChannel(&g_fioChan);
+
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {
 #ifndef DEBUG
-        SMC_HAL_SetMode(SMC, &g_idlePowerMode);
+        //SMC_HAL_SetMode(SMC, &g_idlePowerMode);
 #endif
     }
 }

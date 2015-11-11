@@ -93,6 +93,8 @@ ADD_EXECUTABLE(hello_world
     "${ProjDirPath}/../KSDK_1.2.0/platform/devices/MKL27Z4/startup/system_MKL27Z4.c"
     "${ProjDirPath}/../KSDK_1.2.0/platform/devices/startup.c"
     "${ProjDirPath}/../KSDK_1.2.0/platform/devices/startup.h"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/dma/fsl_dma_irq.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flexio/fsl_flexio_irq.c"
     "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/lpuart/fsl_lpuart_irq.c"
     "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_irq.c"
     "${ProjDirPath}/main.c"
