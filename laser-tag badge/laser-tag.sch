@@ -10378,9 +10378,9 @@ support interrupts</text>
 <label x="-99.06" y="30.48" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="S3" gate="G$1" pin="RIGHT"/>
-<wire x1="132.08" y1="66.04" x2="129.54" y2="66.04" width="0.1524" layer="91"/>
-<label x="129.54" y="66.04" size="1.778" layer="95" rot="R180"/>
+<pinref part="S3" gate="G$1" pin="DOWN"/>
+<wire x1="132.08" y1="63.5" x2="129.54" y2="63.5" width="0.1524" layer="91"/>
+<label x="129.54" y="63.5" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="PTA5" class="0">
@@ -10395,9 +10395,9 @@ support interrupts</text>
 <label x="-116.84" y="27.94" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="S3" gate="G$1" pin="LEFT"/>
-<wire x1="132.08" y1="60.96" x2="129.54" y2="60.96" width="0.1524" layer="91"/>
-<label x="129.54" y="60.96" size="1.778" layer="95" rot="R180"/>
+<pinref part="S3" gate="G$1" pin="UP"/>
+<wire x1="132.08" y1="68.58" x2="129.54" y2="68.58" width="0.1524" layer="91"/>
+<label x="129.54" y="68.58" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="PTA12" class="0">
@@ -10412,9 +10412,9 @@ support interrupts</text>
 <label x="-99.06" y="27.94" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="S3" gate="G$1" pin="DOWN"/>
-<wire x1="132.08" y1="63.5" x2="129.54" y2="63.5" width="0.1524" layer="91"/>
-<label x="129.54" y="63.5" size="1.778" layer="95" rot="R180"/>
+<pinref part="S3" gate="G$1" pin="SELECT"/>
+<wire x1="132.08" y1="58.42" x2="129.54" y2="58.42" width="0.1524" layer="91"/>
+<label x="129.54" y="58.42" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="PTA13" class="0">
@@ -10429,9 +10429,9 @@ support interrupts</text>
 <label x="-116.84" y="25.4" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="S3" gate="G$1" pin="UP"/>
-<wire x1="132.08" y1="68.58" x2="129.54" y2="68.58" width="0.1524" layer="91"/>
-<label x="129.54" y="68.58" size="1.778" layer="95" rot="R180"/>
+<pinref part="S3" gate="G$1" pin="LEFT"/>
+<wire x1="132.08" y1="60.96" x2="129.54" y2="60.96" width="0.1524" layer="91"/>
+<label x="129.54" y="60.96" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="PTA18" class="0">
@@ -10446,9 +10446,9 @@ support interrupts</text>
 <label x="-99.06" y="22.86" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="S3" gate="G$1" pin="SELECT"/>
-<wire x1="132.08" y1="58.42" x2="129.54" y2="58.42" width="0.1524" layer="91"/>
-<label x="129.54" y="58.42" size="1.778" layer="95" rot="R180"/>
+<pinref part="S3" gate="G$1" pin="RIGHT"/>
+<wire x1="132.08" y1="66.04" x2="129.54" y2="66.04" width="0.1524" layer="91"/>
+<label x="129.54" y="66.04" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="PTD7" class="0">
