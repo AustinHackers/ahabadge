@@ -320,7 +320,7 @@ int main (void)
     /* Start LPTMR */
     LPTMR_DRV_Start(LPTMR0_IDX);
 
-    /* Setup LPUART0 */
+    /* Setup LPUART1 */
     LPUART_DRV_Init(1, &g_lpuartState, &g_lpuartConfig);
     LPUART_DRV_InstallRxCallback(1, lpuartRxCallback, rxBuff, NULL, true);
     PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 1, kPortMuxAlt3);
