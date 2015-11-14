@@ -41,6 +41,7 @@
 #include "fsl_pit_driver.h"
 #include "fsl_smc_hal.h"
 #include "fsl_spi_master_driver.h"
+#include "fsl_tpm_driver.h"
 
 
 ////////////////////////////
@@ -269,9 +270,10 @@ int main (void)
     CLOCK_SYS_SetConfiguration(&g_defaultClockConfigVlpr);
 
     /* Initialize LPTMR */
-    lptmr_state_t lptmrState;
-    LPTMR_DRV_Init(LPTMR0_IDX, &lptmrState, &g_lptmrConfig);
-    LPTMR_DRV_SetTimerPeriodUs(LPTMR0_IDX, 100000);
+    //lptmr_state_t lptmrState;
+    //LPTMR_DRV_Init(LPTMR0_IDX, &lptmrState, &g_lptmrConfig);
+    //LPTMR_DRV_SetTimerPeriodUs(LPTMR0_IDX, 100000);
+    OSA_TimeInit();
     LPTMR_DRV_InstallCallback(LPTMR0_IDX, lptmr_call_back);
 
     /* Initialize PIT */
@@ -344,9 +346,9 @@ int main (void)
     }
     DMA_DRV_RegisterCallback(&g_fioChan, fioDmaCallback, NULL);
 
-    uint8_t green = 32;
-    uint8_t red = 0;
-    uint8_t blue = 32;
+    uint8_t red = 0x4B;
+    uint8_t green = 0x00;
+    uint8_t blue = 0x82;
     uint32_t color = (green << 16) | (red << 8) | blue;
     int i;
     for (i = 0; i < 24; ++i) {
@@ -360,6 +362,60 @@ int main (void)
             (intptr_t)&FLEXIO_SHIFTBUFBIS_REG(fiobase, 0), sizeof(shift0_buf));
     DMA_DRV_StartChannel(&g_fioChan);
 
+    /* Play some chip tunez */
+    //CLOCK_SYS_SetTpmSrc(1, kClockTpmSrcMcgIrClk);
+    PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 21, kPortMuxAlt3);
+    tpm_general_config_t tmpConfig = {
+        .isDBGMode = false,
+        .isGlobalTimeBase = false,
+        .isTriggerMode = false,
+        .isStopCountOnOveflow = false,
+        .isCountReloadOnTrig = false,
+        .triggerSource = kTpmTrigSel0,
+    };
+    TPM_DRV_Init(1, &tmpConfig);
+    TPM_DRV_SetClock(1, kTpmClockSourceModuleMCGIRCLK, kTpmDividedBy1);
+
+    uint16_t notes[] = {
+        0,   // rest
+        494, // B4  1
+        523, // C5  2
+        554, // C#5 3
+        587, // D5  4
+        622, // D#5 5
+        659, // E5  6
+        698, // F5  7
+        740, // F#5 8
+        784, // G5  9
+        830, // G#5 10
+        880, // A5  11
+        932, // A#5 12
+        988, // B5  13
+    };
+    uint8_t beeps[] = {
+         8,  8,  4,  1,
+         0,  1,  0,  6,
+         0,  6,  0,  6,
+        10, 10, 11, 13,
+        11, 11, 11,  6,
+         0,  4,  0,  8,
+         0,  8,  0,  8,
+         6,  6,  8,  6,
+    };
+
+    tpm_pwm_param_t param = {
+        .mode = kTpmEdgeAlignedPWM,
+        .edgeMode = kTpmHighTrue,
+        .uDutyCyclePercent = 50,
+    };
+    for (i = 0; ; i = (i + 1) % sizeof(beeps)) {
+        param.uFrequencyHZ = notes[beeps[i]];
+        if (param.uFrequencyHZ)
+            TPM_DRV_PwmStart(1, &param, 1);
+        else
+            TPM_DRV_PwmStop(1, &param, 1);
+        OSA_TimeDelay(193);
+    }
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {
