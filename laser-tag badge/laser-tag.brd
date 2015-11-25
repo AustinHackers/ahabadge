@@ -2478,7 +2478,7 @@ design rules under a new name.</description>
 <element name="T1" library="transistor" package="SOT23-BEC" value="" x="84.455" y="15.24" rot="MR90"/>
 <element name="R1" library="rcl" package="R0603" value="10k" x="76.835" y="41.275" rot="R180"/>
 <element name="USB" library="adafruit" package="USB-MINIB" value="" x="60.96" y="76.835" rot="MR180"/>
-<element name="R2" library="rcl" package="R0603" value="10" x="83.185" y="19.05" rot="MR270"/>
+<element name="R2" library="rcl" package="R0603" value="10" x="84.455" y="19.05" rot="MR90"/>
 <element name="C5" library="rcl" package="C0603K" value="10 uF" x="72.39" y="35.56" rot="R270"/>
 <element name="S1" library="switch" package="SKHMPXE010" value="SKHMPSE010" x="62.23" y="8.255" rot="R90"/>
 <element name="S2" library="switch" package="SKHMPXE010" value="SKHMPSE010" x="74.93" y="8.255" rot="R90"/>
@@ -2540,7 +2540,6 @@ design rules under a new name.</description>
 </polygon>
 <contactref element="R1" pad="1"/>
 <contactref element="USB" pad="GND"/>
-<contactref element="R2" pad="1"/>
 <contactref element="C5" pad="2"/>
 <contactref element="S1" pad="4"/>
 <contactref element="S2" pad="3"/>
@@ -2623,9 +2622,35 @@ design rules under a new name.</description>
 <wire x1="73.66" y1="35.56" x2="73.66" y2="40.64" width="0.254" layer="1"/>
 <wire x1="73.66" y1="40.64" x2="72.785" y2="41.515" width="0.254" layer="1"/>
 <wire x1="72.785" y1="41.515" x2="71.12" y2="41.515" width="0.254" layer="1"/>
+<contactref element="T1" pad="E"/>
 <wire x1="87.757" y1="70.485" x2="87.757" y2="71.755" width="0" layer="19" extent="1-1"/>
 <wire x1="85.725" y1="71.755" x2="87.757" y2="71.755" width="0" layer="19" extent="1-16"/>
+<wire x1="65.98" y1="73.695" x2="85.725" y2="71.755" width="0" layer="19" extent="1-16"/>
+<wire x1="62.56" y1="72.771" x2="64.28" y2="73.695" width="0" layer="19" extent="1-16"/>
+<wire x1="52.07" y1="63.5" x2="62.56" y2="72.771" width="0" layer="19" extent="16-16"/>
+<wire x1="67.31" y1="42.94" x2="65.630621875" y2="46.91558125" width="0" layer="19" extent="1-16"/>
+<wire x1="69.85" y1="41.275" x2="68.34" y2="42.94" width="0" layer="19" extent="1-1"/>
+<wire x1="72.878478125" y1="38.253515625" x2="73.66" y2="40.64" width="0" layer="19" extent="1-16"/>
+<wire x1="64.77" y1="41.91" x2="67.31" y2="42.94" width="0" layer="19" extent="1-1"/>
+<wire x1="69.215" y1="33.431690625" x2="72.39" y2="34.685" width="0" layer="19" extent="1-16"/>
+<wire x1="61.03441875" y1="38.96061875" x2="63.5" y2="41.515" width="0" layer="19" extent="1-16"/>
+<wire x1="67.31" y1="38.735" x2="69.85" y2="41.275" width="0" layer="19" extent="1-1"/>
+<wire x1="77.685" y1="41.275" x2="73.66" y2="40.64" width="0" layer="19" extent="1-1"/>
+<wire x1="83.185" y1="42.545" x2="78.74" y2="41.275" width="0" layer="19" extent="1-1"/>
+<wire x1="31.15" y1="31.89" x2="29.845" y2="26.035" width="0" layer="19" extent="16-16"/>
+<wire x1="27.94" y1="33.415" x2="31.15" y2="31.89" width="0" layer="19" extent="16-16"/>
+<wire x1="21.2725" y1="58.6325" x2="29.21" y2="64.135" width="0" layer="19" extent="16-16"/>
+<wire x1="18.095" y1="57.615" x2="21.2725" y2="58.6325" width="0" layer="19" extent="16-16"/>
+<wire x1="14.285" y1="57.615" x2="18.095" y2="57.615" width="0" layer="19" extent="16-16"/>
+<wire x1="20.32" y1="51.675" x2="18.095" y2="57.615" width="0" layer="19" extent="16-16"/>
 <wire x1="22.225" y1="51.675" x2="20.32" y2="51.675" width="0" layer="19" extent="16-16"/>
+<wire x1="24.13" y1="51.675" x2="22.225" y2="51.675" width="0" layer="19" extent="16-16"/>
+<wire x1="26.035" y1="51.675" x2="24.13" y2="51.675" width="0" layer="19" extent="16-16"/>
+<wire x1="27.94" y1="51.675" x2="26.035" y2="51.675" width="0" layer="19" extent="16-16"/>
+<wire x1="31.15" y1="46.89" x2="27.94" y2="51.675" width="0" layer="19" extent="16-16"/>
+<wire x1="64.4525" y1="8.255" x2="52.705" y2="8.89" width="0" layer="19" extent="1-16"/>
+<wire x1="77.1525" y1="8.255" x2="64.48" y2="8.2825" width="0" layer="19" extent="1-1"/>
+<wire x1="83.355" y1="16.19" x2="77.18" y2="12.455" width="0" layer="19" extent="1-16"/>
 </signal>
 <signal name="VCC">
 <contactref element="DEBUG" pad="1"/>
@@ -3466,19 +3491,6 @@ design rules under a new name.</description>
 <wire x1="16.195" y1="57.615" x2="16.195" y2="58.735" width="0.254" layer="16"/>
 <wire x1="16.195" y1="58.735" x2="14.2875" y2="60.6425" width="0.254" layer="16"/>
 </signal>
-<signal name="N$9">
-<contactref element="LD1" pad="C"/>
-<contactref element="T1" pad="C"/>
-<wire x1="88.9" y1="15.24" x2="86.995" y2="15.24" width="0.254" layer="1"/>
-<via x="86.995" y="15.24" extent="1-16" drill="0.5"/>
-<wire x1="86.995" y1="15.24" x2="85.555" y2="15.24" width="0.254" layer="16"/>
-</signal>
-<signal name="N$1">
-<contactref element="T1" pad="E"/>
-<contactref element="R2" pad="2"/>
-<wire x1="83.355" y1="16.19" x2="83.185" y2="16.36" width="0.254" layer="16"/>
-<wire x1="83.185" y1="16.36" x2="83.185" y2="18.2" width="0.254" layer="16"/>
-</signal>
 <signal name="VOUT33">
 <via x="70.485" y="38.1" extent="1-16" drill="0.5"/>
 <contactref element="C5" pad="1"/>
@@ -3708,6 +3720,21 @@ design rules under a new name.</description>
 <wire x1="31.75" y1="15.875" x2="31.75" y2="8.89" width="0.254" layer="16"/>
 <wire x1="31.75" y1="8.89" x2="31.75" y2="6.35" width="0.254" layer="16"/>
 <wire x1="31.3944" y1="8.89" x2="31.75" y2="8.89" width="0.254" layer="16"/>
+</signal>
+<signal name="N$1">
+<contactref element="T1" pad="C"/>
+<contactref element="R2" pad="1"/>
+<wire x1="85.555" y1="15.24" x2="85.555" y2="16.68" width="0.254" layer="16"/>
+<wire x1="85.555" y1="16.68" x2="84.455" y2="17.78" width="0.254" layer="16"/>
+<wire x1="84.455" y1="17.78" x2="84.455" y2="18.2" width="0.254" layer="16"/>
+</signal>
+<signal name="N$9">
+<contactref element="R2" pad="2"/>
+<contactref element="LD1" pad="C"/>
+<wire x1="88.9" y1="15.24" x2="88.9" y2="17.145" width="0.254" layer="1"/>
+<via x="88.9" y="17.145" extent="1-16" drill="0.5"/>
+<wire x1="88.9" y1="17.145" x2="86.145" y2="19.9" width="0.254" layer="16"/>
+<wire x1="86.145" y1="19.9" x2="84.455" y2="19.9" width="0.254" layer="16"/>
 </signal>
 </signals>
 </board>

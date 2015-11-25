@@ -9819,16 +9819,16 @@ support interrupts</text>
 <instance part="BREAKOUT2" gate="A" x="-68.58" y="43.18"/>
 <instance part="LD1" gate="A" x="-43.18" y="91.44" rot="R270"/>
 <instance part="P+1" gate="VCC" x="-43.18" y="104.14"/>
-<instance part="T1" gate="G$1" x="-40.64" y="76.2" smashed="yes" rot="MR0">
-<attribute name="NAME" x="-43.18" y="76.2" size="1.778" layer="95" rot="MR0"/>
-<attribute name="VALUE" x="-30.48" y="81.28" size="1.778" layer="96" rot="MR0"/>
+<instance part="T1" gate="G$1" x="-40.64" y="63.5" smashed="yes" rot="MR0">
+<attribute name="NAME" x="-43.18" y="63.5" size="1.778" layer="95" rot="MR0"/>
+<attribute name="VALUE" x="-30.48" y="68.58" size="1.778" layer="96" rot="MR0"/>
 </instance>
 <instance part="GND1" gate="1" x="-43.18" y="53.34"/>
 <instance part="P+2" gate="VCC" x="-25.4" y="104.14"/>
 <instance part="R1" gate="G$1" x="-25.4" y="76.2" rot="R90"/>
 <instance part="GND2" gate="1" x="-25.4" y="66.04"/>
 <instance part="USB" gate="G$1" x="-106.68" y="5.08"/>
-<instance part="R2" gate="G$1" x="-43.18" y="63.5" rot="R90"/>
+<instance part="R2" gate="G$1" x="-43.18" y="76.2" rot="R90"/>
 <instance part="C5" gate="G$1" x="-10.16" y="78.74"/>
 <instance part="GND5" gate="1" x="-10.16" y="68.58"/>
 <instance part="P+5" gate="VCC" x="-10.16" y="104.14"/>
@@ -9954,11 +9954,6 @@ support interrupts</text>
 <label x="-93.98" y="0" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="GND1" gate="1" pin="GND"/>
-<pinref part="R2" gate="G$1" pin="1"/>
-<wire x1="-43.18" y1="55.88" x2="-43.18" y2="58.42" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="C5" gate="G$1" pin="2"/>
 <pinref part="GND5" gate="1" pin="GND"/>
 <wire x1="-10.16" y1="73.66" x2="-10.16" y2="71.12" width="0.1524" layer="91"/>
@@ -10040,6 +10035,11 @@ support interrupts</text>
 <pinref part="L1" gate="G$1" pin="GND"/>
 <pinref part="GND7" gate="1" pin="GND"/>
 <wire x1="-30.48" y1="35.56" x2="-30.48" y2="33.02" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="GND1" gate="1" pin="GND"/>
+<pinref part="T1" gate="G$1" pin="E"/>
+<wire x1="-43.18" y1="55.88" x2="-43.18" y2="58.42" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="VCC" class="0">
@@ -10276,6 +10276,7 @@ support interrupts</text>
 <segment>
 <pinref part="U1" gate="A" pin="PTE20"/>
 <wire x1="10.16" y1="78.74" x2="7.62" y2="78.74" width="0.1524" layer="91"/>
+<junction x="7.62" y="78.74"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="9"/>
@@ -10368,8 +10369,8 @@ support interrupts</text>
 </segment>
 <segment>
 <pinref part="T1" gate="G$1" pin="B"/>
-<wire x1="-38.1" y1="76.2" x2="-35.56" y2="76.2" width="0.1524" layer="91"/>
-<wire x1="-35.56" y1="76.2" x2="-35.56" y2="55.88" width="0.1524" layer="91"/>
+<wire x1="-38.1" y1="63.5" x2="-35.56" y2="63.5" width="0.1524" layer="91"/>
+<wire x1="-35.56" y1="63.5" x2="-35.56" y2="55.88" width="0.1524" layer="91"/>
 <wire x1="-35.56" y1="55.88" x2="10.16" y2="55.88" width="0.1524" layer="91"/>
 <pinref part="U1" gate="A" pin="PTE30"/>
 </segment>
@@ -10886,20 +10887,6 @@ support interrupts</text>
 <label x="-71.12" y="-104.14" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$9" class="0">
-<segment>
-<pinref part="LD1" gate="A" pin="C"/>
-<pinref part="T1" gate="G$1" pin="C"/>
-<wire x1="-43.18" y1="83.82" x2="-43.18" y2="81.28" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$1" class="0">
-<segment>
-<pinref part="T1" gate="G$1" pin="E"/>
-<pinref part="R2" gate="G$1" pin="2"/>
-<wire x1="-43.18" y1="68.58" x2="-43.18" y2="71.12" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="VOUT33" class="0">
 <segment>
 <pinref part="C5" gate="G$1" pin="1"/>
@@ -11146,6 +11133,20 @@ support interrupts</text>
 <pinref part="BREAKOUT1" gate="A" pin="15"/>
 <wire x1="-111.76" y1="43.18" x2="-116.84" y2="43.18" width="0.1524" layer="91"/>
 <label x="-116.84" y="43.18" size="1.778" layer="95" rot="R180"/>
+</segment>
+</net>
+<net name="N$1" class="0">
+<segment>
+<pinref part="T1" gate="G$1" pin="C"/>
+<pinref part="R2" gate="G$1" pin="1"/>
+<wire x1="-43.18" y1="68.58" x2="-43.18" y2="71.12" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$9" class="0">
+<segment>
+<pinref part="R2" gate="G$1" pin="2"/>
+<pinref part="LD1" gate="A" pin="C"/>
+<wire x1="-43.18" y1="81.28" x2="-43.18" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
