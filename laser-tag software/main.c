@@ -201,6 +201,23 @@ static lpuart_state_t g_lpuartState;
 static uint8_t rxBuff[1];
 static uint32_t shift0_buf[3];
 
+static void led(uint8_t red, uint8_t green, uint8_t blue)
+{
+    FLEXIO_Type *fiobase = g_flexioBase[0];
+    uint32_t color = (green << 16) | (red << 8) | blue;
+    int i;
+    for (i = 0; i < 24; ++i) {
+        shift0_buf[i / 10] <<= 3;
+        shift0_buf[i / 10] |= 4 | ((color >> (22 - i)) & 2);
+    }
+    shift0_buf[2] <<= 3 * 6;
+
+    DMA_DRV_ConfigTransfer(&g_fioChan, kDmaMemoryToPeripheral, 4,
+            (intptr_t)&shift0_buf,
+            (intptr_t)&FLEXIO_SHIFTBUFBIS_REG(fiobase, 0), sizeof(shift0_buf));
+    DMA_DRV_StartChannel(&g_fioChan);
+}
+
 /*!
  * @brief LPTMR interrupt call back function.
  * The function is used to toggle LED1.
@@ -221,18 +238,23 @@ static void lptmr_call_back(void)
     }
 }
 
+uint8_t g_txBuff[] = { '$' };
+
 void PORTA_IRQHandler(void)
 {
     /* Clear interrupt flag.*/
     PORT_HAL_ClearPortIntFlag(PORTA_BASE_PTR);
 
     if (GPIO_DRV_ReadPinInput(g_switch1.pinName)) {
-        PIT_DRV_StopTimer(0, 0);
-        DAC_DRV_Output(0, 0);
+        LPUART_DRV_AbortSendingData(1);
     } else {
-        DMA_HAL_SetTransferCount(g_dmaBase[0], g_dacChan.channel, 0xffff0);
-        PIT_DRV_StartTimer(0, 0);
+        LPUART_DRV_SendData(1, g_txBuff, 1);
     }
+}
+
+static void lpuartTxCallback(uint32_t instance, void *lpuartState)
+{
+    // Do nothing, keep sending the same character for testing
 }
 
 static void lpuartRxCallback(uint32_t instance, void *lpuartState)
@@ -244,6 +266,23 @@ static void lpuartRxCallback(uint32_t instance, void *lpuartState)
     bool parity_error = stat & LPUART_STAT_PF_MASK;
     LPUART_WR_STAT(base, (stat & 0x3e000000) |
             LPUART_STAT_NF_MASK | LPUART_STAT_FE_MASK | LPUART_STAT_PF_MASK);
+    if (rxBuff[0] == '$') {
+        led(0x00, 0xff, 0x00);
+        return;
+    }
+    if (noise) {
+        led(0xff, 0xff, 0x00);
+        return;
+    }
+    if (frame_error) {
+        led(0xff, 0x00, 0xff);
+        return;
+    }
+    if (parity_error) {
+        led(0x00, 0xff, 0xff);
+        return;
+    }
+    led(0x00, 0x00, 0x00);
 }
 
 static void fioDmaCallback(void *param, dma_channel_status_t status)
@@ -259,7 +298,7 @@ int main (void)
     /* enable clock for PORTs */
     CLOCK_SYS_EnablePortClock(PORTA_IDX);
     //CLOCK_SYS_EnablePortClock(PORTB_IDX);
-    //CLOCK_SYS_EnablePortClock(PORTC_IDX);
+    CLOCK_SYS_EnablePortClock(PORTC_IDX);
     CLOCK_SYS_EnablePortClock(PORTD_IDX);
     CLOCK_SYS_EnablePortClock(PORTE_IDX);
 
@@ -270,12 +309,17 @@ int main (void)
     CLOCK_SYS_SetConfiguration(&g_defaultClockConfigVlpr);
 
     /* Initialize LPTMR */
-    //lptmr_state_t lptmrState;
-    //LPTMR_DRV_Init(LPTMR0_IDX, &lptmrState, &g_lptmrConfig);
-    //LPTMR_DRV_SetTimerPeriodUs(LPTMR0_IDX, 100000);
-    OSA_TimeInit();
+    lptmr_state_t lptmrState;
+    LPTMR_DRV_Init(LPTMR0_IDX, &lptmrState, &g_lptmrConfig);
+    LPTMR_DRV_SetTimerPeriodUs(LPTMR0_IDX, 100000);
+    //OSA_Init();
     LPTMR_DRV_InstallCallback(LPTMR0_IDX, lptmr_call_back);
 
+    /* Initialize DMA */
+    dma_state_t dma_state;
+    DMA_DRV_Init(&dma_state);
+
+#if 0
     /* Initialize PIT */
     PIT_DRV_Init(0, false);
     PIT_DRV_InitChannel(0, 0, &g_pitChan0);
@@ -286,8 +330,6 @@ int main (void)
     DAC_DRV_Init(0, &MyDacUserConfigStruct);
 
     /* Initialize DAC DMA channel */
-    dma_state_t dma_state;
-    DMA_DRV_Init(&dma_state);
     DMA_DRV_RequestChannel(kDmaAnyChannel, kDmaRequestMux0AlwaysOn60,
             &g_dacChan);
     DMAMUX_HAL_SetPeriodTriggerCmd(g_dmamuxBase[0], g_dacChan.channel, true);
@@ -309,11 +351,12 @@ int main (void)
             false);
     DMA_DRV_StartChannel(&g_dacChan);
     DAC_DRV_Output(0, 0);
+#endif
 
     /* Initialize CMP */
     CMP_DRV_Init(0, &g_cmpState, &g_cmpConf);
     CMP_DRV_ConfigDacChn(0, &g_cmpDacConf);
-    PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 0, kPortMuxAlt5);
+    PORT_HAL_SetMuxMode(g_portBase[GPIOC_IDX], 0, kPortMuxAlt5);
     CMP_DRV_Start(0);
 
     /* Buttons */
@@ -325,6 +368,9 @@ int main (void)
     /* Setup LPUART1 */
     LPUART_DRV_Init(1, &g_lpuartState, &g_lpuartConfig);
     LPUART_DRV_InstallRxCallback(1, lpuartRxCallback, rxBuff, NULL, true);
+    LPUART_DRV_InstallTxCallback(1, lpuartTxCallback, NULL, NULL);
+    LPUART_BWR_CTRL_TXINV(g_lpuartBase[1], 1);
+    PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 0, kPortMuxAlt3);
     PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 1, kPortMuxAlt3);
 
     /* Setup FlexIO for the WS2812B */
@@ -334,34 +380,14 @@ int main (void)
     FLEXIO_HAL_ConfigureTimer(fiobase, 0, &g_timerConfig);
     FLEXIO_HAL_ConfigureShifter(fiobase, 0, &g_shifterConfig);
     PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 20, kPortMuxAlt6);
-    //FLEXIO_DRV_RegisterCallback(0, 0, shift0_int_handler, NULL);
     FLEXIO_DRV_Start(0);
 
     FLEXIO_HAL_SetShifterStatusDmaCmd(fiobase, 1, true);
-    uint32_t chan;
-    chan = DMA_DRV_RequestChannel(kDmaAnyChannel, kDmaRequestMux0FlexIOChannel0,
+    DMA_DRV_RequestChannel(kDmaAnyChannel, kDmaRequestMux0FlexIOChannel0,
             &g_fioChan);
-    if (chan == kDmaInvalidChannel) {
-        while(1);
-    }
     DMA_DRV_RegisterCallback(&g_fioChan, fioDmaCallback, NULL);
 
-    uint8_t red = 0x4B;
-    uint8_t green = 0x00;
-    uint8_t blue = 0x82;
-    uint32_t color = (green << 16) | (red << 8) | blue;
-    int i;
-    for (i = 0; i < 24; ++i) {
-        shift0_buf[i / 10] <<= 3;
-        shift0_buf[i / 10] |= 4 | ((color >> (22 - i)) & 2);
-    }
-    shift0_buf[2] <<= 3 * 6;
-
-    DMA_DRV_ConfigTransfer(&g_fioChan, kDmaMemoryToPeripheral, 4,
-            (intptr_t)&shift0_buf,
-            (intptr_t)&FLEXIO_SHIFTBUFBIS_REG(fiobase, 0), sizeof(shift0_buf));
-    DMA_DRV_StartChannel(&g_fioChan);
-
+#if 0
     /* Play some chip tunez */
     //CLOCK_SYS_SetTpmSrc(1, kClockTpmSrcMcgIrClk);
     PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 21, kPortMuxAlt3);
@@ -416,6 +442,7 @@ int main (void)
             TPM_DRV_PwmStop(1, &param, 1);
         OSA_TimeDelay(193);
     }
+#endif
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {
