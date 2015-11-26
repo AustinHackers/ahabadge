@@ -222,6 +222,7 @@ CLASS 3R LASER PRODUCT</text>
 <text x="45.085" y="68.58" size="0.8128" layer="26" rot="MR270">PTD2 ** PTD3</text>
 <text x="50.165" y="68.58" size="0.8128" layer="26" rot="MR270">PTD6 ** PTD7</text>
 <text x="47.625" y="68.58" size="0.8128" layer="26" rot="MR270">PTD4 ** PTD5</text>
+<text x="3.81" y="10.16" size="0.8128" layer="26" rot="MR270">AHA! Badge v0</text>
 </plain>
 <libraries>
 <library name="Freescale">
