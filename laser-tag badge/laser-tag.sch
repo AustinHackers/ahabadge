@@ -9771,6 +9771,7 @@ www.irf.com&lt;p&gt;
 <part name="J5" library="Jumpers" deviceset="JUMPER_SOLDER_1X2_CLOSED" device=""/>
 <part name="SP1" library="adafruit" deviceset="SPEAKER" device="/PS12"/>
 <part name="GND9" library="supply1" deviceset="GND" device=""/>
+<part name="C21" library="rcl" deviceset="C-EU" device="C0603K" value="0.1 uF"/>
 </parts>
 <sheets>
 <sheet>
@@ -9846,6 +9847,7 @@ support interrupts</text>
 <instance part="J5" gate="J" x="2.54" y="99.06"/>
 <instance part="SP1" gate="S1" x="-45.72" y="7.62" rot="R90"/>
 <instance part="GND9" gate="1" x="-45.72" y="-2.54"/>
+<instance part="C21" gate="G$1" x="-20.32" y="43.18"/>
 </instances>
 <busses>
 </busses>
@@ -10004,6 +10006,10 @@ support interrupts</text>
 <pinref part="L1" gate="G$1" pin="GND"/>
 <pinref part="GND7" gate="1" pin="GND"/>
 <wire x1="-30.48" y1="35.56" x2="-30.48" y2="33.02" width="0.1524" layer="91"/>
+<pinref part="C21" gate="G$1" pin="2"/>
+<wire x1="-30.48" y1="35.56" x2="-20.32" y2="35.56" width="0.1524" layer="91"/>
+<wire x1="-20.32" y1="35.56" x2="-20.32" y2="38.1" width="0.1524" layer="91"/>
+<junction x="-30.48" y="35.56"/>
 </segment>
 <segment>
 <pinref part="GND1" gate="1" pin="GND"/>
@@ -10114,6 +10120,9 @@ support interrupts</text>
 <pinref part="P+7" gate="VCC" pin="VCC"/>
 <pinref part="L1" gate="G$1" pin="VDD"/>
 <wire x1="-30.48" y1="48.26" x2="-30.48" y2="45.72" width="0.1524" layer="91"/>
+<pinref part="C21" gate="G$1" pin="1"/>
+<wire x1="-20.32" y1="45.72" x2="-30.48" y2="45.72" width="0.1524" layer="91"/>
+<junction x="-30.48" y="45.72"/>
 </segment>
 </net>
 <net name="PTA3" class="0">

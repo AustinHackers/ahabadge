@@ -2561,6 +2561,7 @@ www.irf.com&lt;p&gt;
 <element name="SP1" library="adafruit" package="PS12" value="SPEAKER/PS12" x="69.85" y="15.875" smashed="yes" rot="MR0">
 <attribute name="NAME" x="72.39" y="22.225" size="1.27" layer="26" ratio="10" rot="MR0"/>
 </element>
+<element name="C21" library="rcl" package="C0603K" value="0.1 uF" x="87.63" y="41.275" rot="MR90"/>
 </elements>
 <signals>
 <signal name="GND">
@@ -2669,7 +2670,7 @@ www.irf.com&lt;p&gt;
 <wire x1="64.135" y1="41.515" x2="64.77" y2="42.15" width="0.254" layer="1"/>
 <wire x1="64.77" y1="42.15" x2="64.77" y2="42.545" width="0.254" layer="1"/>
 <via x="64.77" y="42.545" extent="1-16" drill="0.5"/>
-<wire x1="22.225" y1="51.675" x2="20.32" y2="51.675" width="0" layer="19" extent="16-16"/>
+<contactref element="C21" pad="2"/>
 </signal>
 <signal name="VCC">
 <contactref element="U1" pad="48"/>
@@ -2773,7 +2774,6 @@ www.irf.com&lt;p&gt;
 <wire x1="80.645" y1="8.89" x2="80.01" y2="9.525" width="0.254" layer="1"/>
 <wire x1="80.01" y1="9.525" x2="80.01" y2="27.305" width="0.254" layer="1"/>
 <wire x1="80.01" y1="27.305" x2="79.375" y2="27.94" width="0.254" layer="1"/>
-<wire x1="73.025" y1="67.945" x2="73.025" y2="60.96" width="0" layer="19" extent="1-16"/>
 <wire x1="73.025" y1="51.435" x2="67.31" y2="45.72" width="0.254" layer="1"/>
 <wire x1="68.9356" y1="37.465" x2="68.58" y2="37.465" width="0.254" layer="1"/>
 <wire x1="61.387971875" y1="38.607065625" x2="62.78590625" y2="40.005" width="0.254" layer="16"/>
@@ -2787,9 +2787,13 @@ www.irf.com&lt;p&gt;
 <wire x1="73.025" y1="51.435" x2="73.025" y2="67.945" width="0.254" layer="1"/>
 <via x="73.025" y="67.945" extent="1-16" drill="0.5"/>
 <wire x1="73.025" y1="67.945" x2="73.025" y2="71.755" width="0.254" layer="16"/>
+<contactref element="C21" pad="1"/>
+<via x="88.645" y="38.99" extent="1-16" drill="0.5"/>
+<wire x1="88.645" y1="38.99" x2="90.08" y2="38.99" width="0.254" layer="1"/>
+<wire x1="88.645" y1="38.99" x2="87.63" y2="40.005" width="0.254" layer="16"/>
+<wire x1="87.63" y1="40.005" x2="87.63" y2="40.4" width="0.254" layer="16"/>
 <wire x1="73.025" y1="71.755" x2="98.425" y2="71.755" width="0" layer="19" extent="16-16"/>
 <wire x1="69.703478125" y1="35.071521875" x2="69.696484375" y2="35.071521875" width="0" layer="19" extent="16-16"/>
-<wire x1="90.08" y1="38.99" x2="89.28" y2="38.99" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="PTA3">
 <contactref element="U1" pad="25"/>
@@ -3808,18 +3812,18 @@ www.irf.com&lt;p&gt;
 <approved hash="19,1,09184da6418375c1"/>
 <approved hash="19,1,b277824b837db341"/>
 <approved hash="19,1,b13f81038015b029"/>
-<approved hash="19,1,85d1e09ae729521f"/>
 <approved hash="19,1,201b79316db2e4e5"/>
-<approved hash="19,1,c376c34ac010c02c"/>
+<approved hash="19,1,85d1e09ae729521f"/>
 <approved hash="19,1,c33ac306c200c23c"/>
+<approved hash="19,1,c376c34ac010c02c"/>
 <approved hash="19,16,327f824385df35e3"/>
 <approved hash="19,16,072129f6b4746713"/>
 <approved hash="19,16,ce52dc59d57b3ac0"/>
 <approved hash="19,16,0d7ccf40c8dc0ae0"/>
-<approved hash="19,16,09145943555675fd"/>
 <approved hash="19,16,43fd2fc992288ee0"/>
-<approved hash="19,16,b27d82418173b14f"/>
+<approved hash="19,16,09145943555675fd"/>
 <approved hash="19,16,b23d82018c03bc3f"/>
+<approved hash="19,16,b27d82418173b14f"/>
 </errors>
 </board>
 </drawing>
