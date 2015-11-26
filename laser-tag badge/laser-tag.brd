@@ -173,6 +173,55 @@
 <wire x1="5.08" y1="33.02" x2="3.175" y2="34.925" width="0" layer="20" curve="-90"/>
 <wire x1="101.6" y1="17.78" x2="79.375" y2="35.56" width="0" layer="20" curve="-78"/>
 <wire x1="101.6" y1="63.5" x2="79.375" y2="45.72" width="0" layer="20" curve="78"/>
+<text x="69.85" y="31.75" size="0.6096" layer="25" rot="R90">USB Power</text>
+<text x="61.595" y="64.135" size="0.8128" layer="25" rot="R90">Hold     while powering up
+to enter programming mode</text>
+<wire x1="59.6392" y1="67.2338" x2="60.325" y2="67.2338" width="0.0762" layer="25"/>
+<wire x1="60.325" y1="67.2338" x2="59.9948" y2="67.4624" width="0.0762" layer="25"/>
+<wire x1="60.325" y1="67.2338" x2="60.0202" y2="67.0306" width="0.0762" layer="25"/>
+<text x="100.3808" y="4.7498" size="0.8128" layer="25" rot="R180">LASER RADIATION
+AVOID DIRECT EYE EXPOSURE
+CLASS 3R LASER PRODUCT</text>
+<text x="51.435" y="6.35" size="0.8128" layer="25">1</text>
+<text x="51.435" y="3.81" size="0.8128" layer="25">2</text>
+<text x="8.255" y="6.35" size="0.8128" layer="25">31</text>
+<text x="8.255" y="3.81" size="0.8128" layer="25">32</text>
+<text x="8.255" y="74.93" size="0.8128" layer="25">33</text>
+<text x="8.255" y="77.47" size="0.8128" layer="25">34</text>
+<text x="51.435" y="74.93" size="0.8128" layer="25">63</text>
+<text x="51.435" y="77.47" size="0.8128" layer="25">64</text>
+<text x="50.165" y="18.415" size="0.8128" layer="26" rot="MR270">PTE1 ** PTE0</text>
+<text x="47.625" y="18.415" size="0.8128" layer="26" rot="MR270">VSS ** VDD</text>
+<text x="45.085" y="20.955" size="0.8128" layer="26" rot="MR270">USB0_DM ** USB0_DP</text>
+<text x="42.545" y="20.32" size="0.8128" layer="26" rot="MR270">VREGIN ** VOUT33</text>
+<text x="40.005" y="19.05" size="0.8128" layer="26" rot="MR270">PTE21 ** PTE20</text>
+<text x="37.465" y="19.05" size="0.8128" layer="26" rot="MR270">PTE23 ** PTE22</text>
+<text x="34.925" y="19.05" size="0.8128" layer="26" rot="MR270">VREFH ** VDDA</text>
+<text x="32.385" y="19.685" size="0.8128" layer="26" rot="MR270">VSSA ** VREFL</text>
+<text x="29.845" y="19.05" size="0.8128" layer="26" rot="MR270">PTE30 ** PTE29</text>
+<text x="27.305" y="19.05" size="0.8128" layer="26" rot="MR270">PTE24 ** PTE31</text>
+<text x="24.765" y="19.05" size="0.8128" layer="26" rot="MR270">CLK/PTA0 ** PTE25</text>
+<text x="22.225" y="18.415" size="0.8128" layer="26" rot="MR270">PTA2 ** PTA1</text>
+<text x="19.685" y="20.955" size="0.8128" layer="26" rot="MR270">PTA4 ** PTA3/DIO</text>
+<text x="17.145" y="18.415" size="0.8128" layer="26" rot="MR270">PTA12 ** PTA5</text>
+<text x="14.605" y="19.05" size="0.8128" layer="26" rot="MR270">VDD ** PTA13</text>
+<text x="12.065" y="17.78" size="0.8128" layer="26" rot="MR270">PTA18 ** VSS</text>
+<text x="12.065" y="73.025" size="0.8128" layer="26" rot="MR270">PTA19 ** PTA20/RESET</text>
+<text x="14.605" y="68.58" size="0.8128" layer="26" rot="MR270">PTB0 ** PTB1</text>
+<text x="17.145" y="68.58" size="0.8128" layer="26" rot="MR270">PTB2 ** PTB3</text>
+<text x="19.685" y="69.215" size="0.8128" layer="26" rot="MR270">PTB16 ** PTB17</text>
+<text x="22.225" y="69.215" size="0.8128" layer="26" rot="MR270">PTB18 ** PTB19</text>
+<text x="24.765" y="68.58" size="0.8128" layer="26" rot="MR270">PTC0 ** PTC1</text>
+<text x="27.305" y="68.58" size="0.8128" layer="26" rot="MR270">PTC2 ** PTC3</text>
+<text x="29.845" y="67.945" size="0.8128" layer="26" rot="MR270">VSS ** VDD</text>
+<text x="32.385" y="68.58" size="0.8128" layer="26" rot="MR270">PTC4 ** PTC5</text>
+<text x="34.925" y="68.58" size="0.8128" layer="26" rot="MR270">PTC6 ** PTC7</text>
+<text x="37.465" y="68.58" size="0.8128" layer="26" rot="MR270">PTC8 ** PTC9</text>
+<text x="40.005" y="69.215" size="0.8128" layer="26" rot="MR270">PTC10 ** PTC11</text>
+<text x="42.545" y="68.58" size="0.8128" layer="26" rot="MR270">PTD0 ** PTD1</text>
+<text x="45.085" y="68.58" size="0.8128" layer="26" rot="MR270">PTD2 ** PTD3</text>
+<text x="50.165" y="68.58" size="0.8128" layer="26" rot="MR270">PTD6 ** PTD7</text>
+<text x="47.625" y="68.58" size="0.8128" layer="26" rot="MR270">PTD4 ** PTD5</text>
 </plain>
 <libraries>
 <library name="Freescale">
@@ -2443,12 +2492,12 @@ www.irf.com&lt;p&gt;
 </element>
 <element name="C4" library="rcl" package="C0603K" value="0.1 uF" x="67.31" y="36.83" smashed="yes" rot="R90">
 <attribute name="NAME" x="66.66" y="36.03" size="1.016" layer="25" rot="R90"/>
-<attribute name="VALUE" x="68.96" y="37.3" size="1.016" layer="27" rot="R90"/>
+<attribute name="VALUE" x="65.15" y="34.76" size="1.016" layer="27" rot="R90"/>
 </element>
 <element name="BREAKOUT1" library="pinhead" package="2X16" value="" x="30.48" y="5.08" rot="R180"/>
 <element name="BREAKOUT2" library="pinhead" package="2X16" value="" x="30.48" y="76.2"/>
 <element name="LD1" library="Photonics" package="LD-FLUSH-WITH-JUMPER" value="LD" x="88.9" y="8.89" smashed="yes" rot="R90">
-<attribute name="NAME" x="85.09" y="5.08" size="1.27" layer="25" rot="R90"/>
+<attribute name="NAME" x="85.5726" y="7.4676" size="1.27" layer="25" rot="R90"/>
 </element>
 <element name="T1" library="transistor" package="SOT23-BEC" value="" x="84.455" y="15.24" rot="MR90"/>
 <element name="R1" library="rcl" package="R0603" value="10k" x="76.835" y="41.275" smashed="yes" rot="R180">
@@ -3827,4 +3876,10 @@ www.irf.com&lt;p&gt;
 </errors>
 </board>
 </drawing>
+<compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
+</compatibility>
 </eagle>
