@@ -1040,6 +1040,32 @@
 <wire x1="-1.3" y1="2.8" x2="-1.7" y2="3.2" width="0.127" layer="21"/>
 <wire x1="-1.7" y1="3.2" x2="-2.5" y2="2.5" width="0.127" layer="21"/>
 </package>
+<package name="AL60P">
+<description>&lt;b&gt;SPEAKER&lt;/b&gt;</description>
+<circle x="0" y="0" radius="6.096" width="0.1524" layer="21"/>
+<circle x="0" y="0" radius="1.27" width="0.1524" layer="21"/>
+<pad name="1" x="-3.7592" y="0" drill="1.016" diameter="2.54" shape="octagon"/>
+<pad name="2" x="3.7592" y="0" drill="1.016" diameter="2.54" shape="octagon"/>
+<text x="-2.54" y="6.35" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<text x="-3.8862" y="-3.81" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
+</package>
+<package name="AL11P">
+<description>&lt;b&gt;SPEAKER&lt;/b&gt;</description>
+<circle x="0" y="0" radius="5.715" width="0.1524" layer="21"/>
+<circle x="0" y="0" radius="6.223" width="0.1524" layer="21"/>
+<circle x="0" y="0" radius="1.016" width="0.1524" layer="21"/>
+<pad name="-" x="-2.286" y="0" drill="1.016" diameter="1.905" shape="octagon"/>
+<pad name="+" x="2.286" y="0" drill="1.016" diameter="1.905" shape="octagon"/>
+<text x="-3.175" y="6.35" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<text x="-3.81" y="-3.175" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
+</package>
+<package name="PS12">
+<circle x="0" y="0" radius="6.096" width="0.1524" layer="21"/>
+<pad name="P$1" x="-2.5" y="0" drill="1" diameter="2.54"/>
+<pad name="P$2" x="2.5" y="0" drill="1" diameter="2.54"/>
+<text x="-2.54" y="6.35" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<text x="-3.8862" y="-3.81" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
+</package>
 </packages>
 <symbols>
 <symbol name="3V">
@@ -1113,6 +1139,23 @@
 <wire x1="0.762" y1="-1.27" x2="1.016" y2="-1.524" width="0.254" layer="94"/>
 <wire x1="1.016" y1="-1.016" x2="1.27" y2="-1.27" width="0.254" layer="94"/>
 <text x="2.54" y="3.048" size="0.6096" layer="95">&gt;NAME</text>
+</symbol>
+<symbol name="SP">
+<wire x1="-1.905" y1="-0.635" x2="1.905" y2="-0.635" width="0.254" layer="94"/>
+<wire x1="1.905" y1="-0.635" x2="1.905" y2="0" width="0.254" layer="94"/>
+<wire x1="1.905" y1="2.54" x2="-1.905" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-1.905" y1="-0.635" x2="-1.905" y2="0" width="0.254" layer="94"/>
+<wire x1="1.905" y1="2.54" x2="5.08" y2="5.08" width="0.254" layer="94"/>
+<wire x1="5.08" y1="5.08" x2="-5.08" y2="5.08" width="0.254" layer="94"/>
+<wire x1="-1.905" y1="2.54" x2="-5.08" y2="5.08" width="0.254" layer="94"/>
+<wire x1="2.54" y1="0" x2="1.905" y2="0" width="0.1524" layer="94"/>
+<wire x1="1.905" y1="0" x2="1.905" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="0" x2="-1.905" y2="0" width="0.1524" layer="94"/>
+<wire x1="-1.905" y1="0" x2="-1.905" y2="2.54" width="0.254" layer="94"/>
+<text x="-3.81" y="6.35" size="1.778" layer="95">&gt;NAME</text>
+<text x="-3.81" y="-3.175" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="-" x="5.08" y="0" visible="off" length="short" direction="pas" rot="R180"/>
+<pin name="+" x="-5.08" y="0" visible="off" length="short" direction="pas"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -1202,6 +1245,41 @@ Thru-hole RA Female Mini-B USB Connector 4UConnector: 18732&lt;/p&gt;
 <connect gate="G$1" pin="DOUT" pad="2-DOUT"/>
 <connect gate="G$1" pin="GND" pad="3-GND"/>
 <connect gate="G$1" pin="VDD" pad="1-VDD"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="SPEAKER" prefix="SP">
+<description>&lt;b&gt;SPEAKER&lt;/b&gt;&lt;p&gt; Source: Buerklin&lt;p&gt;Added PS12 (for part # PS1240 piezo) &lt;p&gt;http://www.ladyada.net/library/pcb/eaglelibrary.html&lt;p&gt;</description>
+<gates>
+<gate name="S1" symbol="SP" x="0" y="0"/>
+</gates>
+<devices>
+<device name="/AL60P" package="AL60P">
+<connects>
+<connect gate="S1" pin="+" pad="1"/>
+<connect gate="S1" pin="-" pad="2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="/AL11P" package="AL11P">
+<connects>
+<connect gate="S1" pin="+" pad="+"/>
+<connect gate="S1" pin="-" pad="-"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="/PS12" package="PS12">
+<connects>
+<connect gate="S1" pin="+" pad="P$1"/>
+<connect gate="S1" pin="-" pad="P$2"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -9796,6 +9874,8 @@ www.irf.com&lt;p&gt;
 <part name="GND7" library="supply1" deviceset="GND" device=""/>
 <part name="P+7" library="supply1" deviceset="VCC" device=""/>
 <part name="J5" library="Jumpers" deviceset="JUMPER_SOLDER_1X2_CLOSED" device=""/>
+<part name="SP1" library="adafruit" deviceset="SPEAKER" device="/PS12"/>
+<part name="GND9" library="supply1" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -9869,6 +9949,8 @@ support interrupts</text>
 <instance part="GND7" gate="1" x="-30.48" y="30.48"/>
 <instance part="P+7" gate="VCC" x="-30.48" y="50.8"/>
 <instance part="J5" gate="J" x="2.54" y="99.06"/>
+<instance part="SP1" gate="S1" x="-45.72" y="7.62" rot="R90"/>
+<instance part="GND9" gate="1" x="-45.72" y="-2.54"/>
 </instances>
 <busses>
 </busses>
@@ -10042,6 +10124,11 @@ support interrupts</text>
 <pinref part="GND1" gate="1" pin="GND"/>
 <pinref part="T1" gate="G$1" pin="E"/>
 <wire x1="-17.78" y1="58.42" x2="-17.78" y2="60.96" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="GND9" gate="1" pin="GND"/>
+<pinref part="SP1" gate="S1" pin="+"/>
+<wire x1="-45.72" y1="0" x2="-45.72" y2="2.54" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="VCC" class="0">
@@ -10372,6 +10459,12 @@ support interrupts</text>
 <segment>
 <pinref part="U1" gate="A" pin="PTE30"/>
 <wire x1="10.16" y1="55.88" x2="7.62" y2="55.88" width="0.1524" layer="91"/>
+<junction x="7.62" y="55.88"/>
+</segment>
+<segment>
+<pinref part="SP1" gate="S1" pin="-"/>
+<wire x1="-45.72" y1="12.7" x2="-45.72" y2="15.24" width="0.1524" layer="91"/>
+<label x="-45.72" y="15.24" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="PTE31" class="0">
