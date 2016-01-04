@@ -309,11 +309,11 @@ int main (void)
     CLOCK_SYS_SetConfiguration(&g_defaultClockConfigVlpr);
 
     /* Initialize LPTMR */
-    lptmr_state_t lptmrState;
-    LPTMR_DRV_Init(LPTMR0_IDX, &lptmrState, &g_lptmrConfig);
-    LPTMR_DRV_SetTimerPeriodUs(LPTMR0_IDX, 100000);
-    //OSA_Init();
-    LPTMR_DRV_InstallCallback(LPTMR0_IDX, lptmr_call_back);
+    //lptmr_state_t lptmrState;
+    //LPTMR_DRV_Init(LPTMR0_IDX, &lptmrState, &g_lptmrConfig);
+    //LPTMR_DRV_SetTimerPeriodUs(LPTMR0_IDX, 100000);
+    OSA_Init();
+    //LPTMR_DRV_InstallCallback(LPTMR0_IDX, lptmr_call_back);
 
     /* Initialize DMA */
     dma_state_t dma_state;
@@ -387,10 +387,10 @@ int main (void)
             &g_fioChan);
     DMA_DRV_RegisterCallback(&g_fioChan, fioDmaCallback, NULL);
 
-#if 0
+#if 1
     /* Play some chip tunez */
     //CLOCK_SYS_SetTpmSrc(1, kClockTpmSrcMcgIrClk);
-    PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 21, kPortMuxAlt3);
+    PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 30, kPortMuxAlt3);
     tpm_general_config_t tmpConfig = {
         .isDBGMode = false,
         .isGlobalTimeBase = false,
@@ -399,8 +399,8 @@ int main (void)
         .isCountReloadOnTrig = false,
         .triggerSource = kTpmTrigSel0,
     };
-    TPM_DRV_Init(1, &tmpConfig);
-    TPM_DRV_SetClock(1, kTpmClockSourceModuleMCGIRCLK, kTpmDividedBy1);
+    TPM_DRV_Init(0, &tmpConfig);
+    TPM_DRV_SetClock(0, kTpmClockSourceModuleMCGIRCLK, kTpmDividedBy1);
 
     uint16_t notes[] = {
         0,   // rest
@@ -434,12 +434,13 @@ int main (void)
         .edgeMode = kTpmHighTrue,
         .uDutyCyclePercent = 50,
     };
+    int i;
     for (i = 0; ; i = (i + 1) % sizeof(beeps)) {
         param.uFrequencyHZ = notes[beeps[i]];
         if (param.uFrequencyHZ)
-            TPM_DRV_PwmStart(1, &param, 1);
+            TPM_DRV_PwmStart(0, &param, 3);
         else
-            TPM_DRV_PwmStop(1, &param, 1);
+            TPM_DRV_PwmStop(0, &param, 3);
         OSA_TimeDelay(193);
     }
 #endif
