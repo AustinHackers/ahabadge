@@ -176,9 +176,9 @@
 <text x="69.85" y="31.75" size="0.6096" layer="25" font="vector" rot="R90">USB Power</text>
 <text x="61.595" y="63.5" size="0.8128" layer="25" font="vector" rot="R90">Hold   while powering up
 to enter programming mode</text>
-<wire x1="59.6392" y1="67.2338" x2="60.325" y2="67.2338" width="0.0762" layer="25"/>
-<wire x1="60.325" y1="67.2338" x2="59.9948" y2="67.4624" width="0.0762" layer="25"/>
-<wire x1="60.325" y1="67.2338" x2="60.0202" y2="67.0306" width="0.0762" layer="25"/>
+<wire x1="60.3758" y1="67.3862" x2="59.69" y2="67.3862" width="0.0762" layer="25"/>
+<wire x1="59.69" y1="67.3862" x2="60.0202" y2="67.1576" width="0.0762" layer="25"/>
+<wire x1="59.69" y1="67.3862" x2="59.9948" y2="67.5894" width="0.0762" layer="25"/>
 <text x="100.3808" y="4.7498" size="0.8128" layer="25" font="vector" rot="R180">LASER RADIATION
 AVOID DIRECT EYE EXPOSURE
 CLASS 3R LASER PRODUCT</text>
