@@ -417,7 +417,6 @@ int main (void)
     lptmr_state_t lptmrState;
     LPTMR_DRV_Init(LPTMR0_IDX, &lptmrState, &g_lptmrConfig);
     LPTMR_DRV_SetTimerPeriodUs(LPTMR0_IDX, 100000);
-    //OSA_Init();
     LPTMR_DRV_InstallCallback(LPTMR0_IDX, lptmr_call_back);
 
     /* Initialize DMA */
@@ -427,36 +426,6 @@ int main (void)
     /* Initialize PIT */
     PIT_DRV_Init(0, false);
     PIT_DRV_InitChannel(0, 0, &g_pitChan0);
-
-#if 0
-    /* Initialize the DAC */
-    dac_converter_config_t MyDacUserConfigStruct;
-    DAC_DRV_StructInitUserConfigNormal(&MyDacUserConfigStruct);
-    DAC_DRV_Init(0, &MyDacUserConfigStruct);
-
-    /* Initialize DAC DMA channel */
-    DMA_DRV_RequestChannel(kDmaAnyChannel, kDmaRequestMux0AlwaysOn60,
-            &g_dacChan);
-    DMAMUX_HAL_SetPeriodTriggerCmd(g_dmamuxBase[0], g_dacChan.channel, true);
-    const uint32_t dac_dat = (intptr_t)&DAC_DATL_REG(g_dacBase[0], 0);
-    const uint16_t L_ON = 0x4ff;
-    const uint16_t L_OFF = 0x2ff;
-    const uint16_t laserbuf[16] __attribute__ ((aligned(32))) = {
-        L_ON,  L_ON,  L_ON,  L_OFF,
-        L_ON,  L_ON,  L_OFF, L_ON,
-        L_ON,  L_ON,  L_OFF, L_OFF,
-        L_OFF, L_OFF, L_OFF, L_OFF,
-    };
-    DMA_DRV_ConfigTransfer(&g_dacChan, kDmaMemoryToPeripheral, 2,
-            (intptr_t)laserbuf, dac_dat, 0xffff0);
-    DMA_HAL_SetSourceModulo(g_dmaBase[0], g_dacChan.channel, kDmaModulo32Bytes);
-    DMA_HAL_SetAsyncDmaRequestCmd(g_dmaBase[0], g_dacChan.channel, true);
-    DMA_HAL_SetIntCmd(g_dmaBase[0], g_dacChan.channel, false);
-    DMA_HAL_SetDisableRequestAfterDoneCmd(g_dmaBase[0], g_dacChan.channel,
-            false);
-    DMA_DRV_StartChannel(&g_dacChan);
-    DAC_DRV_Output(0, 0);
-#endif
 
     /* Initialize CMP */
     CMP_DRV_Init(0, &g_cmpState, &g_cmpConf);
