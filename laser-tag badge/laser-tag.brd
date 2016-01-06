@@ -2612,6 +2612,7 @@ www.irf.com&lt;p&gt;
 <attribute name="NAME" x="72.39" y="22.225" size="1.27" layer="26" font="vector" ratio="10" rot="MR0"/>
 </element>
 <element name="C21" library="rcl" package="C0603K" value="0.1 uF" x="87.63" y="41.275" rot="MR90"/>
+<element name="R4" library="rcl" package="R0603" value="10k" x="80.645" y="13.335" rot="MR90"/>
 </elements>
 <signals>
 <signal name="GND">
@@ -2721,6 +2722,7 @@ www.irf.com&lt;p&gt;
 <wire x1="64.77" y1="42.15" x2="64.77" y2="42.545" width="0.254" layer="1"/>
 <via x="64.77" y="42.545" extent="1-16" drill="0.5"/>
 <contactref element="C21" pad="2"/>
+<contactref element="R4" pad="1"/>
 </signal>
 <signal name="VCC">
 <contactref element="U1" pad="48"/>
@@ -3837,6 +3839,9 @@ www.irf.com&lt;p&gt;
 <wire x1="82.55" y1="2.54" x2="53.975" y2="2.54" width="0.254" layer="16"/>
 <wire x1="53.975" y1="2.54" x2="52.07" y2="4.445" width="0.254" layer="16"/>
 <wire x1="52.07" y1="4.445" x2="52.07" y2="4.8006" width="0.254" layer="16"/>
+<contactref element="R4" pad="2"/>
+<wire x1="83.355" y1="14.29" x2="80.645" y2="14.29" width="0.254" layer="16"/>
+<wire x1="80.645" y1="14.29" x2="80.645" y2="14.185" width="0.254" layer="16"/>
 </signal>
 <signal name="N$11">
 <contactref element="R1" pad="2"/>
