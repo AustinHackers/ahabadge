@@ -243,6 +243,7 @@ static dma_channel_t g_dacChan, g_fioChan;
 static lpuart_state_t g_lpuartState;
 static uint8_t rxBuff[1];
 static uint32_t shift0_buf[3];
+static uint32_t blank_led;
 
 static void led(uint8_t red, uint8_t green, uint8_t blue)
 {
@@ -278,6 +279,13 @@ static void lptmr_call_back(void)
             g_cmpDacConf.dacValue--;
             CMP_DRV_ConfigDacChn(0, &g_cmpDacConf);
         }
+    }
+    // countdown to turn off LED
+    if (blank_led) {
+        if (blank_led == 1) {
+            led(0, 0, 0);
+        }
+        blank_led--;
     }
 }
 
@@ -335,7 +343,7 @@ void PIT_IRQHandler(void)
     }
 }
 
-uint8_t g_txBuff[] = { '$' };
+uint8_t g_txBuff[] = { 'R' };
 
 void PORTA_IRQHandler(void)
 {
@@ -355,6 +363,19 @@ void PORTA_IRQHandler(void)
     } else {
         LPUART_DRV_SendData(1, g_txBuff, 1);
     }
+
+    if (!GPIO_DRV_ReadPinInput(g_switchUp.pinName)) {
+        g_txBuff[0] = 'R';
+    }
+    if (!GPIO_DRV_ReadPinInput(g_switchLeft.pinName)) {
+        g_txBuff[0] = 'G';
+    }
+    if (!GPIO_DRV_ReadPinInput(g_switchRight.pinName)) {
+        g_txBuff[0] = 'B';
+    }
+    if (!GPIO_DRV_ReadPinInput(g_switchDown.pinName)) {
+        g_txBuff[0] = '!';
+    }
 }
 
 static void lpuartTxCallback(uint32_t instance, void *lpuartState)
@@ -371,10 +392,27 @@ static void lpuartRxCallback(uint32_t instance, void *lpuartState)
     bool parity_error = stat & LPUART_STAT_PF_MASK;
     LPUART_WR_STAT(base, (stat & 0x3e000000) |
             LPUART_STAT_NF_MASK | LPUART_STAT_FE_MASK | LPUART_STAT_PF_MASK);
-    if (rxBuff[0] == '$') {
-        led(0x00, 0xff, 0x00);
+    if (rxBuff[0] == 'R') {
+        led(0xff, 0x00, 0x00);
+        blank_led = 30;
         return;
     }
+    if (rxBuff[0] == 'G') {
+        led(0x00, 0xff, 0x00);
+        blank_led = 30;
+        return;
+    }
+    if (rxBuff[0] == 'B') {
+        led(0x00, 0x00, 0xff);
+        blank_led = 30;
+        return;
+    }
+    if (rxBuff[0] == '!') {
+        position = 0;
+        PIT_DRV_StartTimer(0, 0);
+        return;
+    }
+    return;
     if (noise) {
         led(0xff, 0xff, 0x00);
         return;
@@ -479,6 +517,9 @@ int main (void)
     };
     TPM_DRV_Init(0, &tmpConfig);
     TPM_DRV_SetClock(0, kTpmClockSourceModuleMCGIRCLK, kTpmDividedBy1);
+
+    /* Blank LED just in case, saves power */
+    led(0x00, 0x00, 0x00);
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {
