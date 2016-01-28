@@ -235,17 +235,21 @@ static flexio_shifter_config_t g_shifterConfig = {
     .sstart = kFlexioShifterStartBitDisabledLoadDataOnEnable,
 };
 
+
+extern void EPD_Init();
+extern void EPD_Draw();
+
 ///////
 // Code
 
 static cmp_state_t g_cmpState;
-static dma_channel_t g_dacChan, g_fioChan;
+static dma_channel_t g_fioChan;
 static lpuart_state_t g_lpuartState;
 static uint8_t rxBuff[1];
 static uint32_t shift0_buf[3];
 static uint32_t blank_led;
 
-static void led(uint8_t red, uint8_t green, uint8_t blue)
+void led(uint8_t red, uint8_t green, uint8_t blue)
 {
     FLEXIO_Type *fiobase = g_flexioBase[0];
     uint32_t color = (green << 16) | (red << 8) | blue;
@@ -520,6 +524,12 @@ int main (void)
 
     /* Blank LED just in case, saves power */
     led(0x00, 0x00, 0x00);
+
+    /* Init e-paper display */
+    EPD_Init();
+
+    /* Draw something */
+    EPD_Draw();
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {

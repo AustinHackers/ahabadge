@@ -99,6 +99,7 @@ ADD_EXECUTABLE(hello_world
     "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/lpuart/fsl_lpuart_irq.c"
     "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_irq.c"
     "${ProjDirPath}/main.c"
+    "${ProjDirPath}/epaper.c"
 )
 SET_TARGET_PROPERTIES(hello_world PROPERTIES OUTPUT_NAME "hello_world.elf")
 
