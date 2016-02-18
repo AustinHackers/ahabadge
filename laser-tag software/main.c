@@ -237,7 +237,8 @@ static flexio_shifter_config_t g_shifterConfig = {
 
 
 extern void EPD_Init();
-extern void EPD_Draw();
+extern int EPD_Draw();
+extern void EPD_Deinit();
 
 ///////
 // Code
@@ -529,7 +530,17 @@ int main (void)
     EPD_Init();
 
     /* Draw something */
-    EPD_Draw();
+    int ret = EPD_Draw();
+    if (ret == -1) {
+        led(0xff, 0x00, 0x00);
+    } else if (ret == -2) {
+        led(0xff, 0xff, 0x00);
+    } else {
+        led(0x00, 0xff, 0x00);
+    }
+
+    /* Deinit so we can mess around on the bus pirate */
+    EPD_Deinit();
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {
