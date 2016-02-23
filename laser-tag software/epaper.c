@@ -19,6 +19,10 @@ static const spi_master_user_config_t spiConfig = {
     .bitCount = kSpi8BitMode,
 };
 
+static const uint8_t channel_select[] = {
+    0x00, 0x00, 0x1f, 0xe0, 0x00, 0x00, 0x00, 0xff
+};
+
 static spi_master_state_t spiState;
 
 void EPD_Init()
@@ -36,7 +40,7 @@ void EPD_Init()
     SPI_DRV_MasterConfigureBus(1, &spiConfig, &calculatedBaudRate);
 }
 
-void EPD_WriteCommandBuffer(uint8_t index, uint8_t *data, size_t length)
+void EPD_WriteCommandBuffer(uint8_t index, const uint8_t *data, size_t length)
 {
     uint8_t tx[3] = { 0x70, index, 0x72 };
 
@@ -79,6 +83,15 @@ uint8_t EPD_ReadCogID()
     return rx[1];
 }
 
+void EPD_Delay(uint32_t ms)
+{
+    for (; ms > 0; --ms) {
+        /* XXX This is really stupid */
+        volatile int i;
+        for (i = 0; i < 306; ++i);
+    }
+}
+
 int EPD_Draw()
 {
     /* read the COG ID */
@@ -99,9 +112,61 @@ int EPD_Draw()
     /* power saving mode */
     EPD_WriteCommandByte(0x0b, 0x02);
 
+    /* channel select */
+    EPD_WriteCommandBuffer(0x01, channel_select, sizeof channel_select);
+
+    /* high power mode osc */
+    EPD_WriteCommandByte(0x07, 0xd1);
+
+    /* power setting */
+    EPD_WriteCommandByte(0x08, 0x02);
+
+    /* Vcom level */
+    EPD_WriteCommandByte(0x09, 0xc2);
+
+    /* power setting */
+    EPD_WriteCommandByte(0x04, 0x03);
+
+    /* driver latch on */
+    EPD_WriteCommandByte(0x03, 0x01);
+
+    /* driver latch off */
+    EPD_WriteCommandByte(0x03, 0x00);
+    EPD_Delay(5);
+
+    int i;
+    for (i = 0; i < 4; ++i) {
+        /* charge pump positive voltage on - VGH/VDL on */
+        EPD_WriteCommandByte(0x05, 0x01);
+        EPD_Delay(240);
+
+        /* charge pump negative voltage on - VGL/VDL on */
+        EPD_WriteCommandByte(0x05, 0x03);
+        EPD_Delay(40);
+
+        /* charge pump Vcom on - Vcom driver on */
+        EPD_WriteCommandByte(0x05, 0x0f);
+        EPD_Delay(40);
+
+        /* check DC/DC */
+        uint8_t dc_state = EPD_ReadCommand(0x0f);
+        if (0x40 & dc_state)
+            break;
+    }
+
+    if (4 == i)
+        return -3;
+
+    /* output enable to disable */
+    EPD_WriteCommandByte(0x02, 0x40);
+
+    /* TODO Draw something */
+
+#if 0
     /* Shutdown */
     GPIO_DRV_WritePinOutput(pinDischarge.pinName, 1);
     GPIO_DRV_WritePinOutput(pinDischarge.pinName, 0);
+#endif
     return 0;
 }
 

@@ -531,10 +531,12 @@ int main (void)
 
     /* Draw something */
     int ret = EPD_Draw();
-    if (ret == -1) {
+    if (-1 == ret) {
         led(0xff, 0x00, 0x00);
-    } else if (ret == -2) {
+    } else if (-2 == ret) {
         led(0xff, 0xff, 0x00);
+    } else if (-3 == ret) {
+        led(0x00, 0x00, 0xff);
     } else {
         led(0x00, 0xff, 0x00);
     }
