@@ -1,6 +1,13 @@
 #include "fsl_gpio_driver.h"
 #include "fsl_spi_master_driver.h"
 
+typedef enum {       /* Image pixel -> Display pixel */
+    EPD_compensate,  /* B -> W, W -> B (Current Image) */
+    EPD_white,       /* B -> N, W -> W (Current Image) */
+    EPD_inverse,     /* B -> N, W -> B (New Image) */
+    EPD_normal       /* B -> B, W -> W (New Image) */
+} EPD_stage;
+
 static const gpio_output_pin_user_config_t pinDischarge = {
     .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 19),
     .config.outputLogic = 0,
@@ -22,6 +29,10 @@ static const spi_master_user_config_t spiConfig = {
 static const uint8_t channel_select[] = {
     0x00, 0x00, 0x1f, 0xe0, 0x00, 0x00, 0x00, 0xff
 };
+
+static const int LINES_PER_DISPLAY = 128;
+static const int BYTES_PER_SCAN = 128 / 4 / 2;
+static const int BYTES_PER_LINE = 232 / 8;
 
 static spi_master_state_t spiState;
 
@@ -89,6 +100,86 @@ void EPD_Delay(uint32_t ms)
         /* XXX This is really stupid */
         volatile int i;
         for (i = 0; i < 306; ++i);
+    }
+}
+
+void EPD_line(int line, const uint8_t *data, uint8_t fixed_value, EPD_stage stage)
+{
+    size_t len = BYTES_PER_SCAN * 2 + BYTES_PER_LINE * 2 + 1;
+    uint8_t buf[len], *p = buf;
+    int i;
+    for (i = 0; i < BYTES_PER_SCAN; ++i) {
+        if (0 != (line & 0x01) && line / 8 == i) {
+            *p++ = 0xc0 >> (line & 0x06);
+        } else {
+            *p++ = 0x00;
+        }
+    }
+
+    for (i = BYTES_PER_LINE; i > 0; --i) {
+        if (data) {
+            uint16_t pixels = data[i - 1];
+            /* interleave bits */
+            pixels = (pixels | (pixels << 4)) & 0x0f0f;
+            pixels = (pixels | (pixels << 2)) & 0x3333;
+            pixels = (pixels | (pixels << 1)) & 0x5555;
+            switch (stage) {
+            case EPD_compensate:
+                pixels = 0xaaaa | (pixels ^ 0x5555);
+                break;
+            case EPD_white:
+                pixels = 0x5555 + (pixels ^ 0x5555);
+                break;
+            case EPD_inverse:
+                pixels = 0x5555 | ((pixels ^ 0x5555) << 1);
+                break;
+            case EPD_normal:
+                pixels = 0xaaaa | pixels;
+                break;
+            }
+            *p++ = pixels >> 8;
+            *p++ = pixels;
+        } else {
+            *p++ = fixed_value;
+            *p++ = fixed_value;
+        }
+    }
+
+    for (i = BYTES_PER_SCAN; i > 0; --i) {
+        if (0 == (line & 0x01) && line / 8 == i - 1) {
+            *p++ = 0x03 << (line & 0x06);
+        } else {
+            *p++ = 0x00;
+        }
+    }
+
+    /* border byte */
+    if (EPD_normal == stage) {
+        *p++ = 0xaa;
+    } else {
+        *p++ = 0x00;
+    }
+
+    EPD_WriteCommandBuffer(0x0a, buf, len);
+
+    /* turn on OE */
+    EPD_WriteCommandByte(0x02, 0x07);
+}
+
+void EPD_frame_fixed(uint8_t fixed_value, EPD_stage stage)
+{
+    int i;
+    for (i = 0; i < LINES_PER_DISPLAY; ++i) {
+        EPD_line(i, NULL, fixed_value, stage);
+    }
+}
+
+void EPD_frame_fixed_repeat(uint8_t fixed_value, EPD_stage stage)
+{
+    /* TODO this needs to repeat for about 630ms */
+    int i;
+    for (i = 0; i < 3; ++i) {
+        EPD_frame_fixed(fixed_value, stage);
     }
 }
 
@@ -160,13 +251,48 @@ int EPD_Draw()
     /* output enable to disable */
     EPD_WriteCommandByte(0x02, 0x40);
 
-    /* TODO Draw something */
+    /* Draw something */
+    /* TODO I'd like to call a callback at this point with a "graphics context"
+     * that contains a buffer and the screen coordinates that correspond to
+     * the part of the screen to be drawn. That way we can have as little or
+     * as much of the image in RAM as we want while drawing. The callback would
+     * be called for each portion of the screen we're "caching" in memory while
+     * pushing bits to the display.
+     */
+    /* clear display (anything -> white) */
+    EPD_frame_fixed_repeat(0xff, EPD_compensate);
+    EPD_frame_fixed_repeat(0xff, EPD_white);
+    EPD_frame_fixed_repeat(0xaa, EPD_inverse);
+    EPD_frame_fixed_repeat(0xaa, EPD_normal);
 
-#if 0
-    /* Shutdown */
+    /* ??? */
+    EPD_WriteCommandByte(0x0b, 0x00);
+
+    /* latch reset turn on */
+    EPD_WriteCommandByte(0x03, 0x01);
+
+    /* power off charge pump Vcom */
+    EPD_WriteCommandByte(0x05, 0x03);
+
+    /* power off charge pump neg voltage */
+    EPD_WriteCommandByte(0x05, 0x01);
+    EPD_Delay(120);
+
+    /* discharge internal */
+    EPD_WriteCommandByte(0x04, 0x80);
+
+    /* power off all charge pumps */
+    EPD_WriteCommandByte(0x05, 0x00);
+
+    /* turn off osc */
+    EPD_WriteCommandByte(0x07, 0x01);
+    EPD_Delay(50);
+
+    /* discharge external */
     GPIO_DRV_WritePinOutput(pinDischarge.pinName, 1);
+    EPD_Delay(150);
     GPIO_DRV_WritePinOutput(pinDischarge.pinName, 0);
-#endif
+
     return 0;
 }
 
