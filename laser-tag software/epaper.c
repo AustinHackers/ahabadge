@@ -1,6 +1,14 @@
 #include "fsl_gpio_driver.h"
 #include "fsl_spi_master_driver.h"
 
+#include "aha_2_6.xbm"
+#if aha_2_6_width != 232
+#error image width not 232
+#endif
+#if aha_2_6_height != 128
+#error image height not 128
+#endif
+
 typedef enum {       /* Image pixel -> Display pixel */
     EPD_compensate,  /* B -> W, W -> B (Current Image) */
     EPD_white,       /* B -> N, W -> W (Current Image) */
@@ -119,7 +127,7 @@ void EPD_line(int line, const uint8_t *data, uint8_t fixed_value, EPD_stage stag
     for (i = BYTES_PER_LINE; i > 0; --i) {
         if (data) {
             uint16_t pixels = data[i - 1];
-            /* interleave bits */
+            /* interleave bits with zeros */
             pixels = (pixels | (pixels << 4)) & 0x0f0f;
             pixels = (pixels | (pixels << 2)) & 0x3333;
             pixels = (pixels | (pixels << 1)) & 0x5555;
@@ -166,20 +174,26 @@ void EPD_line(int line, const uint8_t *data, uint8_t fixed_value, EPD_stage stag
     EPD_WriteCommandByte(0x02, 0x07);
 }
 
-void EPD_frame_fixed(uint8_t fixed_value, EPD_stage stage)
+void EPD_frame(const uint8_t *data, uint8_t fixed_value, EPD_stage stage)
 {
     int i;
-    for (i = 0; i < LINES_PER_DISPLAY; ++i) {
-        EPD_line(i, NULL, fixed_value, stage);
+    if (data) {
+        for (i = 0; i < LINES_PER_DISPLAY; ++i) {
+            EPD_line(i, &data[i * BYTES_PER_LINE], 0, stage);
+        }
+    } else {
+        for (i = 0; i < LINES_PER_DISPLAY; ++i) {
+            EPD_line(i, NULL, fixed_value, stage);
+        }
     }
 }
 
-void EPD_frame_fixed_repeat(uint8_t fixed_value, EPD_stage stage)
+void EPD_frame_repeat(const uint8_t *data, uint8_t fixed_value, EPD_stage stage)
 {
     /* TODO this needs to repeat for about 630ms */
     int i;
-    for (i = 0; i < 3; ++i) {
-        EPD_frame_fixed(fixed_value, stage);
+    for (i = 0; i < 2; ++i) {
+        EPD_frame(data, fixed_value, stage);
     }
 }
 
@@ -260,10 +274,16 @@ int EPD_Draw()
      * pushing bits to the display.
      */
     /* clear display (anything -> white) */
-    EPD_frame_fixed_repeat(0xff, EPD_compensate);
-    EPD_frame_fixed_repeat(0xff, EPD_white);
-    EPD_frame_fixed_repeat(0xaa, EPD_inverse);
-    EPD_frame_fixed_repeat(0xaa, EPD_normal);
+    EPD_frame_repeat(NULL, 0xff, EPD_compensate);
+    EPD_frame_repeat(NULL, 0xff, EPD_white);
+    EPD_frame_repeat(NULL, 0xaa, EPD_inverse);
+    EPD_frame_repeat(NULL, 0xaa, EPD_normal);
+
+    /* assuming a clear (white) screen output an image */
+    //EPD_frame_repeat(NULL, 0xaa, EPD_compensate);
+    //EPD_frame_repeat(NULL, 0xaa, EPD_white);
+    EPD_frame_repeat(aha_2_6_bits, 0, EPD_inverse);
+    EPD_frame_repeat(aha_2_6_bits, 0, EPD_normal);
 
     /* ??? */
     EPD_WriteCommandByte(0x0b, 0x00);

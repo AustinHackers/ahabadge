@@ -540,6 +540,7 @@ int main (void)
     } else {
         led(0x00, 0xff, 0x00);
     }
+    blank_led = 30;
 
     /* Deinit so we can mess around on the bus pirate */
     EPD_Deinit();
@@ -547,7 +548,7 @@ int main (void)
     /* We're done, everything else is triggered through interrupts */
     for(;;) {
 #ifndef DEBUG
-        //SMC_HAL_SetMode(SMC, &g_idlePowerMode);
+        SMC_HAL_SetMode(SMC, &g_idlePowerMode);
 #endif
     }
 }
