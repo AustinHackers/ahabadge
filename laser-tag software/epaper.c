@@ -1,5 +1,5 @@
 #include "fsl_gpio_driver.h"
-#include "fsl_spi_master_driver.h"
+#include "fsl_spi_dma_master_driver.h"
 
 #include "aha_2_6.xbm"
 #if aha_2_6_width != 232
@@ -26,7 +26,7 @@ static const gpio_output_pin_user_config_t pinCS = {
     .config.outputLogic = 1,
 };
 
-static const spi_master_user_config_t spiConfig = {
+static const spi_dma_master_user_config_t spiConfig = {
     .bitsPerSec = 2000000, /* 2 MHz, max is 20 MHz */
     .polarity = kSpiClockPolarity_ActiveHigh,
     .phase = kSpiClockPhase_FirstEdge,
@@ -42,7 +42,7 @@ static const int LINES_PER_DISPLAY = 128;
 static const int BYTES_PER_SCAN = 128 / 4 / 2;
 static const int BYTES_PER_LINE = 232 / 8;
 
-static spi_master_state_t spiState;
+static spi_dma_master_state_t spiState;
 
 void EPD_Init()
 {
@@ -54,9 +54,9 @@ void EPD_Init()
     PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 7, kPortMuxAlt2);
     GPIO_DRV_OutputPinInit(&pinDischarge);
     GPIO_DRV_OutputPinInit(&pinCS);
-    SPI_DRV_MasterInit(1, &spiState);
+    SPI_DRV_DmaMasterInit(1, &spiState);
     uint32_t calculatedBaudRate;
-    SPI_DRV_MasterConfigureBus(1, &spiConfig, &calculatedBaudRate);
+    SPI_DRV_DmaMasterConfigureBus(1, &spiConfig, &calculatedBaudRate);
 }
 
 void EPD_WriteCommandBuffer(uint8_t index, const uint8_t *data, size_t length)
@@ -64,11 +64,13 @@ void EPD_WriteCommandBuffer(uint8_t index, const uint8_t *data, size_t length)
     uint8_t tx[3] = { 0x70, index, 0x72 };
 
     GPIO_DRV_WritePinOutput(pinCS.pinName, 0);
-    SPI_DRV_MasterTransferBlocking(1, NULL, tx, NULL, 2, 1);
+    SPI_DRV_DmaMasterTransferBlocking(1, NULL, tx, NULL, 2, kSpiDmaWaitForever);
     GPIO_DRV_WritePinOutput(pinCS.pinName, 1);
     GPIO_DRV_WritePinOutput(pinCS.pinName, 0);
-    SPI_DRV_MasterTransferBlocking(1, NULL, &tx[2], NULL, 1, 1);
-    SPI_DRV_MasterTransferBlocking(1, NULL, data, NULL, length, 1);
+    SPI_DRV_DmaMasterTransferBlocking(1, NULL, &tx[2], NULL, 1,
+            kSpiDmaWaitForever);
+    SPI_DRV_DmaMasterTransferBlocking(1, NULL, data, NULL, length,
+            kSpiDmaWaitForever);
     GPIO_DRV_WritePinOutput(pinCS.pinName, 1);
 }
 
@@ -83,10 +85,11 @@ uint8_t EPD_ReadCommand(uint8_t index)
     uint8_t rx[2];
 
     GPIO_DRV_WritePinOutput(pinCS.pinName, 0);
-    SPI_DRV_MasterTransferBlocking(1, NULL, tx, NULL, 2, 1);
+    SPI_DRV_DmaMasterTransferBlocking(1, NULL, tx, NULL, 2, kSpiDmaWaitForever);
     GPIO_DRV_WritePinOutput(pinCS.pinName, 1);
     GPIO_DRV_WritePinOutput(pinCS.pinName, 0);
-    SPI_DRV_MasterTransferBlocking(1, NULL, &tx[2], rx, 2, 1);
+    SPI_DRV_DmaMasterTransferBlocking(1, NULL, &tx[2], rx, 2,
+            kSpiDmaWaitForever);
     GPIO_DRV_WritePinOutput(pinCS.pinName, 1);
     return rx[1];
 }
@@ -97,7 +100,7 @@ uint8_t EPD_ReadCogID()
     uint8_t rx[2];
 
     GPIO_DRV_WritePinOutput(pinCS.pinName, 0);
-    SPI_DRV_MasterTransferBlocking(1, NULL, tx, rx, sizeof tx, 1);
+    SPI_DRV_DmaMasterTransferBlocking(1, NULL, tx, rx, 2, kSpiDmaWaitForever);
     GPIO_DRV_WritePinOutput(pinCS.pinName, 1);
     return rx[1];
 }
@@ -318,7 +321,7 @@ int EPD_Draw()
 
 void EPD_Deinit()
 {
-    SPI_DRV_MasterDeinit(1);
+    SPI_DRV_DmaMasterDeinit(1);
 }
 
 /* vim: set expandtab ts=4 sw=4: */
