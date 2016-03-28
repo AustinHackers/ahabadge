@@ -40,7 +40,6 @@
 #include "fsl_os_abstraction.h"
 #include "fsl_pit_driver.h"
 #include "fsl_smc_hal.h"
-#include "fsl_spi_master_driver.h"
 #include "fsl_tpm_driver.h"
 
 
