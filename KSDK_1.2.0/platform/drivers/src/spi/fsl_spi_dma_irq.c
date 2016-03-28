@@ -30,7 +30,7 @@
 
 #include <assert.h>
 #include <stdbool.h>
-#include "fsl_spi_shared_function.h"
+#include "fsl_spi_dma_shared_function.h"
 #include "fsl_device_registers.h"
 
 /*!
