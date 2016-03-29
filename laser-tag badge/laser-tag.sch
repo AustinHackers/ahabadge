@@ -9712,7 +9712,7 @@ www.irf.com&lt;p&gt;
 </classes>
 <parts>
 <part name="U1" library="Freescale" deviceset="MKL27Z256VLH4" device=""/>
-<part name="BAT" library="adafruit" deviceset="CR2032" device="SMT" value="BK-883"/>
+<part name="BAT1" library="adafruit" deviceset="CR2032" device="SMT" value="BK-883"/>
 <part name="P+3" library="supply1" deviceset="VCC" device=""/>
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
 <part name="C1" library="rcl" deviceset="C-EU" device="C0603K" value="0.1 uF"/>
@@ -9773,6 +9773,7 @@ www.irf.com&lt;p&gt;
 <part name="GND9" library="supply1" deviceset="GND" device=""/>
 <part name="C21" library="rcl" deviceset="C-EU" device="C0603K" value="0.1 uF"/>
 <part name="R4" library="rcl" deviceset="R-EU_" device="R0603" value="10k"/>
+<part name="BAT2" library="adafruit" deviceset="CR2032" device="SMT" value="BK-883"/>
 </parts>
 <sheets>
 <sheet>
@@ -9786,7 +9787,7 @@ support interrupts</text>
 </plain>
 <instances>
 <instance part="U1" gate="A" x="10.16" y="99.06"/>
-<instance part="BAT" gate="G$1" x="-114.3" y="88.9" rot="R90"/>
+<instance part="BAT1" gate="G$1" x="-114.3" y="88.9" rot="R90"/>
 <instance part="P+3" gate="VCC" x="-101.6" y="104.14"/>
 <instance part="GND3" gate="1" x="-114.3" y="76.2"/>
 <instance part="C1" gate="G$1" x="-101.6" y="91.44"/>
@@ -9850,13 +9851,14 @@ support interrupts</text>
 <instance part="GND9" gate="1" x="-45.72" y="-2.54"/>
 <instance part="C21" gate="G$1" x="-20.32" y="43.18"/>
 <instance part="R4" gate="G$1" x="-10.16" y="66.04" rot="R90"/>
+<instance part="BAT2" gate="G$1" x="-124.46" y="88.9" rot="R90"/>
 </instances>
 <busses>
 </busses>
 <nets>
 <net name="GND" class="0">
 <segment>
-<pinref part="BAT" gate="G$1" pin="-"/>
+<pinref part="BAT1" gate="G$1" pin="-"/>
 <pinref part="GND3" gate="1" pin="GND"/>
 <wire x1="-114.3" y1="83.82" x2="-114.3" y2="81.28" width="0.1524" layer="91"/>
 <pinref part="C1" gate="G$1" pin="2"/>
@@ -9876,6 +9878,9 @@ support interrupts</text>
 <wire x1="-81.28" y1="81.28" x2="-71.12" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="-71.12" y1="81.28" x2="-71.12" y2="86.36" width="0.1524" layer="91"/>
 <junction x="-81.28" y="81.28"/>
+<pinref part="BAT2" gate="G$1" pin="-"/>
+<wire x1="-114.3" y1="81.28" x2="-124.46" y2="81.28" width="0.1524" layer="91"/>
+<wire x1="-124.46" y1="81.28" x2="-124.46" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="U1" gate="A" pin="VSSA"/>
@@ -10097,14 +10102,22 @@ support interrupts</text>
 <wire x1="-101.6" y1="101.6" x2="-101.6" y2="96.52" width="0.1524" layer="91"/>
 <junction x="-101.6" y="96.52"/>
 <pinref part="P+3" gate="VCC" pin="VCC"/>
-<pinref part="BAT" gate="G$1" pin="+"/>
-<pinref part="BAT" gate="G$1" pin="+1"/>
+<pinref part="BAT1" gate="G$1" pin="+"/>
+<pinref part="BAT1" gate="G$1" pin="+1"/>
 <wire x1="-111.76" y1="93.98" x2="-111.76" y2="96.52" width="0.1524" layer="91"/>
 <wire x1="-111.76" y1="96.52" x2="-116.84" y2="96.52" width="0.1524" layer="91"/>
 <wire x1="-116.84" y1="96.52" x2="-116.84" y2="93.98" width="0.1524" layer="91"/>
 <wire x1="-111.76" y1="96.52" x2="-101.6" y2="96.52" width="0.1524" layer="91"/>
 <junction x="-111.76" y="96.52"/>
 <junction x="-101.6" y="96.52"/>
+<pinref part="BAT2" gate="G$1" pin="+1"/>
+<wire x1="-121.92" y1="93.98" x2="-121.92" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="-121.92" y1="96.52" x2="-116.84" y2="96.52" width="0.1524" layer="91"/>
+<junction x="-116.84" y="96.52"/>
+<pinref part="BAT2" gate="G$1" pin="+"/>
+<wire x1="-127" y1="93.98" x2="-127" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="-127" y1="96.52" x2="-121.92" y2="96.52" width="0.1524" layer="91"/>
+<junction x="-121.92" y="96.52"/>
 </segment>
 <segment>
 <pinref part="P+5" gate="VCC" pin="VCC"/>
