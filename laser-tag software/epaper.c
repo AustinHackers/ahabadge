@@ -1,13 +1,6 @@
+#include "epaper.h"
 #include "fsl_gpio_driver.h"
 #include "fsl_spi_dma_master_driver.h"
-
-#include "aha_2_6.xbm"
-#if aha_2_6_width != 232
-#error image width not 232
-#endif
-#if aha_2_6_height != 128
-#error image height not 128
-#endif
 
 typedef enum {       /* Image pixel -> Display pixel */
     EPD_compensate,  /* B -> W, W -> B (Current Image) */
@@ -200,7 +193,7 @@ void EPD_frame_repeat(const uint8_t *data, uint8_t fixed_value, EPD_stage stage)
     }
 }
 
-int EPD_Draw()
+int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
 {
     /* read the COG ID */
     uint8_t id = EPD_ReadCogID();
@@ -276,17 +269,10 @@ int EPD_Draw()
      * be called for each portion of the screen we're "caching" in memory while
      * pushing bits to the display.
      */
-    /* clear display (anything -> white) */
-    EPD_frame_repeat(NULL, 0xff, EPD_compensate);
-    EPD_frame_repeat(NULL, 0xff, EPD_white);
-    EPD_frame_repeat(NULL, 0xaa, EPD_inverse);
-    EPD_frame_repeat(NULL, 0xaa, EPD_normal);
-
-    /* assuming a clear (white) screen output an image */
-    //EPD_frame_repeat(NULL, 0xaa, EPD_compensate);
-    //EPD_frame_repeat(NULL, 0xaa, EPD_white);
-    EPD_frame_repeat(aha_2_6_bits, 0, EPD_inverse);
-    EPD_frame_repeat(aha_2_6_bits, 0, EPD_normal);
+    EPD_frame_repeat(old_image, 0xff, EPD_compensate);
+    EPD_frame_repeat(old_image, 0xff, EPD_white);
+    EPD_frame_repeat(new_image, 0xaa, EPD_inverse);
+    EPD_frame_repeat(new_image, 0xaa, EPD_normal);
 
     /* ??? */
     EPD_WriteCommandByte(0x0b, 0x00);

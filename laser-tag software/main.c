@@ -29,6 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "epaper.h"
 #include "fsl_clock_manager.h"
 #include "fsl_cmp_driver.h"
 #include "fsl_dac_driver.h"
@@ -41,6 +42,25 @@
 #include "fsl_pit_driver.h"
 #include "fsl_smc_hal.h"
 #include "fsl_tpm_driver.h"
+
+
+////////////////////////////
+// Graphics resources
+
+#include "aha.xbm"
+#include "threatbutt.xbm"
+#include "my_name_is.xbm"
+#include "longhorn_lockpicking.xbm"
+
+static const uint8_t *images[] = {
+    aha_bits,
+    longhorn_lockpicking_bits,
+    my_name_is_bits,
+    threatbutt_bits,
+};
+static const int image_count = sizeof images / sizeof *images;
+static int current_image = 0;
+static int cue_next_image = 0;
 
 
 ////////////////////////////
@@ -235,10 +255,6 @@ static flexio_shifter_config_t g_shifterConfig = {
 };
 
 
-extern void EPD_Init();
-extern int EPD_Draw();
-extern void EPD_Deinit();
-
 ///////
 // Code
 
@@ -379,6 +395,9 @@ void PORTA_IRQHandler(void)
     }
     if (!GPIO_DRV_ReadPinInput(g_switchDown.pinName)) {
         g_txBuff[0] = '!';
+    }
+    if (!GPIO_DRV_ReadPinInput(g_switchSelect.pinName)) {
+        cue_next_image = 1;
     }
 }
 
@@ -528,8 +547,8 @@ int main (void)
     /* Init e-paper display */
     EPD_Init();
 
-    /* Draw something */
-    int ret = EPD_Draw();
+    /* Throw up first image */
+    int ret = EPD_Draw(NULL, images[current_image]);
     if (-1 == ret) {
         led(0xff, 0x00, 0x00);
     } else if (-2 == ret) {
@@ -542,10 +561,16 @@ int main (void)
     blank_led = 30;
 
     /* Deinit so we can mess around on the bus pirate */
-    EPD_Deinit();
+    //EPD_Deinit();
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {
+        if (cue_next_image) {
+            int old_image = current_image;
+            current_image = (current_image + 1) % image_count;
+            EPD_Draw(images[old_image], images[current_image]);
+            cue_next_image = 0;
+        }
 #ifndef DEBUG
         SMC_HAL_SetMode(SMC, &g_idlePowerMode);
 #endif
