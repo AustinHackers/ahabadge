@@ -394,7 +394,7 @@ void PORTA_IRQHandler(void)
         g_txBuff[0] = 'B';
     }
     if (!GPIO_DRV_ReadPinInput(g_switchDown.pinName)) {
-        g_txBuff[0] = '!';
+        g_txBuff[0] = 'T';
     }
     if (!GPIO_DRV_ReadPinInput(g_switchSelect.pinName)) {
         cue_next_image = 1;
@@ -430,7 +430,7 @@ static void lpuartRxCallback(uint32_t instance, void *lpuartState)
         blank_led = 30;
         return;
     }
-    if (rxBuff[0] == '!') {
+    if (rxBuff[0] == 'T') {
         position = 0;
         PIT_DRV_StartTimer(0, 0);
         return;
