@@ -2,6 +2,8 @@
 #include "fsl_gpio_driver.h"
 #include "fsl_spi_dma_master_driver.h"
 
+#define HAS_RESET   0
+
 typedef enum {       /* Image pixel -> Display pixel */
     EPD_compensate,  /* B -> W, W -> B (Current Image) */
     EPD_white,       /* B -> N, W -> W (Current Image) */
@@ -11,12 +13,12 @@ typedef enum {       /* Image pixel -> Display pixel */
 
 static const gpio_output_pin_user_config_t pinReset = {
     .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 19),
-    .config.outputLogic = 1,
+    .config.outputLogic = 0,
 };
 
 static const gpio_output_pin_user_config_t pinCS = {
     .pinName = GPIO_MAKE_PIN(GPIOD_IDX, 4),
-    .config.outputLogic = 1,
+    .config.outputLogic = 0,
 };
 
 static const spi_dma_master_user_config_t spiConfig = {
@@ -196,10 +198,14 @@ void EPD_frame_repeat(const uint8_t *data, uint8_t fixed_value, EPD_stage stage)
 int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
 {
     /* Reset */
+#if HAS_RESET
     GPIO_DRV_WritePinOutput(pinReset.pinName, 0);
+#endif
     GPIO_DRV_WritePinOutput(pinCS.pinName, 0);
     EPD_Delay(5);
+#if HAS_RESET
     GPIO_DRV_WritePinOutput(pinReset.pinName, 1);
+#endif
     GPIO_DRV_WritePinOutput(pinCS.pinName, 1);
     EPD_Delay(5);
 
