@@ -9,9 +9,9 @@ typedef enum {       /* Image pixel -> Display pixel */
     EPD_normal       /* B -> B, W -> W (New Image) */
 } EPD_stage;
 
-static const gpio_output_pin_user_config_t pinDischarge = {
+static const gpio_output_pin_user_config_t pinReset = {
     .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 19),
-    .config.outputLogic = 0,
+    .config.outputLogic = 1,
 };
 
 static const gpio_output_pin_user_config_t pinCS = {
@@ -45,7 +45,7 @@ void EPD_Init()
     PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 5, kPortMuxAlt2);
     PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 6, kPortMuxAlt2);
     PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 7, kPortMuxAlt2);
-    GPIO_DRV_OutputPinInit(&pinDischarge);
+    GPIO_DRV_OutputPinInit(&pinReset);
     GPIO_DRV_OutputPinInit(&pinCS);
     SPI_DRV_DmaMasterInit(1, &spiState);
     uint32_t calculatedBaudRate;
@@ -195,6 +195,14 @@ void EPD_frame_repeat(const uint8_t *data, uint8_t fixed_value, EPD_stage stage)
 
 int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
 {
+    /* Reset */
+    GPIO_DRV_WritePinOutput(pinReset.pinName, 0);
+    GPIO_DRV_WritePinOutput(pinCS.pinName, 0);
+    EPD_Delay(5);
+    GPIO_DRV_WritePinOutput(pinReset.pinName, 1);
+    GPIO_DRV_WritePinOutput(pinCS.pinName, 1);
+    EPD_Delay(5);
+
     /* read the COG ID */
     uint8_t id = EPD_ReadCogID();
     if ((id & 0x0f) != 0x02) {
@@ -296,11 +304,6 @@ int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
     /* turn off osc */
     EPD_WriteCommandByte(0x07, 0x01);
     EPD_Delay(50);
-
-    /* discharge external */
-    GPIO_DRV_WritePinOutput(pinDischarge.pinName, 1);
-    EPD_Delay(150);
-    GPIO_DRV_WritePinOutput(pinDischarge.pinName, 0);
 
     return 0;
 }
