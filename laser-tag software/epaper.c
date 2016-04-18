@@ -38,6 +38,7 @@ static const int BYTES_PER_SCAN = 128 / 4 / 2;
 static const int BYTES_PER_LINE = 232 / 8;
 
 static spi_dma_master_state_t spiState;
+static uint32_t dma_timeout;
 
 void EPD_Init()
 {
@@ -49,9 +50,30 @@ void EPD_Init()
     PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 7, kPortMuxAlt2);
     GPIO_DRV_OutputPinInit(&pinReset);
     GPIO_DRV_OutputPinInit(&pinCS);
-    SPI_DRV_DmaMasterInit(1, &spiState);
-    uint32_t calculatedBaudRate;
-    SPI_DRV_DmaMasterConfigureBus(1, &spiConfig, &calculatedBaudRate);
+}
+
+void EPD_Tick()
+{
+    if (!dma_timeout) {
+        return;
+    }
+    if (dma_timeout == 1) {
+        SPI_DRV_DmaMasterAbortTransfer(1);
+        return;
+    }
+    dma_timeout--;
+    return;
+}
+
+spi_status_t SPI_Transfer(const uint8_t *tx, uint8_t *rx, size_t count)
+{
+    spi_status_t rc;
+
+    dma_timeout = (count + 127) / 128 + 1;
+    rc = SPI_DRV_DmaMasterTransferBlocking(1, NULL, tx, rx, count,
+            kSpiDmaWaitForever);
+    dma_timeout = 0;
+    return rc;
 }
 
 void EPD_WriteCommandBuffer(uint8_t index, const uint8_t *data, size_t length)
@@ -59,13 +81,11 @@ void EPD_WriteCommandBuffer(uint8_t index, const uint8_t *data, size_t length)
     uint8_t tx[3] = { 0x70, index, 0x72 };
 
     GPIO_DRV_WritePinOutput(pinCS.pinName, 0);
-    SPI_DRV_DmaMasterTransferBlocking(1, NULL, tx, NULL, 2, kSpiDmaWaitForever);
+    SPI_Transfer(tx, NULL, 2);
     GPIO_DRV_WritePinOutput(pinCS.pinName, 1);
     GPIO_DRV_WritePinOutput(pinCS.pinName, 0);
-    SPI_DRV_DmaMasterTransferBlocking(1, NULL, &tx[2], NULL, 1,
-            kSpiDmaWaitForever);
-    SPI_DRV_DmaMasterTransferBlocking(1, NULL, data, NULL, length,
-            kSpiDmaWaitForever);
+    SPI_Transfer(&tx[2], NULL, 1);
+    SPI_Transfer(data, NULL, length);
     GPIO_DRV_WritePinOutput(pinCS.pinName, 1);
 }
 
@@ -80,11 +100,10 @@ uint8_t EPD_ReadCommand(uint8_t index)
     uint8_t rx[2];
 
     GPIO_DRV_WritePinOutput(pinCS.pinName, 0);
-    SPI_DRV_DmaMasterTransferBlocking(1, NULL, tx, NULL, 2, kSpiDmaWaitForever);
+    SPI_Transfer(tx, NULL, 2);
     GPIO_DRV_WritePinOutput(pinCS.pinName, 1);
     GPIO_DRV_WritePinOutput(pinCS.pinName, 0);
-    SPI_DRV_DmaMasterTransferBlocking(1, NULL, &tx[2], rx, 2,
-            kSpiDmaWaitForever);
+    SPI_Transfer(&tx[2], rx, 2);
     GPIO_DRV_WritePinOutput(pinCS.pinName, 1);
     return rx[1];
 }
@@ -95,7 +114,7 @@ uint8_t EPD_ReadCogID()
     uint8_t rx[2];
 
     GPIO_DRV_WritePinOutput(pinCS.pinName, 0);
-    SPI_DRV_DmaMasterTransferBlocking(1, NULL, tx, rx, 2, kSpiDmaWaitForever);
+    SPI_Transfer(tx, rx, 2);
     GPIO_DRV_WritePinOutput(pinCS.pinName, 1);
     return rx[1];
 }
@@ -197,6 +216,13 @@ void EPD_frame_repeat(const uint8_t *data, uint8_t fixed_value, EPD_stage stage)
 
 int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
 {
+    int rc = 0;
+
+    /* Configure DMA channel */
+    SPI_DRV_DmaMasterInit(1, &spiState);
+    uint32_t calculatedBaudRate;
+    SPI_DRV_DmaMasterConfigureBus(1, &spiConfig, &calculatedBaudRate);
+
     /* Reset */
 #if HAS_RESET
     GPIO_DRV_WritePinOutput(pinReset.pinName, 0);
@@ -212,7 +238,8 @@ int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
     /* read the COG ID */
     uint8_t id = EPD_ReadCogID();
     if ((id & 0x0f) != 0x02) {
-        return -1;
+        rc = -1;
+        goto out;
     }
 
     /* disable OE */
@@ -221,7 +248,8 @@ int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
     /* check breakage */
     uint8_t broken_panel = EPD_ReadCommand(0x0f);
     if (0x00 == (0x80 & broken_panel)) {
-        return -2;
+        rc = -2;
+        goto out;
     }
 
     /* power saving mode */
@@ -269,8 +297,10 @@ int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
             break;
     }
 
-    if (4 == i)
-        return -3;
+    if (4 == i) {
+        rc = -3;
+        goto out;
+    }
 
     /* output enable to disable */
     EPD_WriteCommandByte(0x02, 0x40);
@@ -311,12 +341,9 @@ int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
     EPD_WriteCommandByte(0x07, 0x01);
     EPD_Delay(50);
 
-    return 0;
-}
-
-void EPD_Deinit()
-{
+out:
     SPI_DRV_DmaMasterDeinit(1);
+    return rc;
 }
 
 /* vim: set expandtab ts=4 sw=4: */

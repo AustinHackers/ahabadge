@@ -307,6 +307,8 @@ static void lptmr_call_back(void)
         }
         blank_led--;
     }
+    // kick EPD driver every once in a while
+    EPD_Tick();
 }
 
 /* Play music using the PIT timer */
