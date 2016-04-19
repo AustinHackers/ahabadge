@@ -262,6 +262,8 @@ static cmp_state_t g_cmpState;
 static dma_channel_t g_fioChan;
 static lpuart_state_t g_lpuartState;
 static uint8_t rxBuff[1];
+static uint8_t txBuff[] = { 'R' };
+static uint8_t laser_on;
 static uint32_t shift0_buf[3];
 static uint32_t blank_led;
 
@@ -288,7 +290,7 @@ void led(uint8_t red, uint8_t green, uint8_t blue)
  */
 static void lptmr_call_back(void)
 {
-    // AGC adjust
+    /* AGC adjust */
     if (CMP_DRV_GetOutputLogic(0) != g_cmpConf.invertEnable) {
         if (g_cmpDacConf.dacValue < 63) {
             g_cmpDacConf.dacValue++;
@@ -300,14 +302,21 @@ static void lptmr_call_back(void)
             CMP_DRV_ConfigDacChn(0, &g_cmpDacConf);
         }
     }
-    // countdown to turn off LED
+
+    /* FIRE THE LASER */
+    if (laser_on) {
+        LPUART_DRV_SendData(1, txBuff, 1);
+    }
+
+    /* countdown to turn off LED */
     if (blank_led) {
         if (blank_led == 1) {
             led(0, 0, 0);
         }
         blank_led--;
     }
-    // kick EPD driver every once in a while
+
+    /* kick EPD driver every once in a while */
     EPD_Tick();
 }
 
@@ -365,8 +374,6 @@ void PIT_IRQHandler(void)
     }
 }
 
-uint8_t g_txBuff[] = { 'R' };
-
 void PORTA_IRQHandler(void)
 {
     /* Clear interrupt flag.*/
@@ -382,30 +389,34 @@ void PORTA_IRQHandler(void)
 
     if (GPIO_DRV_ReadPinInput(g_switch2.pinName)) {
         LPUART_DRV_AbortSendingData(1);
+        laser_on = 0;
     } else {
-        LPUART_DRV_SendData(1, g_txBuff, 1);
+        laser_on = 1;
     }
 
     if (!GPIO_DRV_ReadPinInput(g_switchUp.pinName)) {
-        g_txBuff[0] = 'R';
+        txBuff[0] = 'R';
     }
     if (!GPIO_DRV_ReadPinInput(g_switchLeft.pinName)) {
-        g_txBuff[0] = 'G';
+        txBuff[0] = 'G';
     }
     if (!GPIO_DRV_ReadPinInput(g_switchRight.pinName)) {
-        g_txBuff[0] = 'B';
+        txBuff[0] = 'B';
     }
     if (!GPIO_DRV_ReadPinInput(g_switchDown.pinName)) {
-        g_txBuff[0] = 'T';
+        txBuff[0] = 'T';
     }
     if (!GPIO_DRV_ReadPinInput(g_switchSelect.pinName)) {
         cue_next_image = 1;
     }
 }
 
-static void lpuartTxCallback(uint32_t instance, void *lpuartState)
+static void lpuartTxCallback(uint32_t instance, void *state)
 {
-    // Do nothing, keep sending the same character for testing
+    lpuart_state_t *lpuartState = state;
+
+    /* Decrement txSize so the transfer eventually stops */
+    --lpuartState->txSize;
 }
 
 static void lpuartRxCallback(uint32_t instance, void *lpuartState)
