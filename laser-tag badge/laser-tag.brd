@@ -76,6 +76,8 @@
 <layer number="111" name="LPC17xx" color="7" fill="1" visible="no" active="yes"/>
 <layer number="112" name="tSilk" color="7" fill="1" visible="no" active="yes"/>
 <layer number="113" name="ReferenceLS" color="7" fill="1" visible="no" active="no"/>
+<layer number="114" name="Badge_Outline" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="115" name="ReferenceISLANDS" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="116" name="Patch_BOT" color="9" fill="4" visible="no" active="yes"/>
 <layer number="118" name="Rect_Pads" color="7" fill="1" visible="no" active="no"/>
 <layer number="121" name="_tsilk" color="7" fill="1" visible="no" active="yes"/>
@@ -598,97 +600,6 @@ CLASS 3R LASER PRODUCT</text>
 <vertex x="9" y="0" curve="-90"/>
 <vertex x="0" y="-9" curve="-90"/>
 </polygon>
-</package>
-<package name="USB-MINIB">
-<description>Surface Mount USB Mini-B Connector</description>
-<wire x1="3.9" y1="-1.24" x2="3.9" y2="2.86" width="0.127" layer="51"/>
-<wire x1="-2.9591" y1="-0.5471" x2="-2.7514" y2="-3.2985" width="0.1016" layer="51"/>
-<wire x1="-2.7514" y1="-3.2985" x2="-2.5438" y2="-3.558" width="0.1016" layer="51" curve="68.629849"/>
-<wire x1="-2.5438" y1="-3.558" x2="-1.9727" y2="-3.558" width="0.1016" layer="51" curve="34.099487"/>
-<wire x1="-1.9727" y1="-3.558" x2="-1.7651" y2="-3.2985" width="0.1016" layer="51" curve="68.629849"/>
-<wire x1="-1.7651" y1="-3.2985" x2="-1.5055" y2="-0.5471" width="0.1016" layer="51"/>
-<wire x1="-1.5055" y1="-0.5471" x2="-1.7132" y2="-0.5471" width="0.1016" layer="51"/>
-<wire x1="-1.7132" y1="-0.5471" x2="-1.9727" y2="-2.9351" width="0.1016" layer="51"/>
-<wire x1="-1.9727" y1="-2.9351" x2="-2.4919" y2="-2.9351" width="0.1016" layer="51"/>
-<wire x1="-2.4919" y1="-2.9351" x2="-2.7514" y2="-0.5471" width="0.1016" layer="51"/>
-<wire x1="-2.7514" y1="-0.5471" x2="-2.9591" y2="-0.5471" width="0.1016" layer="51"/>
-<wire x1="-1.2459" y1="-3.2984" x2="-1.0383" y2="0.7508" width="0.1016" layer="51"/>
-<wire x1="-1.0383" y1="0.7508" x2="-0.8306" y2="0.9584" width="0.1016" layer="51" curve="-83.771817"/>
-<wire x1="-1.2459" y1="-3.2985" x2="-1.0383" y2="-3.5061" width="0.1016" layer="51" curve="90"/>
-<wire x1="-1.0382" y1="-3.5061" x2="-0.8306" y2="-3.2985" width="0.1016" layer="51" curve="90"/>
-<wire x1="-0.8306" y1="-3.2985" x2="-0.623" y2="0.1278" width="0.1016" layer="51"/>
-<wire x1="2.9589" y1="-0.5471" x2="2.7512" y2="-3.2985" width="0.1016" layer="51"/>
-<wire x1="2.7512" y1="-3.2985" x2="2.5436" y2="-3.558" width="0.1016" layer="51" curve="-68.629849"/>
-<wire x1="2.5436" y1="-3.558" x2="1.9725" y2="-3.558" width="0.1016" layer="51" curve="-34.099487"/>
-<wire x1="1.9725" y1="-3.558" x2="1.7649" y2="-3.2985" width="0.1016" layer="51" curve="-68.629849"/>
-<wire x1="1.7649" y1="-3.2985" x2="1.5053" y2="-0.5471" width="0.1016" layer="51"/>
-<wire x1="1.5053" y1="-0.5471" x2="1.713" y2="-0.5471" width="0.1016" layer="51"/>
-<wire x1="1.713" y1="-0.5471" x2="1.9725" y2="-2.9351" width="0.1016" layer="51"/>
-<wire x1="1.9725" y1="-2.9351" x2="2.4917" y2="-2.9351" width="0.1016" layer="51"/>
-<wire x1="2.4917" y1="-2.9351" x2="2.7512" y2="-0.5471" width="0.1016" layer="51"/>
-<wire x1="2.7512" y1="-0.5471" x2="2.9589" y2="-0.5471" width="0.1016" layer="51"/>
-<wire x1="1.2457" y1="-3.2984" x2="1.0381" y2="0.7508" width="0.1016" layer="51"/>
-<wire x1="1.0381" y1="0.7508" x2="0.8304" y2="0.9584" width="0.1016" layer="51" curve="83.722654"/>
-<wire x1="0.8304" y1="0.9584" x2="-0.8307" y2="0.9584" width="0.1016" layer="51"/>
-<wire x1="1.2457" y1="-3.2985" x2="1.0381" y2="-3.5061" width="0.1016" layer="51" curve="-90"/>
-<wire x1="1.038" y1="-3.5061" x2="0.8304" y2="-3.2985" width="0.1016" layer="51" curve="-90"/>
-<wire x1="0.8304" y1="-3.2985" x2="0.6228" y2="0.1278" width="0.1016" layer="51"/>
-<wire x1="0.6228" y1="0.1278" x2="-0.6232" y2="0.1278" width="0.1016" layer="51"/>
-<wire x1="3.88" y1="4.2594" x2="5.03" y2="4.2594" width="0.1016" layer="51"/>
-<wire x1="5.03" y1="2.8808" x2="3.88" y2="2.8808" width="0.1016" layer="51"/>
-<wire x1="-3.9" y1="4.6" x2="3.9" y2="4.6" width="0.127" layer="21"/>
-<wire x1="5.05" y1="3.3" x2="5.05" y2="3.9" width="0.1016" layer="51" curve="-180"/>
-<wire x1="5.05" y1="4.25" x2="5.05" y2="3.9" width="0.1016" layer="51"/>
-<wire x1="5.05" y1="2.9" x2="5.05" y2="3.3" width="0.1016" layer="51"/>
-<wire x1="3.88" y1="-1.2806" x2="5.03" y2="-1.2806" width="0.1016" layer="51"/>
-<wire x1="5.03" y1="-2.6592" x2="3.88" y2="-2.6592" width="0.1016" layer="51"/>
-<wire x1="5.05" y1="-2.24" x2="5.05" y2="-1.64" width="0.1016" layer="51" curve="-180"/>
-<wire x1="5.05" y1="-1.29" x2="5.05" y2="-1.64" width="0.1016" layer="51"/>
-<wire x1="5.05" y1="-2.64" x2="5.05" y2="-2.24" width="0.1016" layer="51"/>
-<wire x1="-3.91" y1="2.8606" x2="-5.06" y2="2.8606" width="0.1016" layer="51"/>
-<wire x1="-5.06" y1="4.2392" x2="-3.91" y2="4.2392" width="0.1016" layer="51"/>
-<wire x1="-5.08" y1="3.82" x2="-5.08" y2="3.22" width="0.1016" layer="51" curve="-180"/>
-<wire x1="-5.08" y1="2.87" x2="-5.08" y2="3.22" width="0.1016" layer="51"/>
-<wire x1="-5.08" y1="4.22" x2="-5.08" y2="3.82" width="0.1016" layer="51"/>
-<wire x1="-3.91" y1="-2.6794" x2="-5.06" y2="-2.6794" width="0.1016" layer="51"/>
-<wire x1="-5.06" y1="-1.3008" x2="-3.91" y2="-1.3008" width="0.1016" layer="51"/>
-<wire x1="-5.08" y1="-1.72" x2="-5.08" y2="-2.32" width="0.1016" layer="51" curve="-180"/>
-<wire x1="-5.08" y1="-2.67" x2="-5.08" y2="-2.32" width="0.1016" layer="51"/>
-<wire x1="-5.08" y1="-1.32" x2="-5.08" y2="-1.72" width="0.1016" layer="51"/>
-<wire x1="-3.9" y1="-1.29" x2="-3.9" y2="2.81" width="0.127" layer="51"/>
-<wire x1="-3.9" y1="-4.6" x2="3.9" y2="-4.6" width="0.127" layer="21"/>
-<wire x1="-2.75" y1="4.5" x2="-2.75" y2="3.75" width="0.1016" layer="51"/>
-<wire x1="-2.75" y1="3.75" x2="2.75" y2="3.75" width="0.1016" layer="51"/>
-<wire x1="2.75" y1="3.75" x2="2.75" y2="4.5" width="0.1016" layer="51"/>
-<wire x1="-2.25" y1="3.5" x2="-2.25" y2="2.75" width="0.1016" layer="51"/>
-<wire x1="-2.25" y1="2.75" x2="-3" y2="2.75" width="0.1016" layer="51"/>
-<wire x1="-3" y1="2.75" x2="-3" y2="3.5" width="0.1016" layer="51"/>
-<wire x1="-3" y1="3.5" x2="-2.25" y2="3.5" width="0.1016" layer="51"/>
-<wire x1="3" y1="3.5" x2="2.25" y2="3.5" width="0.1016" layer="51"/>
-<wire x1="2.25" y1="3.5" x2="2.25" y2="2.75" width="0.1016" layer="51"/>
-<wire x1="2.25" y1="2.75" x2="3" y2="2.75" width="0.1016" layer="51"/>
-<wire x1="3" y1="2.75" x2="3" y2="3.5" width="0.1016" layer="51"/>
-<wire x1="-3.9" y1="-0.6" x2="-3.9" y2="2.1" width="0.127" layer="21"/>
-<wire x1="3.9" y1="2.1" x2="3.9" y2="-0.6" width="0.127" layer="21"/>
-<wire x1="-3.2" y1="4.6" x2="-2.1" y2="4.6" width="0.127" layer="21"/>
-<wire x1="2.1" y1="4.6" x2="3.2" y2="4.6" width="0.127" layer="21"/>
-<wire x1="-3.9" y1="-4.6" x2="-3.9" y2="-2.7" width="0.127" layer="51"/>
-<wire x1="3.9" y1="-4.6" x2="3.9" y2="-2.7" width="0.127" layer="51"/>
-<wire x1="-3.9" y1="4.6" x2="-3.9" y2="4.25" width="0.127" layer="51"/>
-<wire x1="3.9" y1="4.6" x2="3.9" y2="4.3" width="0.127" layer="51"/>
-<smd name="GND2" x="-4.4" y="3.5" dx="2" dy="2.4" layer="1"/>
-<smd name="VBUS" x="-1.6" y="4.064" dx="0.5" dy="2.308" layer="1" rot="R180"/>
-<smd name="D-" x="-0.8" y="4.064" dx="0.5" dy="2.308" layer="1" rot="R180"/>
-<smd name="D+" x="0" y="4.064" dx="0.5" dy="2.308" layer="1" rot="R180"/>
-<smd name="ID" x="0.8" y="4.064" dx="0.5" dy="2.308" layer="1" rot="R180"/>
-<smd name="GND" x="1.6" y="4.064" dx="0.5" dy="2.308" layer="1" rot="R180"/>
-<smd name="GND1" x="-4.4" y="-2" dx="2" dy="2.4" layer="1"/>
-<smd name="GND3" x="4.4" y="3.5" dx="2" dy="2.4" layer="1"/>
-<smd name="GND4" x="4.4" y="-2" dx="2" dy="2.4" layer="1"/>
-<text x="-3.31" y="5.35" size="1.27" layer="25">&gt;NAME</text>
-<text x="-3.31" y="-6.35" size="1.27" layer="27">&gt;VALUE</text>
-<hole x="-2.2" y="1" drill="1"/>
-<hole x="2.2" y="1" drill="1"/>
 </package>
 <package name="WS2812B">
 <wire x1="2.5" y1="-2.5" x2="-2.5" y2="-2.5" width="0.127" layer="21"/>
@@ -2257,6 +2168,58 @@ Source: Comchip CGRM4001-G.pdf</description>
 </package>
 </packages>
 </library>
+<library name="SparkFun-Connectors">
+<description>&lt;h3&gt;SparkFun Electronics' preferred foot prints&lt;/h3&gt;
+In this library you'll find connectors and sockets- basically anything that can be plugged into or onto.&lt;br&gt;&lt;br&gt;
+We've spent an enormous amount of time creating and checking these footprints and parts, but it is the end user's responsibility to ensure correctness and suitablity for a given componet or application. If you enjoy using this library, please buy one of our products at www.sparkfun.com.
+&lt;br&gt;&lt;br&gt;
+&lt;b&gt;Licensing:&lt;/b&gt; Creative Commons ShareAlike 4.0 International - https://creativecommons.org/licenses/by-sa/4.0/ 
+&lt;br&gt;&lt;br&gt;
+You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
+<packages>
+<package name="USB-MICROB">
+<description>Micro USB Package</description>
+<wire x1="-3.4" y1="-2.15" x2="-3" y2="-2.15" width="0.127" layer="51"/>
+<wire x1="3" y1="-2.15" x2="3.4" y2="-2.15" width="0.127" layer="51"/>
+<wire x1="-3.4" y1="-2.15" x2="-3.4" y2="-1.45" width="0.127" layer="51"/>
+<wire x1="-3.4" y1="-1.45" x2="-3.4" y2="2.85" width="0.127" layer="51"/>
+<wire x1="3.4" y1="2.85" x2="2.2" y2="2.85" width="0.127" layer="51"/>
+<wire x1="3.4" y1="2.85" x2="3.4" y2="-1.45" width="0.127" layer="51"/>
+<wire x1="3.4" y1="-1.45" x2="3.4" y2="-2.15" width="0.127" layer="51"/>
+<wire x1="-3.4" y1="-1.45" x2="3.4" y2="-1.45" width="0.127" layer="51"/>
+<wire x1="-3.4" y1="1.25" x2="-3.4" y2="2.85" width="0.2032" layer="21"/>
+<wire x1="-3.4" y1="2.85" x2="-2.2" y2="2.85" width="0.2032" layer="21"/>
+<wire x1="3.4" y1="2.85" x2="2.2" y2="2.85" width="0.2032" layer="21"/>
+<wire x1="3.4" y1="1.25" x2="3.4" y2="2.85" width="0.2032" layer="21"/>
+<wire x1="-3.4" y1="-1.45" x2="3.4" y2="-1.45" width="0.2032" layer="21"/>
+<wire x1="-2.2" y1="1.45" x2="2.2" y2="1.45" width="0.127" layer="51"/>
+<wire x1="2.2" y1="1.45" x2="2.2" y2="2.85" width="0.127" layer="51"/>
+<wire x1="-2.2" y1="1.45" x2="-2.2" y2="2.85" width="0.127" layer="51"/>
+<wire x1="-3.4" y1="2.85" x2="-2.2" y2="2.85" width="0.127" layer="51"/>
+<wire x1="-2.2" y1="2.85" x2="-2.2" y2="1.45" width="0.2032" layer="21"/>
+<wire x1="-2.2" y1="1.45" x2="2.2" y2="1.45" width="0.2032" layer="21"/>
+<wire x1="2.2" y1="1.45" x2="2.2" y2="2.85" width="0.2032" layer="21"/>
+<wire x1="-3.4" y1="-2.15" x2="-4" y2="-2.75" width="0.2032" layer="51"/>
+<wire x1="3.4" y1="-2.15" x2="4" y2="-2.75" width="0.2032" layer="51"/>
+<wire x1="-3" y1="-2.15" x2="-3" y2="-2.55" width="0.127" layer="51"/>
+<wire x1="-2.8" y1="-2.8" x2="2.75" y2="-2.8" width="0.127" layer="51"/>
+<wire x1="3" y1="-2.6" x2="3" y2="-2.15" width="0.127" layer="51"/>
+<wire x1="-3" y1="-2.55" x2="-2.8" y2="-2.8" width="0.127" layer="51" curve="84.547378"/>
+<wire x1="2.75" y1="-2.8" x2="3" y2="-2.6" width="0.127" layer="51" curve="84.547378"/>
+<smd name="VBUS" x="-1.3" y="2.65" dx="1.4" dy="0.35" layer="1" rot="R90"/>
+<smd name="GND" x="1.3" y="2.65" dx="1.4" dy="0.35" layer="1" rot="R90"/>
+<smd name="D-" x="-0.65" y="2.65" dx="1.4" dy="0.35" layer="1" rot="R90"/>
+<smd name="D+" x="0" y="2.65" dx="1.4" dy="0.35" layer="1" rot="R90"/>
+<smd name="ID" x="0.65" y="2.65" dx="1.4" dy="0.35" layer="1" rot="R90"/>
+<smd name="MT1" x="-4" y="0" dx="1.8" dy="1.9" layer="1"/>
+<smd name="MT2" x="4" y="0" dx="1.8" dy="1.9" layer="1"/>
+<text x="-1.6" y="-0.35" size="0.762" layer="25">&gt;NAME</text>
+<text x="-1.905" y="-3.175" size="0.762" layer="27">&gt;VALUE</text>
+<smd name="P$1" x="-1.27" y="0" dx="1.9" dy="1.9" layer="1"/>
+<smd name="P$2" x="1.27" y="0" dx="1.9" dy="1.9" layer="1"/>
+</package>
+</packages>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -2474,7 +2437,6 @@ Source: Comchip CGRM4001-G.pdf</description>
 <attribute name="NAME" x="77.47" y="40.64" size="1.27" layer="25" font="vector" rot="R180"/>
 <attribute name="VALUE" x="77.47" y="43.18" size="1.27" layer="27" font="vector" rot="R180"/>
 </element>
-<element name="USB" library="adafruit" package="USB-MINIB" value="" x="3.81" y="22.225" rot="MR90"/>
 <element name="R2" library="rcl" package="R0603" value="10" x="84.455" y="19.05" rot="MR90"/>
 <element name="C5" library="rcl" package="C0603K" value="10 uF" x="72.39" y="37.465" smashed="yes" rot="R90">
 <attribute name="NAME" x="72.375" y="34.125" size="1.016" layer="25" font="vector" rot="R90"/>
@@ -2579,6 +2541,10 @@ Source: Comchip CGRM4001-G.pdf</description>
 <element name="BAT2" library="adafruit" package="CR2032-SMD" value="BK-883" x="85.725" y="71.755" smashed="yes">
 <attribute name="NAME" x="74.153" y="74.549" size="1.6764" layer="25" font="vector" rot="R90"/>
 </element>
+<element name="USB" library="SparkFun-Connectors" package="USB-MICROB" value="10104110-0001LF" x="1.397" y="22.479" smashed="yes" rot="MR90">
+<attribute name="PROD_ID" value="CONN-09505" x="1.397" y="22.479" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="NAME" x="3.079" y="26.721" size="0.762" layer="26" rot="MR90"/>
+</element>
 </elements>
 <signals>
 <signal name="GND">
@@ -2602,7 +2568,6 @@ Source: Comchip CGRM4001-G.pdf</description>
 <vertex x="0" y="0"/>
 </polygon>
 <contactref element="R1" pad="1"/>
-<contactref element="USB" pad="GND"/>
 <contactref element="C5" pad="2"/>
 <contactref element="S1" pad="4"/>
 <contactref element="S2" pad="3"/>
@@ -2689,6 +2654,9 @@ Source: Comchip CGRM4001-G.pdf</description>
 <contactref element="R4" pad="1"/>
 <contactref element="BAT2" pad="-"/>
 <via x="85.725" y="71.755" extent="1-16" drill="0.5"/>
+<contactref element="USB" pad="GND"/>
+<contactref element="USB" pad="MT2"/>
+<contactref element="USB" pad="MT1"/>
 </signal>
 <signal name="VCC">
 <contactref element="U1" pad="48"/>
@@ -2882,14 +2850,11 @@ Source: Comchip CGRM4001-G.pdf</description>
 <signal name="USB0_DP">
 <contactref element="U1" pad="5"/>
 <contactref element="BREAKOUT1" pad="5"/>
-<contactref element="USB" pad="D+"/>
 <wire x1="72.524925" y1="37.8999625" x2="76.2" y2="34.2248875" width="0.254" layer="16"/>
 <wire x1="76.2" y1="34.2248875" x2="76.2" y2="33.02" width="0.254" layer="16"/>
 <wire x1="76.2" y1="33.02" x2="52.705" y2="9.525" width="0.254" layer="16"/>
 <wire x1="52.705" y1="9.525" x2="44.45" y2="9.525" width="0.254" layer="16"/>
 <wire x1="44.45" y1="9.525" x2="44.45" y2="6.35" width="0.254" layer="16"/>
-<wire x1="7.874" y1="22.225" x2="11.43" y2="22.225" width="0.254" layer="16"/>
-<wire x1="11.43" y1="22.225" x2="12.065" y2="21.59" width="0.254" layer="16"/>
 <wire x1="12.065" y1="21.59" x2="12.065" y2="9.525" width="0.254" layer="16"/>
 <wire x1="12.065" y1="9.525" x2="9.525" y2="6.985" width="0.254" layer="16"/>
 <wire x1="9.525" y1="6.985" x2="9.525" y2="3.175" width="0.254" layer="16"/>
@@ -2898,19 +2863,19 @@ Source: Comchip CGRM4001-G.pdf</description>
 <via x="43.18" y="2.54" extent="1-16" drill="0.5"/>
 <wire x1="43.18" y1="2.54" x2="43.18" y2="5.08" width="0.254" layer="1"/>
 <wire x1="43.18" y1="5.08" x2="44.45" y2="6.35" width="0.254" layer="1"/>
+<contactref element="USB" pad="D+"/>
+<wire x1="4.047" y1="22.479" x2="11.176" y2="22.479" width="0.254" layer="16"/>
+<wire x1="11.176" y1="22.479" x2="12.065" y2="21.59" width="0.254" layer="16"/>
 </signal>
 <signal name="USB0_DM">
 <contactref element="U1" pad="6"/>
 <contactref element="BREAKOUT1" pad="6"/>
-<contactref element="USB" pad="D-"/>
 <wire x1="72.171371875" y1="37.546409375" x2="75.565" y2="34.15278125" width="0.254" layer="16"/>
 <wire x1="75.565" y1="34.15278125" x2="75.565" y2="33.02" width="0.254" layer="16"/>
 <wire x1="75.565" y1="33.02" x2="52.705" y2="10.16" width="0.254" layer="16"/>
 <wire x1="52.705" y1="10.16" x2="43.18" y2="10.16" width="0.254" layer="16"/>
 <wire x1="43.18" y1="10.16" x2="43.18" y2="5.08" width="0.254" layer="16"/>
 <wire x1="43.18" y1="5.08" x2="44.45" y2="3.81" width="0.254" layer="16"/>
-<wire x1="7.874" y1="21.425" x2="10.96" y2="21.425" width="0.254" layer="16"/>
-<wire x1="10.96" y1="21.425" x2="11.43" y2="20.955" width="0.254" layer="16"/>
 <wire x1="11.43" y1="20.955" x2="11.43" y2="9.525" width="0.254" layer="16"/>
 <wire x1="11.43" y1="9.525" x2="8.89" y2="6.985" width="0.254" layer="16"/>
 <wire x1="8.89" y1="6.985" x2="8.89" y2="3.175" width="0.254" layer="16"/>
@@ -2920,19 +2885,19 @@ Source: Comchip CGRM4001-G.pdf</description>
 <wire x1="42.545" y1="1.27" x2="43.815" y2="1.27" width="0.254" layer="16"/>
 <wire x1="43.815" y1="1.27" x2="44.45" y2="1.905" width="0.254" layer="16"/>
 <wire x1="44.45" y1="1.905" x2="44.45" y2="3.81" width="0.254" layer="16"/>
+<contactref element="USB" pad="D-"/>
+<wire x1="4.047" y1="21.829" x2="10.556" y2="21.829" width="0.254" layer="16"/>
+<wire x1="10.556" y1="21.829" x2="11.43" y2="20.955" width="0.254" layer="16"/>
 </signal>
 <signal name="VREGIN">
 <contactref element="U1" pad="8"/>
 <contactref element="BREAKOUT1" pad="8"/>
-<contactref element="USB" pad="VBUS"/>
 <wire x1="71.46425" y1="36.8392875" x2="74.295" y2="34.0085375" width="0.254" layer="16"/>
 <wire x1="74.295" y1="34.0085375" x2="74.295" y2="33.02" width="0.254" layer="16"/>
 <wire x1="74.295" y1="33.02" x2="52.705" y2="11.43" width="0.254" layer="16"/>
 <wire x1="52.705" y1="11.43" x2="40.64" y2="11.43" width="0.254" layer="16"/>
 <wire x1="40.64" y1="11.43" x2="40.64" y2="5.08" width="0.254" layer="16"/>
 <wire x1="40.64" y1="5.08" x2="41.91" y2="3.81" width="0.254" layer="16"/>
-<wire x1="7.874" y1="20.625" x2="10.49" y2="20.625" width="0.254" layer="16"/>
-<wire x1="10.49" y1="20.625" x2="10.795" y2="20.32" width="0.254" layer="16"/>
 <wire x1="10.795" y1="20.32" x2="10.795" y2="10.16" width="0.254" layer="16"/>
 <wire x1="10.795" y1="10.16" x2="10.16" y2="9.525" width="0.254" layer="16"/>
 <via x="10.16" y="9.525" extent="1-16" drill="0.5"/>
@@ -2941,6 +2906,9 @@ Source: Comchip CGRM4001-G.pdf</description>
 <wire x1="9.525" y1="2.54" x2="10.16" y2="1.905" width="0.254" layer="1"/>
 <wire x1="10.16" y1="1.905" x2="40.005" y2="1.905" width="0.254" layer="1"/>
 <wire x1="40.005" y1="1.905" x2="41.91" y2="3.81" width="0.254" layer="1"/>
+<contactref element="USB" pad="VBUS"/>
+<wire x1="4.047" y1="21.179" x2="9.936" y2="21.179" width="0.254" layer="16"/>
+<wire x1="9.936" y1="21.179" x2="10.795" y2="20.32" width="0.254" layer="16"/>
 </signal>
 <signal name="PTE20">
 <contactref element="U1" pad="9"/>
