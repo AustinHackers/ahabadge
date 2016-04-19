@@ -10068,13 +10068,18 @@ support interrupts</text>
 </net>
 <net name="PTA20" class="0">
 <segment>
+<pinref part="U1" gate="A" pin="PTA20"/>
+<wire x1="116.84" y1="22.86" x2="121.92" y2="22.86" width="0.1524" layer="91"/>
+</segment>
+<segment>
 <pinref part="BREAKOUT2" gate="A" pin="2"/>
 <wire x1="-63.5" y1="60.96" x2="-58.42" y2="60.96" width="0.1524" layer="91"/>
 <label x="-58.42" y="60.96" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="PTA20"/>
-<wire x1="116.84" y1="22.86" x2="121.92" y2="22.86" width="0.1524" layer="91"/>
+<pinref part="P1" gate="G$1" pin="/RESET"/>
+<wire x1="12.7" y1="-17.78" x2="7.62" y2="-17.78" width="0.1524" layer="91"/>
+<label x="7.62" y="-17.78" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="PTE0" class="0">
@@ -10748,11 +10753,6 @@ support interrupts</text>
 <pinref part="BREAKOUT2" gate="A" pin="1"/>
 <wire x1="-71.12" y1="60.96" x2="-76.2" y2="60.96" width="0.1524" layer="91"/>
 <label x="-76.2" y="60.96" size="1.778" layer="95" rot="R180"/>
-</segment>
-<segment>
-<pinref part="P1" gate="G$1" pin="/RESET"/>
-<wire x1="12.7" y1="-17.78" x2="7.62" y2="-17.78" width="0.1524" layer="91"/>
-<label x="7.62" y="-17.78" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="VOUT33" class="0">
