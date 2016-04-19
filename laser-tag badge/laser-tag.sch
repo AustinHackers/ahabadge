@@ -812,6 +812,21 @@
 <text x="-2.54" y="6.35" size="1.27" layer="25" ratio="10">&gt;NAME</text>
 <text x="-3.8862" y="-3.81" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
 </package>
+<package name="FIDUCIAL_1MM">
+<smd name="1" x="0" y="0" dx="1" dy="1" layer="1" roundness="100" stop="no" cream="no"/>
+<polygon width="0.127" layer="29">
+<vertex x="-1" y="0" curve="90"/>
+<vertex x="0" y="-1" curve="90"/>
+<vertex x="1" y="0" curve="90"/>
+<vertex x="0" y="1" curve="90"/>
+</polygon>
+<polygon width="0.127" layer="41">
+<vertex x="-1" y="0" curve="90"/>
+<vertex x="0" y="-1" curve="90"/>
+<vertex x="1" y="0" curve="90"/>
+<vertex x="0" y="1" curve="90"/>
+</polygon>
+</package>
 </packages>
 <symbols>
 <symbol name="3V">
@@ -867,6 +882,9 @@
 <text x="-3.81" y="-3.175" size="1.778" layer="96">&gt;VALUE</text>
 <pin name="-" x="5.08" y="0" visible="off" length="short" direction="pas" rot="R180"/>
 <pin name="+" x="-5.08" y="0" visible="off" length="short" direction="pas"/>
+</symbol>
+<symbol name="DOT">
+<circle x="0" y="0" radius="2.54" width="0.254" layer="94"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -944,6 +962,20 @@
 <connect gate="S1" pin="+" pad="P$1"/>
 <connect gate="S1" pin="-" pad="P$2"/>
 </connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="FIDUCIAL">
+<description>For use by pick and place machines to calibrate the vision/machine, 1mm
+&lt;p&gt;By microbuilder.eu&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="DOT" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="FIDUCIAL_1MM">
 <technologies>
 <technology name=""/>
 </technologies>
@@ -10053,6 +10085,10 @@ For boards designed to be plugged directly into a USB slot. If possible, ensure 
 <part name="R4" library="rcl" deviceset="R-EU_" device="R0603" value="10k"/>
 <part name="BAT2" library="adafruit" deviceset="CR2032" device="SMT" value="BK-883"/>
 <part name="USB" library="SparkFun-Connectors" deviceset="USB" device="-MICROB" value="10104110-0001LF"/>
+<part name="U$1" library="adafruit" deviceset="FIDUCIAL" device=""/>
+<part name="U$2" library="adafruit" deviceset="FIDUCIAL" device=""/>
+<part name="U$3" library="adafruit" deviceset="FIDUCIAL" device=""/>
+<part name="U$4" library="adafruit" deviceset="FIDUCIAL" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -10063,6 +10099,7 @@ support interrupts</text>
 <text x="-7.62" y="45.72" size="1.778" layer="91">SWD_CLK</text>
 <text x="-7.62" y="38.1" size="1.778" layer="91">SWD_DIO</text>
 <text x="121.92" y="22.86" size="1.778" layer="91">RESET</text>
+<text x="127" y="2.54" size="1.778" layer="91">Fiducials</text>
 </plain>
 <instances>
 <instance part="U1" gate="A" x="10.16" y="99.06"/>
@@ -10129,6 +10166,10 @@ support interrupts</text>
 <instance part="R4" gate="G$1" x="-10.16" y="66.04" rot="R90"/>
 <instance part="BAT2" gate="G$1" x="-124.46" y="88.9" rot="R90"/>
 <instance part="USB" gate="G$1" x="-104.14" y="10.16" rot="R180"/>
+<instance part="U$1" gate="G$1" x="127" y="-2.54"/>
+<instance part="U$2" gate="G$1" x="134.62" y="-2.54"/>
+<instance part="U$3" gate="G$1" x="127" y="-10.16"/>
+<instance part="U$4" gate="G$1" x="134.62" y="-10.16"/>
 </instances>
 <busses>
 </busses>
