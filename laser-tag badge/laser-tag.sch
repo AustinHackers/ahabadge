@@ -8133,18 +8133,12 @@ For boards designed to be plugged directly into a USB slot. If possible, ensure 
 <wire x1="3.4" y1="2.85" x2="3.4" y2="-1.45" width="0.127" layer="51"/>
 <wire x1="3.4" y1="-1.45" x2="3.4" y2="-2.15" width="0.127" layer="51"/>
 <wire x1="-3.4" y1="-1.45" x2="3.4" y2="-1.45" width="0.127" layer="51"/>
-<wire x1="-3.4" y1="1.25" x2="-3.4" y2="2.85" width="0.2032" layer="21"/>
-<wire x1="-3.4" y1="2.85" x2="-2.2" y2="2.85" width="0.2032" layer="21"/>
-<wire x1="3.4" y1="2.85" x2="2.2" y2="2.85" width="0.2032" layer="21"/>
-<wire x1="3.4" y1="1.25" x2="3.4" y2="2.85" width="0.2032" layer="21"/>
 <wire x1="-3.4" y1="-1.45" x2="3.4" y2="-1.45" width="0.2032" layer="21"/>
 <wire x1="-2.2" y1="1.45" x2="2.2" y2="1.45" width="0.127" layer="51"/>
 <wire x1="2.2" y1="1.45" x2="2.2" y2="2.85" width="0.127" layer="51"/>
 <wire x1="-2.2" y1="1.45" x2="-2.2" y2="2.85" width="0.127" layer="51"/>
 <wire x1="-3.4" y1="2.85" x2="-2.2" y2="2.85" width="0.127" layer="51"/>
-<wire x1="-2.2" y1="2.85" x2="-2.2" y2="1.45" width="0.2032" layer="21"/>
 <wire x1="-2.2" y1="1.45" x2="2.2" y2="1.45" width="0.2032" layer="21"/>
-<wire x1="2.2" y1="1.45" x2="2.2" y2="2.85" width="0.2032" layer="21"/>
 <wire x1="-3.4" y1="-2.15" x2="-4" y2="-2.75" width="0.2032" layer="51"/>
 <wire x1="3.4" y1="-2.15" x2="4" y2="-2.75" width="0.2032" layer="51"/>
 <wire x1="-3" y1="-2.15" x2="-3" y2="-2.55" width="0.127" layer="51"/>
@@ -8152,17 +8146,19 @@ For boards designed to be plugged directly into a USB slot. If possible, ensure 
 <wire x1="3" y1="-2.6" x2="3" y2="-2.15" width="0.127" layer="51"/>
 <wire x1="-3" y1="-2.55" x2="-2.8" y2="-2.8" width="0.127" layer="51" curve="84.547378"/>
 <wire x1="2.75" y1="-2.8" x2="3" y2="-2.6" width="0.127" layer="51" curve="84.547378"/>
-<smd name="VBUS" x="-1.3" y="2.65" dx="1.4" dy="0.35" layer="1" rot="R90"/>
-<smd name="GND" x="1.3" y="2.65" dx="1.4" dy="0.35" layer="1" rot="R90"/>
-<smd name="D-" x="-0.65" y="2.65" dx="1.4" dy="0.35" layer="1" rot="R90"/>
-<smd name="D+" x="0" y="2.65" dx="1.4" dy="0.35" layer="1" rot="R90"/>
-<smd name="ID" x="0.65" y="2.65" dx="1.4" dy="0.35" layer="1" rot="R90"/>
-<smd name="MT1" x="-4" y="0" dx="1.8" dy="1.9" layer="1"/>
-<smd name="MT2" x="4" y="0" dx="1.8" dy="1.9" layer="1"/>
+<smd name="VBUS" x="-1.3" y="2.675" dx="1.35" dy="0.4" layer="1" rot="R90"/>
+<smd name="GND" x="1.3" y="2.675" dx="1.35" dy="0.4" layer="1" rot="R90"/>
+<smd name="D-" x="-0.65" y="2.675" dx="1.35" dy="0.4" layer="1" rot="R90"/>
+<smd name="D+" x="0" y="2.675" dx="1.35" dy="0.4" layer="1" rot="R90"/>
+<smd name="ID" x="0.65" y="2.675" dx="1.35" dy="0.4" layer="1" rot="R90"/>
+<smd name="MT1" x="-3.775" y="0" dx="1.75" dy="1.9" layer="1"/>
+<smd name="MT2" x="3.775" y="0" dx="1.75" dy="1.9" layer="1"/>
 <text x="-1.6" y="-0.35" size="0.762" layer="25">&gt;NAME</text>
 <text x="-1.905" y="-3.175" size="0.762" layer="27">&gt;VALUE</text>
-<smd name="P$1" x="-1.27" y="0" dx="1.9" dy="1.9" layer="1"/>
-<smd name="P$2" x="1.27" y="0" dx="1.9" dy="1.9" layer="1"/>
+<smd name="P$1" x="-1.075" y="0" dx="1.65" dy="1.9" layer="1"/>
+<smd name="P$2" x="1.075" y="0" dx="1.65" dy="1.9" layer="1"/>
+<smd name="MT3" x="3.1" y="2.55" dx="2.1" dy="1.6" layer="1"/>
+<smd name="MT4" x="-3.1" y="2.55" dx="2.1" dy="1.6" layer="1"/>
 </package>
 <package name="USB-A-SMT-MALE">
 <wire x1="6" y1="14.58" x2="-6" y2="14.58" width="0.2032" layer="51"/>
@@ -8654,7 +8650,7 @@ www.irf.com&lt;p&gt;
 <part name="C21" library="rcl" deviceset="C-EU" device="C0603K" value="0.1 uF"/>
 <part name="R4" library="rcl" deviceset="R-EU_" device="R0603" value="10k"/>
 <part name="BAT2" library="adafruit" deviceset="CR2032" device="SMT" value="BK-883"/>
-<part name="USB" library="SparkFun-Connectors" deviceset="USB" device="-MICROB" value="10104110-0001LF"/>
+<part name="USB" library="SparkFun-Connectors" deviceset="USB" device="-MICROB" value="10118192-0001LF"/>
 <part name="U$1" library="adafruit" deviceset="FIDUCIAL" device=""/>
 <part name="U$2" library="adafruit" deviceset="FIDUCIAL" device=""/>
 <part name="U$3" library="adafruit" deviceset="FIDUCIAL" device=""/>
