@@ -2015,11 +2015,6 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <smd name="2" x="0.2794" y="0" dx="0.8128" dy="0.4064" layer="1" rot="R90" cream="no"/>
 <wire x1="-0.254" y1="0" x2="0.254" y2="0" width="0.254" layer="1"/>
 </package>
-<package name="JUMPER_SOLDER_1X2_OPEN">
-<description>Solder jumper 6mil clearance</description>
-<smd name="1" x="-0.2794" y="0" dx="0.8128" dy="0.4064" layer="1" rot="R90" cream="no"/>
-<smd name="2" x="0.2794" y="0" dx="0.8128" dy="0.4064" layer="1" rot="R90" cream="no"/>
-</package>
 </packages>
 </library>
 <library name="Displays">
@@ -2464,7 +2459,7 @@ www.irf.com&lt;p&gt;
 </element>
 <element name="J1" library="Jumpers" package="JUMPER_SOLDER_1X2_CLOSED" value="JUMPER_SOLDER_1X2_CLOSED" x="52.07" y="2.54" rot="R90"/>
 <element name="J3" library="Jumpers" package="JUMPER_SOLDER_1X2_CLOSED" value="JUMPER_SOLDER_1X2_CLOSED" x="75.565" y="39.37" rot="R270"/>
-<element name="J2" library="Jumpers" package="JUMPER_SOLDER_1X2_OPEN" value="JUMPER_SOLDER_1X2_OPEN" x="69.215" y="37.465" rot="R180"/>
+<element name="J2" library="Jumpers" package="JUMPER_SOLDER_1X2_CLOSED" value="JUMPER_SOLDER_1X2_CLOSED" x="69.215" y="37.465" rot="R180"/>
 <element name="PD1" library="Photonics" package="PDB-C156-FLUSH" value="PDB-C156" x="93.98" y="40.64" smashed="yes" rot="R270">
 <attribute name="NAME" x="92.71" y="36.83" size="1.27" layer="25" font="vector"/>
 </element>
@@ -2678,35 +2673,6 @@ www.irf.com&lt;p&gt;
 <contactref element="USB" pad="MT2"/>
 <contactref element="USB" pad="MT1"/>
 <contactref element="Q1" pad="2"/>
-<wire x1="63.44" y1="73.695" x2="85.725" y2="71.755" width="0" layer="19" extent="1-16"/>
-<wire x1="52.07" y1="63.5" x2="61.74" y2="73.695" width="0" layer="19" extent="1-16"/>
-<wire x1="67.31" y1="42.94" x2="65.630621875" y2="46.91558125" width="0" layer="19" extent="1-16"/>
-<wire x1="69.85" y1="41.275" x2="68.34" y2="42.94" width="0" layer="19" extent="1-1"/>
-<wire x1="72.878478125" y1="38.253515625" x2="73.265" y2="38.34" width="0" layer="19" extent="1-16"/>
-<wire x1="64.77" y1="42.545" x2="67.31" y2="42.94" width="0" layer="19" extent="1-1"/>
-<wire x1="67.31" y1="38.735" x2="69.85" y2="41.275" width="0" layer="19" extent="1-1"/>
-<wire x1="68.635828125" y1="34.0108625" x2="67.31" y2="37.705" width="0" layer="19" extent="1-16"/>
-<wire x1="61.03441875" y1="38.96061875" x2="64.135" y2="41.515" width="0" layer="19" extent="1-16"/>
-<wire x1="77.685" y1="41.275" x2="73.66" y2="40.64" width="0" layer="19" extent="1-1"/>
-<wire x1="83.185" y1="42.545" x2="78.74" y2="41.275" width="0" layer="19" extent="1-1"/>
-<wire x1="87.63" y1="42.15" x2="85.18" y2="42.29" width="0" layer="19" extent="1-16"/>
-<wire x1="31.15" y1="31.89" x2="29.845" y2="26.035" width="0" layer="19" extent="16-16"/>
-<wire x1="27.94" y1="33.415" x2="31.15" y2="31.89" width="0" layer="19" extent="16-16"/>
-<wire x1="21.2725" y1="58.6325" x2="29.21" y2="64.135" width="0" layer="19" extent="16-16"/>
-<wire x1="22.225" y1="51.675" x2="21.2725" y2="58.6325" width="0" layer="19" extent="16-16"/>
-<wire x1="24.13" y1="51.675" x2="22.225" y2="51.675" width="0" layer="19" extent="16-16"/>
-<wire x1="26.035" y1="51.675" x2="24.13" y2="51.675" width="0" layer="19" extent="16-16"/>
-<wire x1="27.94" y1="51.675" x2="26.035" y2="51.675" width="0" layer="19" extent="16-16"/>
-<wire x1="20.32" y1="51.675" x2="22.225" y2="51.675" width="0" layer="19" extent="16-16"/>
-<wire x1="31.15" y1="46.89" x2="27.94" y2="51.675" width="0" layer="19" extent="16-16"/>
-<wire x1="64.4525" y1="8.255" x2="52.705" y2="8.89" width="0" layer="19" extent="1-16"/>
-<wire x1="72.35" y1="15.875" x2="64.48" y2="12.455" width="0" layer="19" extent="1-1"/>
-<wire x1="77.18" y1="12.455" x2="72.35" y2="15.875" width="0" layer="19" extent="1-1"/>
-<wire x1="80.645" y1="12.485" x2="77.18" y2="12.455" width="0" layer="19" extent="1-16"/>
-<wire x1="83.355" y1="16.19" x2="80.645" y2="12.485" width="0" layer="19" extent="16-16"/>
-<wire x1="1.397" y1="18.479" x2="11.43" y2="7.62" width="0" layer="19" extent="16-16"/>
-<wire x1="4.047" y1="23.779" x2="1.397" y2="18.479" width="0" layer="19" extent="16-16"/>
-<wire x1="1.397" y1="26.479" x2="4.047" y2="23.779" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="VCC">
 <contactref element="U1" pad="48"/>

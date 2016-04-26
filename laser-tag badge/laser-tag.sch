@@ -7404,11 +7404,6 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 <smd name="2" x="0.2794" y="0" dx="0.8128" dy="0.4064" layer="1" rot="R90" cream="no"/>
 <wire x1="-0.254" y1="0" x2="0.254" y2="0" width="0.254" layer="1"/>
 </package>
-<package name="JUMPER_SOLDER_1X2_OPEN">
-<description>Solder jumper 6mil clearance</description>
-<smd name="1" x="-0.2794" y="0" dx="0.8128" dy="0.4064" layer="1" rot="R90" cream="no"/>
-<smd name="2" x="0.2794" y="0" dx="0.8128" dy="0.4064" layer="1" rot="R90" cream="no"/>
-</package>
 </packages>
 <symbols>
 <symbol name="JUMP_SOLDER_1X2_CLOSED">
@@ -7429,23 +7424,6 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 </polygon>
 <wire x1="-0.762" y1="0" x2="0.762" y2="0" width="0.254" layer="94"/>
 </symbol>
-<symbol name="JUMP_SOLDER_1X2_OPEN">
-<wire x1="-2.54" y1="0" x2="-1.524" y2="0" width="0.1524" layer="94"/>
-<wire x1="2.54" y1="0" x2="1.524" y2="0" width="0.1524" layer="94"/>
-<text x="-4.318" y="2.54" size="1.778" layer="95">&gt;NAME</text>
-<pin name="1" x="-5.08" y="0" visible="off" length="short" direction="pas"/>
-<pin name="2" x="5.08" y="0" visible="off" length="short" direction="pas" rot="R180"/>
-<polygon width="0.254" layer="94">
-<vertex x="-0.635" y="0.9137"/>
-<vertex x="-0.635" y="-0.9137" curve="-90"/>
-<vertex x="-1.5875" y="0" curve="-90"/>
-</polygon>
-<polygon width="0.254" layer="94">
-<vertex x="0.635" y="-0.9137"/>
-<vertex x="0.635" y="0.9137" curve="-90"/>
-<vertex x="1.5875" y="0" curve="-90"/>
-</polygon>
-</symbol>
 </symbols>
 <devicesets>
 <deviceset name="JUMPER_SOLDER_1X2_CLOSED" prefix="J">
@@ -7454,22 +7432,6 @@ Source: http://www3.alps.co.jp/WebObjects/catalog.woa/PDF/E/Switch/Tact/SKHM/SKH
 </gates>
 <devices>
 <device name="" package="JUMPER_SOLDER_1X2_CLOSED">
-<connects>
-<connect gate="J" pin="1" pad="1"/>
-<connect gate="J" pin="2" pad="2"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-<deviceset name="JUMPER_SOLDER_1X2_OPEN" prefix="J">
-<gates>
-<gate name="J" symbol="JUMP_SOLDER_1X2_OPEN" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="JUMPER_SOLDER_1X2_OPEN">
 <connects>
 <connect gate="J" pin="1" pad="1"/>
 <connect gate="J" pin="2" pad="2"/>
@@ -8655,7 +8617,7 @@ www.irf.com&lt;p&gt;
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
 <part name="J1" library="Jumpers" deviceset="JUMPER_SOLDER_1X2_CLOSED" device=""/>
 <part name="J3" library="Jumpers" deviceset="JUMPER_SOLDER_1X2_CLOSED" device=""/>
-<part name="J2" library="Jumpers" deviceset="JUMPER_SOLDER_1X2_OPEN" device=""/>
+<part name="J2" library="Jumpers" deviceset="JUMPER_SOLDER_1X2_CLOSED" device=""/>
 <part name="PD1" library="Photonics" deviceset="PDB-C156" device=""/>
 <part name="PD2" library="Photonics" deviceset="PDB-C156" device=""/>
 <part name="P1" library="Displays" deviceset="E1260CS021" device=""/>
