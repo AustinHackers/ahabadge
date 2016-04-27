@@ -8582,6 +8582,128 @@ www.irf.com&lt;p&gt;
 </deviceset>
 </devicesets>
 </library>
+<library name="dp_devices.v6">
+<description>Dangerous Prototypes Standard PCB sizes
+http://dangerousprototypes.com</description>
+<packages>
+<package name="SW_TACT_SMALL">
+<wire x1="-1.2183" y1="2.182" x2="-1.1335" y2="2.182" width="0.1524" layer="21"/>
+<wire x1="-1.1335" y1="2.182" x2="1.2183" y2="2.182" width="0.1524" layer="21"/>
+<wire x1="1.2183" y1="2.182" x2="2.182" y2="1.2183" width="0.1524" layer="21"/>
+<wire x1="2.182" y1="-1.2183" x2="1.2183" y2="-2.182" width="0.1524" layer="21"/>
+<wire x1="-1.2183" y1="-2.182" x2="-2.182" y2="-1.2183" width="0.1524" layer="21"/>
+<wire x1="-2.182" y1="1.2183" x2="-1.2183" y2="2.182" width="0.1524" layer="21"/>
+<wire x1="-1.1335" y1="2.182" x2="-1.1335" y2="2.5" width="0.1524" layer="21"/>
+<wire x1="-1.1335" y1="2.5" x2="1.1335" y2="2.5" width="0.1524" layer="21"/>
+<wire x1="1.1335" y1="2.5" x2="1.1335" y2="2.181" width="0.1524" layer="21"/>
+<wire x1="1.2183" y1="-2.182" x2="1.1335" y2="-2.182" width="0.1524" layer="21"/>
+<wire x1="1.1335" y1="-2.182" x2="-1.2183" y2="-2.182" width="0.1524" layer="21"/>
+<wire x1="1.1335" y1="-2.182" x2="1.1335" y2="-2.5" width="0.1524" layer="21"/>
+<wire x1="1.1335" y1="-2.5" x2="-1.1335" y2="-2.5" width="0.1524" layer="21"/>
+<wire x1="-1.1335" y1="-2.5" x2="-1.1335" y2="-2.181" width="0.1524" layer="21"/>
+<wire x1="-2.182" y1="-1.2183" x2="-2.182" y2="-1.1335" width="0.1524" layer="21"/>
+<wire x1="-2.182" y1="-1.1335" x2="-2.182" y2="1.2183" width="0.1524" layer="21"/>
+<wire x1="-2.182" y1="-1.1335" x2="-2.5" y2="-1.1335" width="0.1524" layer="21"/>
+<wire x1="-2.5" y1="-1.1335" x2="-2.5" y2="1.1335" width="0.1524" layer="21"/>
+<wire x1="-2.5" y1="1.1335" x2="-2.181" y2="1.1335" width="0.1524" layer="21"/>
+<wire x1="2.182" y1="1.2183" x2="2.182" y2="1.1335" width="0.1524" layer="21"/>
+<wire x1="2.182" y1="1.1335" x2="2.182" y2="-1.2183" width="0.1524" layer="21"/>
+<wire x1="2.182" y1="1.1335" x2="2.5" y2="1.1335" width="0.1524" layer="21"/>
+<wire x1="2.5" y1="1.1335" x2="2.5" y2="-1.1335" width="0.1524" layer="21"/>
+<wire x1="2.5" y1="-1.1335" x2="2.181" y2="-1.1335" width="0.1524" layer="21"/>
+<wire x1="-1.065" y1="1.812" x2="1.065" y2="1.812" width="0.0762" layer="21"/>
+<wire x1="1.065" y1="1.812" x2="1.812" y2="1.065" width="0.0762" layer="21"/>
+<wire x1="-1.812" y1="-1.065" x2="-1.812" y2="1.065" width="0.0762" layer="21"/>
+<wire x1="-1.812" y1="1.065" x2="-1.065" y2="1.812" width="0.0762" layer="21"/>
+<wire x1="1.065" y1="-1.812" x2="-1.065" y2="-1.812" width="0.0762" layer="21"/>
+<wire x1="-1.065" y1="-1.812" x2="-1.812" y2="-1.065" width="0.0762" layer="21"/>
+<wire x1="1.812" y1="1.065" x2="1.812" y2="-1.065" width="0.0762" layer="21"/>
+<wire x1="1.812" y1="-1.065" x2="1.065" y2="-1.812" width="0.0762" layer="21"/>
+<wire x1="-0.9958" y1="1.645" x2="0.9958" y2="1.645" width="0.0762" layer="21"/>
+<wire x1="0.9958" y1="1.645" x2="1.645" y2="0.9958" width="0.0762" layer="21"/>
+<wire x1="-1.645" y1="-0.9958" x2="-1.645" y2="0.9958" width="0.0762" layer="21"/>
+<wire x1="-1.645" y1="0.9958" x2="-0.9958" y2="1.645" width="0.0762" layer="21"/>
+<wire x1="0.9958" y1="-1.645" x2="-0.9958" y2="-1.645" width="0.0762" layer="21"/>
+<wire x1="-0.9958" y1="-1.645" x2="-1.645" y2="-0.9958" width="0.0762" layer="21"/>
+<wire x1="1.645" y1="0.9958" x2="1.645" y2="-0.9958" width="0.0762" layer="21"/>
+<wire x1="1.645" y1="-0.9958" x2="0.9958" y2="-1.645" width="0.0762" layer="21"/>
+<circle x="0" y="0" radius="1" width="0.0762" layer="21"/>
+<circle x="0" y="0" radius="0.865" width="0.0762" layer="21"/>
+<smd name="1" x="-3.15" y="1.9" dx="1" dy="1.7" layer="1" rot="R90"/>
+<smd name="2" x="3.15" y="1.9" dx="1" dy="1.7" layer="1" rot="R90"/>
+<smd name="3" x="-3.15" y="-1.9" dx="1" dy="1.7" layer="1" rot="R90"/>
+<smd name="4" x="3.15" y="-1.9" dx="1" dy="1.7" layer="1" rot="R90"/>
+<text x="-3.04" y="2.9825" size="1.27" layer="25" font="vector" ratio="10">&gt;NAME</text>
+<polygon width="0.0762" layer="51">
+<vertex x="1.3003" y="2.1"/>
+<vertex x="3.3" y="2.1"/>
+<vertex x="3.3" y="1.6"/>
+<vertex x="1.8003" y="1.6"/>
+</polygon>
+<polygon width="0.0762" layer="51">
+<vertex x="-1.3003" y="-2.1"/>
+<vertex x="-3.3" y="-2.1"/>
+<vertex x="-3.3" y="-1.6"/>
+<vertex x="-1.8003" y="-1.6"/>
+</polygon>
+<polygon width="0.0762" layer="51">
+<vertex x="-1.3003" y="2.1"/>
+<vertex x="-3.3" y="2.1"/>
+<vertex x="-3.3" y="1.6"/>
+<vertex x="-1.8003" y="1.6"/>
+</polygon>
+<polygon width="0.0762" layer="51">
+<vertex x="1.3003" y="-2.1"/>
+<vertex x="3.3" y="-2.1"/>
+<vertex x="3.3" y="-1.6"/>
+<vertex x="1.8003" y="-1.6"/>
+</polygon>
+</package>
+</packages>
+<symbols>
+<symbol name="SWITCH_2">
+<wire x1="1.905" y1="0" x2="2.54" y2="0" width="0.254" layer="94" style="shortdash"/>
+<wire x1="1.905" y1="4.445" x2="1.905" y2="3.175" width="0.254" layer="94" style="shortdash"/>
+<wire x1="-1.905" y1="4.445" x2="-1.905" y2="3.175" width="0.254" layer="94" style="shortdash"/>
+<wire x1="1.905" y1="4.445" x2="0" y2="4.445" width="0.254" layer="94" style="shortdash"/>
+<wire x1="0" y1="4.445" x2="-1.905" y2="4.445" width="0.254" layer="94" style="shortdash"/>
+<wire x1="0" y1="2.54" x2="0" y2="1.905" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="0" y1="1.27" x2="0" y2="0.635" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="0" y1="4.445" x2="0" y2="3.175" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="2.54" y1="-2.54" x2="2.54" y2="0" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="-2.54" y1="-2.54" x2="-2.54" y2="0" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="-2.54" y1="0" x2="1.905" y2="1.27" width="0.254" layer="94" style="shortdash"/>
+<circle x="-2.54" y="0" radius="0.127" width="0.4064" layer="94"/>
+<circle x="2.54" y="0" radius="0.127" width="0.4064" layer="94"/>
+<text x="-2.54" y="7.62" size="1.778" layer="95" font="vector">&gt;NAME</text>
+<text x="-2.54" y="5.08" size="1.778" layer="96" font="vector">&gt;VALUE</text>
+<pin name="1" x="-5.08" y="0" visible="pad" length="short" direction="pas" swaplevel="2"/>
+<pin name="3" x="5.08" y="0" visible="pad" length="short" direction="pas" swaplevel="1" rot="R180"/>
+<pin name="4" x="5.08" y="-2.54" visible="pad" length="short" direction="pas" swaplevel="1" rot="R180"/>
+<pin name="2" x="-5.08" y="-2.54" visible="pad" length="short" direction="pas" swaplevel="2"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="SW_TACT_4P" prefix="SW" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="SWITCH_2" x="-2.54" y="0"/>
+</gates>
+<devices>
+<device name="" package="SW_TACT_SMALL">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+<connect gate="G$1" pin="3" pad="3"/>
+<connect gate="G$1" pin="4" pad="4"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -8657,6 +8779,8 @@ www.irf.com&lt;p&gt;
 <part name="U$3" library="adafruit" deviceset="FIDUCIAL" device=""/>
 <part name="U$4" library="adafruit" deviceset="FIDUCIAL" device=""/>
 <part name="Q1" library="transistor-small-signal" deviceset="BSS123" device="" value="2N7002"/>
+<part name="RESET" library="dp_devices.v6" deviceset="SW_TACT_4P" device="" value="TL3342F160QG/TR"/>
+<part name="GND4" library="supply1" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -8735,6 +8859,8 @@ support interrupts</text>
 <instance part="U$3" gate="G$1" x="127" y="-10.16"/>
 <instance part="U$4" gate="G$1" x="134.62" y="-10.16"/>
 <instance part="Q1" gate="G$1" x="-17.78" y="73.66" rot="MR0"/>
+<instance part="RESET" gate="G$1" x="-20.32" y="10.16"/>
+<instance part="GND4" gate="1" x="-12.7" y="2.54"/>
 </instances>
 <busses>
 </busses>
@@ -8907,6 +9033,16 @@ support interrupts</text>
 <pinref part="SP1" gate="S1" pin="+"/>
 <wire x1="-45.72" y1="0" x2="-45.72" y2="2.54" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="RESET" gate="G$1" pin="3"/>
+<pinref part="GND4" gate="1" pin="GND"/>
+<wire x1="-15.24" y1="10.16" x2="-12.7" y2="10.16" width="0.1524" layer="91"/>
+<wire x1="-12.7" y1="10.16" x2="-12.7" y2="7.62" width="0.1524" layer="91"/>
+<pinref part="RESET" gate="G$1" pin="4"/>
+<wire x1="-12.7" y1="7.62" x2="-12.7" y2="5.08" width="0.1524" layer="91"/>
+<wire x1="-15.24" y1="7.62" x2="-12.7" y2="7.62" width="0.1524" layer="91"/>
+<junction x="-12.7" y="7.62"/>
+</segment>
 </net>
 <net name="VCC" class="0">
 <segment>
@@ -9055,6 +9191,14 @@ support interrupts</text>
 <pinref part="P1" gate="G$1" pin="/RESET"/>
 <wire x1="12.7" y1="-17.78" x2="7.62" y2="-17.78" width="0.1524" layer="91"/>
 <label x="7.62" y="-17.78" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<pinref part="RESET" gate="G$1" pin="2"/>
+<wire x1="-25.4" y1="7.62" x2="-27.94" y2="7.62" width="0.1524" layer="91"/>
+<wire x1="-27.94" y1="7.62" x2="-27.94" y2="10.16" width="0.1524" layer="91"/>
+<pinref part="RESET" gate="G$1" pin="1"/>
+<wire x1="-27.94" y1="10.16" x2="-25.4" y2="10.16" width="0.1524" layer="91"/>
+<label x="-27.94" y="10.16" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="PTE0" class="0">
