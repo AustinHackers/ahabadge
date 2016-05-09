@@ -60,7 +60,7 @@ static const uint8_t *images[] = {
 };
 static const int image_count = sizeof images / sizeof *images;
 static int current_image = 0;
-static int cue_next_image = 0;
+static volatile int cue_next_image = 0;
 
 
 ////////////////////////////
