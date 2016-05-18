@@ -61,6 +61,7 @@ static const uint8_t *images[] = {
 static const int image_count = sizeof images / sizeof *images;
 static int current_image = 0;
 static volatile int cue_next_image = 0;
+static uint32_t laser_pulse_length = 32;
 
 
 ////////////////////////////
@@ -305,7 +306,7 @@ static void lptmr_call_back(void)
 
     /* FIRE THE LASER */
     if (laser_on) {
-        LPUART_DRV_SendData(1, txBuff, 1);
+        LPUART_DRV_SendData(1, txBuff, laser_pulse_length);
     }
 
     /* countdown to turn off LED */
