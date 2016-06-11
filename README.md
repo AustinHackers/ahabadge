@@ -1,11 +1,11 @@
 # WARNING
 
-CUT THIS JUMPER IF IT IS NOT ALREADY CUT ON YOUR BOARD!
+## DO NOT POWER THE BADGE ONLY FROM USB!
 
-![CUT THIS JUMPER](cut.jpg?raw=true)
+Some badges fail when powered only from USB,
+the MCU develops a short and destroys itself!
 
-This disables powering the badge from USB, you need to use batteries instead.
-Some badges fail when powered only from USB, the MCU develops a short and destroys itself!
+It is safe to plug in USB when battery power is present.
 
 ## Getting Started
 
