@@ -48,13 +48,13 @@
 // Graphics resources
 
 #include "aha.xbm"
-#include "threatbutt.xbm"
+#include "dc24.xbm"
 #include "my_name_is.xbm"
-#include "longhorn_lockpicking.xbm"
+#include "threatbutt.xbm"
 
 static const uint8_t *images[] = {
     aha_bits,
-    longhorn_lockpicking_bits,
+    dc24_bits,
     my_name_is_bits,
     threatbutt_bits,
 };
