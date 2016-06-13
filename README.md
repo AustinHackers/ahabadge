@@ -1,11 +1,9 @@
 # WARNING
 
-## DO NOT POWER THE BADGE ONLY FROM USB!
-
-Some badges fail when powered only from USB,
+Some badges fail when plugged in to USB,
 the MCU develops a short and destroys itself!
-
-It is safe to plug in USB when battery power is present.
+I tried to weed out these faulty MCUs but I can't be sure the ones that
+seemed fine won't develop this problem.
 
 ## Getting Started
 
