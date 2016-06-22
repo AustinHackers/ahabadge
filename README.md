@@ -1,9 +1,12 @@
 # WARNING
 
-Some badges fail when plugged in to USB,
+Some v0 and v1 badges fail when plugged in to USB,
 the MCU develops a short and destroys itself!
-I tried to weed out these faulty MCUs but I can't be sure the ones that
-seemed fine won't develop this problem.
+
+If you have a v0 or v1 badge install a 10uF cap between pins 4 and 8
+(VSS and VREGIN) on the BREAKOUT1 header.
+
+![VREGIN capacitor](vregin_cap.jpg?raw=true)
 
 ## Getting Started
 
