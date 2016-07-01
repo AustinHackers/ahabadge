@@ -265,6 +265,7 @@ static lpuart_state_t g_lpuartState;
 static uint8_t rxBuff[1];
 static uint8_t txBuff[] = { 'R' };
 static uint8_t laser_on;
+static uint8_t seizure_on = 1;
 static uint32_t shift0_buf[3];
 static uint32_t blank_led;
 
@@ -306,6 +307,12 @@ static void lptmr_call_back(void)
 
     /* FIRE THE LASER */
     if (laser_on) {
+        if (seizure_on) {
+            static int foo = 0;
+            static char colors[] = { 'R', 'G', 'B' };
+            txBuff[0] = colors[foo];
+            foo = (foo + 1) % 3;
+        }
         LPUART_DRV_SendData(1, txBuff, laser_pulse_length);
     }
 
@@ -397,15 +404,19 @@ void PORTA_IRQHandler(void)
 
     if (!GPIO_DRV_ReadPinInput(g_switchUp.pinName)) {
         txBuff[0] = 'R';
+        seizure_on = 0;
     }
     if (!GPIO_DRV_ReadPinInput(g_switchLeft.pinName)) {
         txBuff[0] = 'G';
+        seizure_on = 0;
     }
     if (!GPIO_DRV_ReadPinInput(g_switchRight.pinName)) {
         txBuff[0] = 'B';
+        seizure_on = 0;
     }
     if (!GPIO_DRV_ReadPinInput(g_switchDown.pinName)) {
         txBuff[0] = 'T';
+        seizure_on = 0;
     }
     if (!GPIO_DRV_ReadPinInput(g_switchSelect.pinName)) {
         cue_next_image = 1;
