@@ -61,7 +61,12 @@ static const uint8_t *images[] = {
 };
 static const int image_count = sizeof images / sizeof *images;
 static int current_image = 0;
-static volatile int cue_next_image = 0;
+static volatile enum IMAGE_ACTION {
+	HOLD_IMAGE = 0,
+    NEXT_IMAGE,
+    NEXT_IMAGE_DIRTY, /* For when a full screen update is required */
+    DRAW_TEXT,
+} next_image_action;
 static uint32_t laser_pulse_length = 32;
 
 
@@ -420,7 +425,7 @@ void PORTA_IRQHandler(void)
         seizure_on = 0;
     }
     if (!GPIO_DRV_ReadPinInput(g_switchSelect.pinName)) {
-        cue_next_image = 1;
+        next_image_action = NEXT_IMAGE;
     }
 }
 
@@ -590,12 +595,28 @@ int main (void)
     //EPD_Deinit();
 
     /* We're done, everything else is triggered through interrupts */
+    uint8_t image[sizeof(aha_bits)] = {0};
+    char text[100] = "critical hit by mauvehed!";
+    next_image_action = DRAW_TEXT;
     for(;;) {
-        if (cue_next_image) {
-            int old_image = current_image;
-            current_image = (current_image + 1) % image_count;
-            EPD_Draw(images[old_image], images[current_image]);
-            cue_next_image = 0;
+        if (next_image_action != HOLD_IMAGE) {
+            if (next_image_action == DRAW_TEXT) {
+                {
+                    for (uint32_t i=0; i<sizeof(image); i++) {
+                        image[i] = images[current_image][i];
+                    }
+                }
+                uint8_t retval = text_to_image(text, 30, image, EPAPER_WIDTH/8, EPAPER_HEIGHT/8*5, EPAPER_WIDTH/8*7, EPAPER_HEIGHT);
+                if (retval) {
+                    EPD_Draw(images[current_image], image);
+                }
+            }
+            else {
+                int old_image = current_image;
+                current_image = (current_image + 1) % image_count;
+                EPD_Draw(next_image_action == NEXT_IMAGE ? images[old_image] : NULL, images[current_image]);
+            }
+            next_image_action = HOLD_IMAGE;
         }
 #ifndef DEBUG
         SMC_HAL_SetMode(SMC, &g_idlePowerMode);
