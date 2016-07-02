@@ -30,6 +30,7 @@
  */
 
 #include "epaper.h"
+#include "text.h"
 #include "fsl_clock_manager.h"
 #include "fsl_cmp_driver.h"
 #include "fsl_dac_driver.h"
