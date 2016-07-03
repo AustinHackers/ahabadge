@@ -30,6 +30,7 @@
  */
 
 #include "epaper.h"
+#include "text.h"
 #include "fsl_clock_manager.h"
 #include "fsl_cmp_driver.h"
 #include "fsl_dac_driver.h"
@@ -48,19 +49,23 @@
 // Graphics resources
 
 #include "aha.xbm"
-#include "threatbutt.xbm"
+#include "dc24.xbm"
 #include "my_name_is.xbm"
-#include "longhorn_lockpicking.xbm"
+#include "threatbutt.xbm"
 
 static const uint8_t *images[] = {
     aha_bits,
-    longhorn_lockpicking_bits,
+    dc24_bits,
     my_name_is_bits,
     threatbutt_bits,
 };
 static const int image_count = sizeof images / sizeof *images;
 static int current_image = 0;
 static volatile int cue_next_image = 0;
+<<<<<<< HEAD
+=======
+static uint32_t laser_pulse_length = 32;
+>>>>>>> 58ab4873d12baf0d0ba5862e2f6c84179bceec53
 
 
 ////////////////////////////
@@ -264,6 +269,7 @@ static lpuart_state_t g_lpuartState;
 static uint8_t rxBuff[1];
 static uint8_t txBuff[] = { 'R' };
 static uint8_t laser_on;
+static uint8_t seizure_on = 1;
 static uint32_t shift0_buf[3];
 static uint32_t blank_led;
 
@@ -305,7 +311,13 @@ static void lptmr_call_back(void)
 
     /* FIRE THE LASER */
     if (laser_on) {
-        LPUART_DRV_SendData(1, txBuff, 1);
+        if (seizure_on) {
+            static int foo = 0;
+            static char colors[] = { 'R', 'G', 'B' };
+            txBuff[0] = colors[foo];
+            foo = (foo + 1) % 3;
+        }
+        LPUART_DRV_SendData(1, txBuff, laser_pulse_length);
     }
 
     /* countdown to turn off LED */
@@ -396,15 +408,19 @@ void PORTA_IRQHandler(void)
 
     if (!GPIO_DRV_ReadPinInput(g_switchUp.pinName)) {
         txBuff[0] = 'R';
+        seizure_on = 0;
     }
     if (!GPIO_DRV_ReadPinInput(g_switchLeft.pinName)) {
         txBuff[0] = 'G';
+        seizure_on = 0;
     }
     if (!GPIO_DRV_ReadPinInput(g_switchRight.pinName)) {
         txBuff[0] = 'B';
+        seizure_on = 0;
     }
     if (!GPIO_DRV_ReadPinInput(g_switchDown.pinName)) {
         txBuff[0] = 'T';
+        seizure_on = 0;
     }
     if (!GPIO_DRV_ReadPinInput(g_switchSelect.pinName)) {
         cue_next_image = 1;

@@ -6,7 +6,18 @@ Build instructions for Ubuntu:
 2) cd "laser-tag software"
    ./build_debug.sh
 
-Load instructions:
+Load instructions Kinetis Bootloader:
+0) Download the Kinetis Bootloader[0]. (registration required)
+1) Extract that huge zip and find the blhost executable for your OS in the bin directory.
+2) Boot your badge into the ROM boot-loader by holding the direction pad UP while pressing reset.
+3) It should show up as a USB-HID device.
+4) Execute:
+   blhost -u -- flash-erase-all-unsecure
+   blhost -u -- write-memory 0 hello_world.bin
+5) Reset the badge or:
+   blhost -u -- reset
+
+Load instructions for openocd:
 0) openocd
    in another terminal:
    telnet localhost 4444
@@ -15,3 +26,5 @@ Load instructions:
    gdb-multiarch -x gdb.init debug/hello_world.elf
    gdb) load
    gdb) monitor reset
+
+[0] http://www.nxp.com/products/microcontrollers-and-processors/arm-processors/kinetis-cortex-m/kinetis-symbols-footprints-and-models/kinetis-bootloader:KBOOT

@@ -8781,6 +8781,8 @@ http://dangerousprototypes.com</description>
 <part name="Q1" library="transistor-small-signal" deviceset="BSS123" device="" value="2N7002"/>
 <part name="RESET" library="dp_devices.v6" deviceset="SW_TACT_4P" device="" value="TL3342F160QG/TR"/>
 <part name="GND4" library="supply1" deviceset="GND" device=""/>
+<part name="C22" library="rcl" deviceset="C-EU" device="C0603K" value="10 uF"/>
+<part name="GND10" library="supply1" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -8861,6 +8863,8 @@ support interrupts</text>
 <instance part="Q1" gate="G$1" x="-17.78" y="73.66" rot="MR0"/>
 <instance part="RESET" gate="G$1" x="-20.32" y="10.16"/>
 <instance part="GND4" gate="1" x="-12.7" y="2.54"/>
+<instance part="C22" gate="G$1" x="-2.54" y="78.74"/>
+<instance part="GND10" gate="1" x="-2.54" y="71.12"/>
 </instances>
 <busses>
 </busses>
@@ -9042,6 +9046,10 @@ support interrupts</text>
 <wire x1="-12.7" y1="7.62" x2="-12.7" y2="5.08" width="0.1524" layer="91"/>
 <wire x1="-15.24" y1="7.62" x2="-12.7" y2="7.62" width="0.1524" layer="91"/>
 <junction x="-12.7" y="7.62"/>
+</segment>
+<segment>
+<pinref part="C22" gate="G$1" pin="2"/>
+<pinref part="GND10" gate="1" pin="GND"/>
 </segment>
 </net>
 <net name="VCC" class="0">
@@ -9262,8 +9270,8 @@ support interrupts</text>
 <net name="VREGIN" class="0">
 <segment>
 <pinref part="U1" gate="A" pin="VREGIN"/>
-<wire x1="10.16" y1="81.28" x2="7.62" y2="81.28" width="0.1524" layer="91"/>
-<junction x="7.62" y="81.28"/>
+<pinref part="C22" gate="G$1" pin="1"/>
+<wire x1="10.16" y1="81.28" x2="-2.54" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="BREAKOUT1" gate="A" pin="8"/>
