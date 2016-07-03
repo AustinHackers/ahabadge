@@ -62,10 +62,7 @@ static const uint8_t *images[] = {
 static const int image_count = sizeof images / sizeof *images;
 static int current_image = 0;
 static volatile int cue_next_image = 0;
-<<<<<<< HEAD
-=======
 static uint32_t laser_pulse_length = 32;
->>>>>>> 58ab4873d12baf0d0ba5862e2f6c84179bceec53
 
 
 ////////////////////////////
