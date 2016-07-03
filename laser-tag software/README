@@ -11,9 +11,11 @@ Load instructions Kinetis Bootloader:
 1) Extract that huge zip and find the blhost executable for your OS in the bin directory.
 2) Boot your badge into the ROM boot-loader by holding the direction pad UP while pressing reset.
 3) It should show up as a USB-HID device.
+   lsusb -d 15a2:0073
+   Bus 001 Device 015: ID 15a2:0073 Freescale Semiconductor, Inc.
 4) Execute:
    blhost -u -- flash-erase-all-unsecure
-   blhost -u -- write-memory 0 hello_world.bin
+   blhost -u -- write-memory 0 debug/hello_world.bin
 5) Reset the badge or:
    blhost -u -- reset
 
