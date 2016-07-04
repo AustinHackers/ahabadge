@@ -97,7 +97,7 @@ ADD_EXECUTABLE(hello_world
     "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flexio/fsl_flexio_irq.c"
     "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/lptmr/fsl_lptmr_irq.c"
     "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/lpuart/fsl_lpuart_irq.c"
-    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_dma_irq.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_irq.c"
     "${ProjDirPath}/main.c"
     "${ProjDirPath}/epaper.c"
     "${ProjDirPath}/text.c"

@@ -324,9 +324,6 @@ static void lptmr_call_back(void)
         }
         blank_led--;
     }
-
-    /* kick EPD driver every once in a while */
-    EPD_Tick();
 }
 
 /* Play music using the PIT timer */
@@ -585,9 +582,6 @@ int main (void)
         led(0x00, 0xff, 0x00);
     }
     blank_led = 30;
-
-    /* Deinit so we can mess around on the bus pirate */
-    //EPD_Deinit();
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {
