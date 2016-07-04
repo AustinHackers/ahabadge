@@ -31,6 +31,7 @@
 
 #include "epaper.h"
 #include "text.h"
+#include "radio.h"
 #include "fsl_clock_manager.h"
 #include "fsl_cmp_driver.h"
 #include "fsl_dac_driver.h"
@@ -582,6 +583,11 @@ int main (void)
         led(0x00, 0xff, 0x00);
     }
     blank_led = 30;
+
+    ret = radio_init();
+    if (0 == ret) {
+        led(0x22, 0x00, 0x22);
+    }
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {

@@ -101,6 +101,7 @@ ADD_EXECUTABLE(hello_world
     "${ProjDirPath}/main.c"
     "${ProjDirPath}/epaper.c"
     "${ProjDirPath}/text.c"
+    "${ProjDirPath}/radio.c"
 )
 SET_TARGET_PROPERTIES(hello_world PROPERTIES OUTPUT_NAME "hello_world.elf")
 
