@@ -290,7 +290,6 @@ void led(uint8_t red, uint8_t green, uint8_t blue)
 
 /*!
  * @brief LPTMR interrupt call back function.
- * The function is used to toggle LED1.
  */
 static void lptmr_call_back(void)
 {
