@@ -8,6 +8,15 @@ static const gpio_output_pin_user_config_t pinReset = {
     .config.outputLogic = 1,
 };
 
+static const gpio_input_pin_user_config_t pinDIO0 = {
+    .pinName = GPIO_MAKE_PIN(GPIOC_IDX, 9),
+};
+
+static const gpio_output_pin_user_config_t pinDIO2 = {
+    .pinName = GPIO_MAKE_PIN(GPIOC_IDX, 10),
+    .config.outputLogic = 0,
+};
+
 static const spi_master_user_config_t spiConfig = {
     .bitsPerSec = 2000000, /* 2 MHz, max is 10 MHz */
     .polarity = kSpiClockPolarity_ActiveHigh,
@@ -20,16 +29,16 @@ static const struct {
     uint8_t reg;
     uint8_t val;
 } config[] = {
-    { REG_OPMODE, RF_OPMODE_SEQUENCER_ON | RF_OPMODE_LISTEN_OFF
-        | RF_OPMODE_STANDBY },
+    { REG_OPMODE, RF_OPMODE_SEQUENCER_ON
+                | RF_OPMODE_LISTEN_OFF
+                | RF_OPMODE_STANDBY },
     { REG_DATAMODUL, RF_DATAMODUL_DATAMODE_PACKET
-        | RF_DATAMODUL_MODULATIONTYPE_FSK
-        | RF_DATAMODUL_MODULATIONSHAPING_00 }, // no shaping
-    { REG_BITRATEMSB, RF_BITRATEMSB_55555 }, // default: 4.8 KBPS
+                   | RF_DATAMODUL_MODULATIONTYPE_FSK
+                   | RF_DATAMODUL_MODULATIONSHAPING_00 }, // no shaping
+    { REG_BITRATEMSB, RF_BITRATEMSB_55555 }, // 55,555 bps
     { REG_BITRATELSB, RF_BITRATELSB_55555 },
     { REG_FDEVMSB, RF_FDEVMSB_50000 }, // default: 5KHz,
-                                       // (FDEV + BitRate / 2 <= 500KHz)
-    { REG_FDEVLSB, RF_FDEVLSB_50000 },
+    { REG_FDEVLSB, RF_FDEVLSB_50000 }, // (FDEV + BitRate / 2 <= 500KHz)
     { REG_FRFMSB, RF_FRFMSB_915 },
     { REG_FRFMID, RF_FRFMID_915 },
     { REG_FRFLSB, RF_FRFLSB_915 },
@@ -40,16 +49,20 @@ static const struct {
     // +17dBm formula: Pout = -14 + OutputPower (with PA1 and PA2)**
     // +20dBm formula: Pout = -11 + OutputPower (with PA1 and PA2)** and high
     // power PA settings (section 3.3.7 in datasheet)
-    //{ REG_PALEVEL, RF_PALEVEL_PA0_ON | RF_PALEVEL_PA1_OFF
-    //| RF_PALEVEL_PA2_OFF | RF_PALEVEL_OUTPUTPOWER_11111 },
-    //{ REG_OCP, RF_OCP_ON | RF_OCP_TRIM_95 }, // over current protection
-    //(default is 95mA)
-
+    { REG_PALEVEL, RF_PALEVEL_PA0_OFF
+                 | RF_PALEVEL_PA1_ON
+                 | RF_PALEVEL_PA2_ON
+                 | RF_PALEVEL_OUTPUTPOWER_11111 },
+    { REG_TESTPA1, 0x5D },
+    { REG_TESTPA2, 0x7C },
+    { REG_OCP, RF_OCP_OFF }, // over current protection
     // RXBW defaults are RF_RXBW_DCCFREQ_010 | RF_RXBW_MANT_24 | RF_RXBW_EXP_5
     // (RxBw: 10.4KHz)
     //for BR-19200: RF_RXBW_DCCFREQ_010 | RF_RXBW_MANT_24 | RF_RXBW_EXP_3
     // (BitRate < 2 * RxBw)
-    { REG_RXBW, RF_RXBW_DCCFREQ_010 | RF_RXBW_MANT_16 | RF_RXBW_EXP_2 },
+    { REG_RXBW, RF_RXBW_DCCFREQ_010
+              | RF_RXBW_MANT_16
+              | RF_RXBW_EXP_2 },
     // DIO0 is the only IRQ we're using
     { REG_DIOMAPPING1, RF_DIOMAPPING1_DIO0_01 },
     // DIO5 ClkOut disable for power saving
@@ -60,26 +73,31 @@ static const struct {
     { REG_RSSITHRESH, 220 },
     // default 3 preamble bytes 0xAAAAAA
     //{ REG_PREAMBLELSB, RF_PREAMBLESIZE_LSB_VALUE }
-    { REG_SYNCCONFIG, RF_SYNC_ON | RF_SYNC_FIFOFILL_AUTO | RF_SYNC_SIZE_2
-        | RF_SYNC_TOL_0 },
+    { REG_SYNCCONFIG, RF_SYNC_ON
+                    | RF_SYNC_FIFOFILL_AUTO
+                    | RF_SYNC_SIZE_2
+                    | RF_SYNC_TOL_0 },
     // attempt to make this compatible with sync1 byte of RFM12B lib
     { REG_SYNCVALUE1, 0x2D },
-    { REG_SYNCVALUE2, 42 }, // NETWORK ID
-    { REG_PACKETCONFIG1, RF_PACKET1_FORMAT_VARIABLE | RF_PACKET1_DCFREE_OFF
-        | RF_PACKET1_CRC_ON | RF_PACKET1_CRCAUTOCLEAR_ON
-        | RF_PACKET1_ADRSFILTERING_OFF },
+    { REG_SYNCVALUE2, 0x01 }, // NETWORK ID (1 = users, 2 = uber)
+    { REG_PACKETCONFIG1, RF_PACKET1_FORMAT_VARIABLE
+                       | RF_PACKET1_DCFREE_OFF
+                       | RF_PACKET1_CRC_ON
+                       | RF_PACKET1_CRCAUTOCLEAR_ON
+                       | RF_PACKET1_ADRSFILTERING_OFF },
     // in variable length mode: the max frame size, not used in TX
     { REG_PAYLOADLENGTH, 66 },
     // turned off because we're not using address filtering
     //{ REG_NODEADRS, nodeID },
     { REG_FIFOTHRESH, RF_FIFOTHRESH_TXSTART_FIFONOTEMPTY
-        | RF_FIFOTHRESH_VALUE }, // TX on FIFO not empty
+                    | RF_FIFOTHRESH_VALUE }, // TX on FIFO not empty
     // RXRESTARTDELAY must match transmitter PA ramp-down time
     // (bitrate dependent)
     //for BR-19200: RF_PACKET2_RXRESTARTDELAY_NONE | RF_PACKET2_AUTORXRESTART_ON
     //| RF_PACKET2_AES_OFF
     { REG_PACKETCONFIG2, RF_PACKET2_RXRESTARTDELAY_2BITS
-        | RF_PACKET2_AUTORXRESTART_ON | RF_PACKET2_AES_OFF },
+                       | RF_PACKET2_AUTORXRESTART_ON
+                       | RF_PACKET2_AES_OFF },
     // run DAGC continuously in RX mode for Fading Margin Improvement,
     // recommended default for AfcLowBetaOn=0
     { REG_TESTDAGC, RF_DAGC_IMPROVED_LOWBETA0 },
@@ -137,7 +155,9 @@ int radio_init()
     PORT_HAL_SetMuxMode(g_portBase[GPIOC_IDX], 6, kPortMuxAlt2);
     PORT_HAL_SetMuxMode(g_portBase[GPIOC_IDX], 7, kPortMuxAlt2);
     PORT_HAL_SetMuxMode(g_portBase[GPIOC_IDX], 8, kPortMuxAsGpio);
+    //PORT_HAL_SetMuxMode(g_portBase[GPIOC_IDX], 10, kPortMuxAsGpio);
     GPIO_DRV_OutputPinInit(&pinReset);
+    //GPIO_DRV_OutputPinInit(&pinDIO2);
     delay(1);
     GPIO_DRV_WritePinOutput(pinReset.pinName, 0);
     delay(5);
@@ -160,6 +180,26 @@ int radio_init()
         write_reg(config[i].reg, config[i].val);
     }
 	return 0;
+}
+
+void set_mode(uint8_t mode)
+{
+    uint8_t reg = read_reg(REG_OPMODE);
+
+    write_reg(REG_OPMODE, (reg & 0xE3) | mode);
+}
+
+void radio_test(void)
+{
+    //write_reg(REG_DATAMODUL, RF_DATAMODUL_DATAMODE_CONTINUOUSNOBSYNC);
+    set_mode(RF_OPMODE_TRANSMITTER);
+    /*
+    bool a = false;
+    while (true) {
+        GPIO_DRV_WritePinOutput(pinDIO2.pinName, a);
+        a = !a;
+        delay(100);
+    }*/
 }
 
 /* vim: set expandtab ts=4 sw=4: */
