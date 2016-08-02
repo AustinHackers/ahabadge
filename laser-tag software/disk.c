@@ -181,6 +181,7 @@ uint8_t USB_App_Class_Callback
     case USB_DEV_EVENT_DATA_RECEIVED:
         /* Add User defined code -- if required*/
         lba_data_ptr = (lba_app_struct_t*) size;
+        USB_PRINTF("DATA_RECEIVED for lun %d\r\n", lba_data_ptr->lun);
         break;
     case USB_DEV_EVENT_SEND_COMPLETE:
         /* Add User defined code -- if required*/

@@ -31,6 +31,7 @@
 
 #include "disk.h"
 #include "epaper.h"
+#include "flash.h"
 #include "fsl_clock_manager.h"
 #include "fsl_cmp_driver.h"
 #include "fsl_dac_driver.h"
@@ -598,6 +599,9 @@ int main (void)
     if (0 == ret) {
         led(0x22, 0x00, 0x22);
     }
+
+    /* Initialize flash stuff */
+    flash_init();
 
     /* No good can come of this */
     disk_init(images[2]);

@@ -47,27 +47,18 @@
 #define RAM_DISK_APP                        (1)
 #define SD_CARD_APP                         (0)
 
-#if RAM_DISK_APP
-    /* Length of Each Logical Address Block */
-    #define LENGTH_OF_EACH_LAB              (512)    
-    /* total number of logical blocks present */
-    #define TOTAL_LOGICAL_ADDRESS_BLOCKS_NORMAL (8)
-    /* Net Disk Size */
-    #define DISK_SIZE_NORMAL (TOTAL_LOGICAL_ADDRESS_BLOCKS_NORMAL * LENGTH_OF_EACH_LAB)
-#endif
+/* Length of Each Logical Address Block */
+#define LENGTH_OF_EACH_LAB                  (512)
+/* total number of logical blocks present */
+#define TOTAL_LOGICAL_ADDRESS_BLOCKS_NORMAL (8)
+/* Net Disk Size */
+#define DISK_SIZE_NORMAL (TOTAL_LOGICAL_ADDRESS_BLOCKS_NORMAL * LENGTH_OF_EACH_LAB)
 
-#define LOGICAL_UNIT_SUPPORTED              (1)
+#define LOGICAL_UNIT_SUPPORTED              (5)
 
 #define SUPPORT_DISK_LOCKING_MECHANISM      (0) /*1: TRUE; 0:FALSE*/
 
-#if SD_CARD_APP
-    #define MUTILE_BUFFER                   (1)
-#endif
-#if MUTILE_BUFFER
-    #define MSD_RECV_BUFFER_NUM             (2)
-    #else
-    #define MSD_RECV_BUFFER_NUM             (1)
-#endif
+#define MSD_RECV_BUFFER_NUM                 (1)
 #define MSD_RECV_BUFFER_SIZE                (512)
 #define MSD_SEND_BUFFER_SIZE                (512)
 /*****************************************************************************

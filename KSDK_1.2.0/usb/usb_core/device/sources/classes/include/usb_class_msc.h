@@ -132,6 +132,7 @@ typedef struct _lba_app_struct
     uint32_t             offset;   /*!< offset of target block need to access*/
     uint32_t             size;     /*!< size need to access*/
     uint8_t*             buff_ptr; /*!< used to save the content by access the target block*/
+    uint8_t		 lun;
 }lba_app_struct_t;
 //extern void USB_Class_Periodic_Task(void);
 #define USB_MSC_Periodic_Task USB_Class_Periodic_Task 

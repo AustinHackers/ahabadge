@@ -84,6 +84,7 @@ IF(CMAKE_BUILD_TYPE MATCHES Debug)
     INCLUDE_DIRECTORIES(${ProjDirPath}/../KSDK_1.2.0/platform/drivers/inc)
     INCLUDE_DIRECTORIES(${ProjDirPath}/../KSDK_1.2.0/platform/system/inc)
     INCLUDE_DIRECTORIES(${ProjDirPath}/../KSDK_1.2.0/platform/utilities/inc)
+    INCLUDE_DIRECTORIES(${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/include)
     INCLUDE_DIRECTORIES(${ProjDirPath}/.)
 ELSEIF(CMAKE_BUILD_TYPE MATCHES Release)
     INCLUDE_DIRECTORIES(${ProjDirPath}/../KSDK_1.2.0/platform/osa/inc)
@@ -108,6 +109,7 @@ ELSEIF(CMAKE_BUILD_TYPE MATCHES Release)
     INCLUDE_DIRECTORIES(${ProjDirPath}/../KSDK_1.2.0/platform/drivers/inc)
     INCLUDE_DIRECTORIES(${ProjDirPath}/../KSDK_1.2.0/platform/system/inc)
     INCLUDE_DIRECTORIES(${ProjDirPath}/../KSDK_1.2.0/platform/utilities/inc)
+    INCLUDE_DIRECTORIES(${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/include)
     INCLUDE_DIRECTORIES(${ProjDirPath}/.)
 ENDIF()
 
@@ -126,6 +128,42 @@ ADD_EXECUTABLE(hello_world
     "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/lptmr/fsl_lptmr_irq.c"
     "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/lpuart/fsl_lpuart_irq.c"
     "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_irq.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/CopyToRam.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/DEFlashPartition.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/DFlashGetProtection.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/DFlashSetProtection.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/EEEWrite.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/EERAMGetProtection.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/EERAMSetProtection.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashCheckSum.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashCommandSequence.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashEraseAllBlock.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashEraseBlock.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashEraseResume.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashEraseSector.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashEraseSuspend.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashGetSecurityState.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashInit.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashProgram.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashProgramCheck.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashProgramOnce.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashProgramSection.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashReadOnce.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashReadResource.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashSecurityBypass.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashVerifyAllBlock.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashVerifyBlock.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/FlashVerifySection.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/PFlashGetProtection.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/PFlashSetProtection.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/PFlashSwap.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/PFlashSwapCtl.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/source/SetEEEEnable.c"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/include/FTFx_KX_flash_config.h"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/include/SSD_FTFx.h"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/include/SSD_FTFx_Common.h"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/include/SSD_FTFx_Internal.h"
+    "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/include/SSD_Types.h"
     "${ProjDirPath}/main.c"
     "${ProjDirPath}/epaper.c"
     "${ProjDirPath}/epaper.h"
@@ -138,6 +176,8 @@ ADD_EXECUTABLE(hello_world
     "${ProjDirPath}/disk.h"
     "${ProjDirPath}/usb_descriptor.c"
     "${ProjDirPath}/usb_descriptor.h"
+    "${ProjDirPath}/flash.c"
+    "${ProjDirPath}/flash.h"
 )
 SET_TARGET_PROPERTIES(hello_world PROPERTIES OUTPUT_NAME "hello_world.elf")
 

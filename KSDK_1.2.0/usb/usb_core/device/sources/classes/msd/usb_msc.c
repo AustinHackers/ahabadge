@@ -487,6 +487,7 @@ void USB_Service_Bulk_Out(usb_event_struct_t* event,void* arg)
         || (WRITE_12_COMMAND == msc_obj_ptr->cbw_ptr->command_block[0])))
         {
             lba_app_struct_t lba_data1;
+	    lba_data1.lun = cbw_ptr->lun;
             lba_data1.offset = 0;
             lba_data1.size = 0;
             lba_data1.buff_ptr = msc_obj_ptr->msd_buff.msc_bulk_out_ptr;
@@ -1032,6 +1033,8 @@ void* arg
             )
             {
                 /* return the maximum number of logical units supported */
+		USB_PRINTF("lun was %d\r\n", msc_dev_ptr->lun);
+		msc_dev_ptr->lun = 4;
                 *data = &msc_dev_ptr->lun;
                 *size= (uint32_t)setup_packet->length;
                 msc_dev_ptr->re_stall_flag = TRUE;
