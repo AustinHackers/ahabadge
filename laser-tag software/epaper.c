@@ -1,4 +1,5 @@
 #include "epaper.h"
+#include "fsl_debug_console.h"
 #include "fsl_gpio_driver.h"
 #include "fsl_spi_master_driver.h"
 
@@ -20,7 +21,7 @@ static const gpio_output_pin_user_config_t pinCS = {
 };
 
 static const spi_master_user_config_t spiConfig = {
-    .bitsPerSec = 2000000, /* 2 MHz, max is 20 MHz */
+    .bitsPerSec = 20000000, /* 20 MHz, max is 20 MHz */
     .polarity = kSpiClockPolarity_ActiveHigh,
     .phase = kSpiClockPhase_FirstEdge,
     .direction = kSpiMsbFirst,
@@ -116,7 +117,7 @@ static void EPD_Delay(uint32_t ms)
     for (; ms > 0; --ms) {
         /* XXX This is really stupid */
         volatile int i;
-        for (i = 0; i < 306; ++i);
+        for (i = 0; i < 306 * 48; ++i);
     }
 }
 
@@ -203,7 +204,7 @@ static void EPD_frame_repeat(const uint8_t *data, uint8_t fixed_value,
 {
     /* TODO this needs to repeat for about 630ms */
     int i;
-    for (i = 0; i < 2; ++i) {
+    for (i = 0; i < 4; ++i) {
         EPD_frame(data, fixed_value, stage);
     }
 }

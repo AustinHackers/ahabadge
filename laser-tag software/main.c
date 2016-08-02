@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 David Barksdale <amatus@amat.us>
+ * Copyright (c) 2015 - 2016 David Barksdale <amatus@amat.us>
  * Copyright (c) 2013 - 2014, Freescale Semiconductor, Inc.
  * All rights reserved.
  *
@@ -29,12 +29,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "disk.h"
 #include "epaper.h"
-#include "text.h"
-#include "radio.h"
 #include "fsl_clock_manager.h"
 #include "fsl_cmp_driver.h"
 #include "fsl_dac_driver.h"
+#include "fsl_debug_console.h"
 #include "fsl_dma_driver.h"
 #include "fsl_flexio_driver.h"
 #include "fsl_gpio_driver.h"
@@ -44,11 +44,12 @@
 #include "fsl_pit_driver.h"
 #include "fsl_smc_hal.h"
 #include "fsl_tpm_driver.h"
+#include "radio.h"
+#include "text.h"
 
 
 ////////////////////////////
 // Graphics resources
-
 #include "aha.xbm"
 #include "dc24.xbm"
 #include "my_name_is.xbm"
@@ -215,7 +216,7 @@ static cmp_dac_config_t g_cmpDacConf = {
 
 /* LPUART0 config */
 static lpuart_user_config_t g_lpuartConfig = {
-    .clockSource = kClockLpuartSrcMcgIrClk,
+    .clockSource = kClockLpuartSrcIrc48M,
     .baudRate = 9600,
     .parityMode = kLpuartParityEven,
     .stopBitCount = kLpuartOneStopBit,
@@ -243,7 +244,7 @@ static flexio_timer_config_t g_timerConfig = {
     .timena = kFlexioTimerEnableOnTriggerHigh,
     .tstop = kFlexioTimerStopBitDisabled,
     .tstart = kFlexioTimerStartBitDisabled,
-    .timcmp = (32 * 2 - 1) << 8 | (2 - 1), // 32 bits at 2 MHz
+    .timcmp = (32 * 2 - 1) << 8 | (12 - 1), // 32 bits at 2 MHz
 };
 
 static flexio_shifter_config_t g_shifterConfig = {
@@ -486,7 +487,7 @@ int main (void)
 {
     /* enable clock for PORTs */
     CLOCK_SYS_EnablePortClock(PORTA_IDX);
-    //CLOCK_SYS_EnablePortClock(PORTB_IDX);
+    CLOCK_SYS_EnablePortClock(PORTB_IDX);
     CLOCK_SYS_EnablePortClock(PORTC_IDX);
     CLOCK_SYS_EnablePortClock(PORTD_IDX);
     CLOCK_SYS_EnablePortClock(PORTE_IDX);
@@ -495,7 +496,15 @@ int main (void)
     SMC_HAL_SetProtection(SMC, kAllowPowerModeAll);
 
     /* Set system clock configuration. */
-    CLOCK_SYS_SetConfiguration(&g_defaultClockConfigVlpr);
+    CLOCK_SYS_SetConfiguration(&g_defaultClockConfigRun);
+
+    /* Break everything */
+    OSA_Init();
+
+    /* Setup Debug console on LPUART0 on PTB17 */
+    PORT_HAL_SetMuxMode(PORTB, 17, kPortMuxAlt3);
+    CLOCK_SYS_SetLpuartSrc(0, kClockLpuartSrcIrc48M);
+    DbgConsole_Init(0, 9600, kDebugConsoleLPUART);
 
     /* Initialize LPTMR */
     lptmr_state_t lptmrState;
@@ -539,7 +548,7 @@ int main (void)
 
     /* Setup FlexIO for the WS2812B */
     FLEXIO_Type *fiobase = g_flexioBase[0];
-    CLOCK_SYS_SetFlexioSrc(0, kClockFlexioSrcMcgIrClk);
+    CLOCK_SYS_SetFlexioSrc(0, kClockFlexioSrcIrc48M);
     FLEXIO_DRV_Init(0, &g_flexioConfig);
     FLEXIO_HAL_ConfigureTimer(fiobase, 0, &g_timerConfig);
     FLEXIO_HAL_ConfigureShifter(fiobase, 0, &g_shifterConfig);
@@ -562,7 +571,7 @@ int main (void)
         .triggerSource = kTpmTrigSel0,
     };
     TPM_DRV_Init(0, &tmpConfig);
-    TPM_DRV_SetClock(0, kTpmClockSourceModuleMCGIRCLK, kTpmDividedBy1);
+    TPM_DRV_SetClock(0, kTpmClockSourceModuleHighFreq, kTpmDividedBy8);
 
     /* Blank LED just in case, saves power */
     led(0x00, 0x00, 0x00);
@@ -572,6 +581,7 @@ int main (void)
 
     /* Throw up first image */
     int ret = EPD_Draw(NULL, images[current_image]);
+    debug_printf("Returned from EPD_Draw %d\r\n", ret);
     if (-1 == ret) {
         led(0xff, 0x00, 0x00);
     } else if (-2 == ret) {
@@ -583,10 +593,13 @@ int main (void)
     }
     blank_led = 30;
 
-    ret = radio_init();
+    ret = 0; //radio_init();
     if (0 == ret) {
         led(0x22, 0x00, 0x22);
     }
+
+    /* No good can come of this */
+    //APP_init();
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {

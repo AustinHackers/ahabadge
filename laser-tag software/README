@@ -1,10 +1,13 @@
 Build instructions for Ubuntu:
 0) apt-get install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi
 1) export ARMGCC_DIR=/usr
-   cd KSDK_1.2.0/lib/ksdk_platform_lib/armgcc/KL27Z4
-   ./build_debug.sh
-2) cd "laser-tag software"
-   ./build_debug.sh
+   cd ../KSDK_1.2.0/lib/ksdk_platform_lib/armgcc/KL27Z4
+   ./build_all.sh
+   cd -
+2) cd ../KSDK_1.2.0/usb/usb_core/device/build/armgcc/usbd_sdk_frdmkl27z_bm
+   ./build_all.sh
+   cd -
+3) ./build_debug.sh -or- ./build_release.sh
 
 Load instructions Kinetis Bootloader:
 0) Download the Kinetis Bootloader[0]. (registration required)
