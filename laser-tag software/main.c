@@ -244,7 +244,7 @@ static flexio_timer_config_t g_timerConfig = {
     .timena = kFlexioTimerEnableOnTriggerHigh,
     .tstop = kFlexioTimerStopBitDisabled,
     .tstart = kFlexioTimerStartBitDisabled,
-    .timcmp = (32 * 2 - 1) << 8 | (12 - 1), // 32 bits at 2 MHz
+    .timcmp = (32 * 2 - 1) << 8 | (10 - 1), // 32 bits at 2.4 MHz
 };
 
 static flexio_shifter_config_t g_shifterConfig = {
@@ -581,7 +581,7 @@ int main (void)
 
     /* Throw up first image */
     int ret = EPD_Draw(NULL, images[current_image]);
-    debug_printf("Returned from EPD_Draw %d\r\n", ret);
+    debug_printf("EPD_Draw returned %d\r\n", ret);
     if (-1 == ret) {
         led(0xff, 0x00, 0x00);
     } else if (-2 == ret) {
@@ -593,24 +593,26 @@ int main (void)
     }
     blank_led = 30;
 
-    ret = 0; //radio_init();
+    ret = radio_init();
+    debug_printf("radio_init returned %d\r\n", ret);
     if (0 == ret) {
         led(0x22, 0x00, 0x22);
     }
 
     /* No good can come of this */
-    //APP_init();
+    disk_init(images[2]);
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {
         if (cue_next_image) {
             int old_image = current_image;
             current_image = (current_image + 1) % image_count;
+            debug_printf("drawing %d -> %d\r\n", old_image, current_image);
             EPD_Draw(images[old_image], images[current_image]);
             cue_next_image = 0;
         }
 #ifndef DEBUG
-        SMC_HAL_SetMode(SMC, &g_idlePowerMode);
+        //SMC_HAL_SetMode(SMC, &g_idlePowerMode);
 #endif
     }
 }

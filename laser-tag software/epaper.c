@@ -21,7 +21,7 @@ static const gpio_output_pin_user_config_t pinCS = {
 };
 
 static const spi_master_user_config_t spiConfig = {
-    .bitsPerSec = 20000000, /* 20 MHz, max is 20 MHz */
+    .bitsPerSec = 20000000, /* max is 20 MHz */
     .polarity = kSpiClockPolarity_ActiveHigh,
     .phase = kSpiClockPhase_FirstEdge,
     .direction = kSpiMsbFirst,
@@ -58,7 +58,7 @@ static spi_status_t SPI_Transfer(const uint8_t *tx, uint8_t *rx, size_t count)
     if (rc != kStatus_SPI_Success) {
         return rc;
     }
-    int i, timeout = (count + 127) / 128 + 1;
+    int i, timeout = count * 4;
     for (i = 0; i < timeout; ++i) {
         rc = SPI_DRV_MasterGetTransferStatus(1, NULL);
         if (rc == kStatus_SPI_Success) {
@@ -117,7 +117,7 @@ static void EPD_Delay(uint32_t ms)
     for (; ms > 0; --ms) {
         /* XXX This is really stupid */
         volatile int i;
-        for (i = 0; i < 306 * 48; ++i);
+        for (i = 0; i < 306 * 12; ++i);
     }
 }
 
@@ -204,7 +204,7 @@ static void EPD_frame_repeat(const uint8_t *data, uint8_t fixed_value,
 {
     /* TODO this needs to repeat for about 630ms */
     int i;
-    for (i = 0; i < 4; ++i) {
+    for (i = 0; i < 6; ++i) {
         EPD_frame(data, fixed_value, stage);
     }
 }
@@ -213,10 +213,11 @@ int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
 {
     int rc = 0;
 
-    /* Configure DMA channel */
+    /* Configure SPI1 */
     SPI_DRV_MasterInit(1, &spiState);
     uint32_t calculatedBaudRate;
     SPI_DRV_MasterConfigureBus(1, &spiConfig, &calculatedBaudRate);
+    debug_printf("EPD baud rate %u Hz\r\n", calculatedBaudRate);
 
     /* read the COG ID */
     uint8_t id = EPD_ReadCogID();

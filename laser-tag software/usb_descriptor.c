@@ -101,9 +101,9 @@ uint8_t g_device_descriptor[DEVICE_DESCRIPTOR_SIZE] =
     /* Max Packet size */
     CONTROL_MAX_PACKET_SIZE,
     /* Vendor ID */
-    0xa2, 0x15,
+    0x37, 0x13,
     /* Product ID */
-    0x00, 0x02,
+    0x41, 0x41,
     /* BCD Device version */
     0x02, 0x00,
     /* Manufacturer string index */
@@ -259,56 +259,28 @@ uint8_t USB_STR_0[USB_STR_0_SIZE + USB_STR_DESC_SIZE] =
 uint8_t USB_STR_1[USB_STR_1_SIZE + USB_STR_DESC_SIZE] =
 { sizeof(USB_STR_1),
     USB_STRING_DESCRIPTOR,
-    'F', 0,
-    'R', 0,
-    'E', 0,
-    'E', 0,
-    'S', 0,
-    'C', 0,
     'A', 0,
-    'L', 0,
-    'E', 0,
-    ' ', 0,
-    'S', 0,
-    'E', 0,
-    'M', 0,
-    'I', 0,
-    'C', 0,
-    'O', 0,
-    'N', 0,
-    'D', 0,
-    'U', 0,
-    'C', 0,
-    'T', 0,
-    'O', 0,
-    'R', 0,
-    ' ', 0,
-    'I', 0,
-    'N', 0,
-    'C', 0,
-    '.', 0
+    'm', 0,
+    'a', 0,
+    't', 0,
+    'u', 0,
+    's', 0,
 };
 
 /*  Product string */
 uint8_t USB_STR_2[USB_STR_2_SIZE + USB_STR_DESC_SIZE] =
 { sizeof(USB_STR_2),
     USB_STRING_DESCRIPTOR,
-    'M', 0,
-    'Q', 0,
-    'X', 0,
-    ' ', 0,
-    'M', 0,
     'A', 0,
-    'S', 0,
-    'S', 0,
-    ' ', 0,
-    'S', 0,
-    'T', 0,
-    'O', 0,
-    'R', 0,
+    'H', 0,
     'A', 0,
-    'G', 0,
-    'E', 0
+    '!', 0,
+    ' ', 0,
+    'B', 0,
+    'a', 0,
+    'd', 0,
+    'g', 0,
+    'e', 0,
 };
 
 /*  Serial number string */
@@ -816,4 +788,5 @@ usb_desc_request_notify_struct_t desc_callback =
     USB_Set_Configuration,
     USB_Desc_Get_Entity
 };
-/* EOF */
+
+/* vim: set expandtab ts=4 sw=4: */

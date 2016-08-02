@@ -51,7 +51,7 @@
     /* Length of Each Logical Address Block */
     #define LENGTH_OF_EACH_LAB              (512)    
     /* total number of logical blocks present */
-    #define TOTAL_LOGICAL_ADDRESS_BLOCKS_NORMAL (4)
+    #define TOTAL_LOGICAL_ADDRESS_BLOCKS_NORMAL (8)
     /* Net Disk Size */
     #define DISK_SIZE_NORMAL (TOTAL_LOGICAL_ADDRESS_BLOCKS_NORMAL * LENGTH_OF_EACH_LAB)
 #endif
@@ -82,9 +82,7 @@ typedef struct _disk_variable_struct
     msd_handle_t app_handle;
     uint32_t start_app;
     uint16_t speed;
-#if RAM_DISK_APP
-    uint8_t storage_disk[DISK_SIZE_NORMAL];
-#endif  
+    uint8_t *storage_disk;
     uint8_t disk_lock;
     uint8_t read_write_error;
 } disk_struct_t;
@@ -92,9 +90,8 @@ typedef struct _disk_variable_struct
 /*****************************************************************************
  * Global Functions
  *****************************************************************************/
-extern void APP_init(void);
-extern void Disk_App(void);
+void disk_init(uint8_t *mem);
 
 #endif
 
-/* EOF */
+/* vim: set expandtab ts=4 sw=4: */

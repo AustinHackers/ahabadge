@@ -1,4 +1,5 @@
 #include "radio.h"
+#include "fsl_debug_console.h"
 #include "fsl_gpio_driver.h"
 #include "fsl_spi_master_driver.h"
 #include "RFM69registers.h"
@@ -18,7 +19,7 @@ static const gpio_output_pin_user_config_t pinDIO2 = {
 };
 
 static const spi_master_user_config_t spiConfig = {
-    .bitsPerSec = 2000000, /* 2 MHz, max is 10 MHz */
+    .bitsPerSec = 10000000, /* max is 10 MHz */
     .polarity = kSpiClockPolarity_ActiveHigh,
     .phase = kSpiClockPhase_FirstEdge,
     .direction = kSpiMsbFirst,
@@ -105,6 +106,15 @@ static const struct {
 
 static spi_master_state_t spiState;
 
+static void delay(uint32_t ms)
+{
+    for (; ms > 0; --ms) {
+        /* XXX This is really stupid */
+        volatile int i;
+        for (i = 0; i < 306 * 12; ++i);
+    }
+}
+
 static spi_status_t SPI_Transfer(const uint8_t *tx, uint8_t *rx, size_t count)
 {
     spi_status_t rc;
@@ -113,7 +123,7 @@ static spi_status_t SPI_Transfer(const uint8_t *tx, uint8_t *rx, size_t count)
     if (rc != kStatus_SPI_Success) {
         return rc;
     }
-    int i, timeout = (count + 127) / 128 + 1;
+    int i, timeout = count * 2;
     for (i = 0; i < timeout; ++i) {
         rc = SPI_DRV_MasterGetTransferStatus(0, NULL);
         if (rc == kStatus_SPI_Success) {
@@ -139,15 +149,6 @@ static void write_reg(uint8_t reg, uint8_t val)
     SPI_Transfer(tx, NULL, 2);
 }
 
-static void delay(uint32_t ms)
-{
-    for (; ms > 0; --ms) {
-        /* XXX This is really stupid */
-        volatile int i;
-        for (i = 0; i < 306; ++i);
-    }
-}
-
 int radio_init()
 {
     PORT_HAL_SetMuxMode(g_portBase[GPIOC_IDX], 4, kPortMuxAlt2);
@@ -162,14 +163,15 @@ int radio_init()
     GPIO_DRV_WritePinOutput(pinReset.pinName, 0);
     delay(5);
 
-    /* Configure DMA channel */
+    /* Configure SPI0 */
     SPI_DRV_MasterInit(0, &spiState);
     uint32_t calculatedBaudRate;
     SPI_DRV_MasterConfigureBus(0, &spiConfig, &calculatedBaudRate);
+    debug_printf("radio baud rate %u Hz\r\n", calculatedBaudRate);
 
     /* Use REG_SYNCVALUE1 to test that the radio is there */
 	write_reg(REG_SYNCVALUE1, 0x55);
-	uint32_t reg = read_reg(REG_SYNCVALUE1);
+	uint8_t reg = read_reg(REG_SYNCVALUE1);
 	if (reg != 0x55) {
 		return -1;
 	}
