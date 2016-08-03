@@ -81,7 +81,7 @@ typedef struct _disk_variable_struct
 /*****************************************************************************
  * Global Functions
  *****************************************************************************/
-void disk_init(uint8_t *mem);
+void disk_init();
 
 #endif
 

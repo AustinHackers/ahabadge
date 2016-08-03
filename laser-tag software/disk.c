@@ -39,6 +39,7 @@
 #include "usb_device_stack_interface.h"
 #include "disk.h"
 #include "adapter_cfg.h"
+#include "flash.h"
 #include "fsl_device_registers.h"
 #include "fsl_clock_manager.h"
 #include "fsl_debug_console.h"
@@ -71,6 +72,7 @@ usb_class_specific_callback_struct_t class_specific_callback;
 
 msc_config_struct_t g_msd_config;
 disk_struct_t g_disk;
+uint8_t sector_buffer[MSD_RECV_BUFFER_SIZE];
 
 /*****************************************************************************
  * Local Types - None
@@ -179,40 +181,29 @@ uint8_t USB_App_Class_Callback
     switch(event_type)
     {
     case USB_DEV_EVENT_DATA_RECEIVED:
-        /* Add User defined code -- if required*/
         lba_data_ptr = (lba_app_struct_t*) size;
-        USB_PRINTF("DATA_RECEIVED for lun %d\r\n", lba_data_ptr->lun);
+        flash_write((intptr_t)images[lba_data_ptr->lun] + lba_data_ptr->offset,
+                sector_buffer,
+                MSD_RECV_BUFFER_SIZE);
         break;
     case USB_DEV_EVENT_SEND_COMPLETE:
-        /* Add User defined code -- if required*/
         lba_data_ptr = (lba_app_struct_t*) size;
-        if (lba_data_ptr->size != 0)
-        {
-            /* read data from mass storage device to driver buffer */
-            if(data != NULL)
-            {
-                *data = g_disk.storage_disk + lba_data_ptr->offset;
-            }
-        }
         break;
     case USB_MSC_START_STOP_EJECT_MEDIA:
-        /*  Code to be added by user for starting, stopping or 
-         ejecting the disk drive. e.g. starting/stopping the motor in 
-         case of CD/DVD*/
         break;
     case USB_MSC_DEVICE_READ_REQUEST:
         lba_data_ptr = (lba_app_struct_t*) size;
 
         if(data != NULL)
         {
-            *data = g_disk.storage_disk + lba_data_ptr->offset;
+            *data = images[lba_data_ptr->lun] + lba_data_ptr->offset;
         }
         break;
     case USB_MSC_DEVICE_WRITE_REQUEST:
         lba_data_ptr = (lba_app_struct_t*) size;
         if(data != NULL)
         {
-            *data = g_disk.storage_disk + lba_data_ptr->offset;
+            *data = sector_buffer;
         }
         break;
     case USB_MSC_DEVICE_FORMAT_COMPLETE:
@@ -254,7 +245,7 @@ uint8_t USB_App_Class_Callback
  **                
  *****************************************************************************/
 
-void disk_init(uint8_t *mem)
+void disk_init()
 {
     OS_Mem_zero(&g_disk, sizeof(disk_struct_t));
 
@@ -271,7 +262,6 @@ void disk_init(uint8_t *mem)
     g_msd_config.desc_callback_ptr = &desc_callback;
 
     g_disk.speed = USB_SPEED_FULL;
-    g_disk.storage_disk = mem;
     /* Finally, Initialize the device and USB Stack layers*/
     USB_Class_MSC_Init(CONTROLLER_ID, &g_msd_config, &g_disk.app_handle);
 }

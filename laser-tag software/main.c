@@ -49,20 +49,6 @@
 #include "text.h"
 
 
-////////////////////////////
-// Graphics resources
-#include "aha.xbm"
-#include "dc24.xbm"
-#include "my_name_is.xbm"
-#include "threatbutt.xbm"
-
-static const uint8_t *images[] = {
-    aha_bits,
-    dc24_bits,
-    my_name_is_bits,
-    threatbutt_bits,
-};
-static const int image_count = sizeof images / sizeof *images;
 static int current_image = 0;
 static volatile int cue_next_image = 0;
 static uint32_t laser_pulse_length = 32;
@@ -577,6 +563,9 @@ int main (void)
     /* Blank LED just in case, saves power */
     led(0x00, 0x00, 0x00);
 
+    /* Initialize flash stuff */
+    flash_init();
+
     /* Init e-paper display */
     EPD_Init();
 
@@ -600,17 +589,14 @@ int main (void)
         led(0x22, 0x00, 0x22);
     }
 
-    /* Initialize flash stuff */
-    flash_init();
-
     /* No good can come of this */
-    disk_init(images[2]);
+    disk_init();
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {
         if (cue_next_image) {
             int old_image = current_image;
-            current_image = (current_image + 1) % image_count;
+            current_image = (current_image + 1) % IMAGE_COUNT;
             debug_printf("drawing %d -> %d\r\n", old_image, current_image);
             EPD_Draw(images[old_image], images[current_image]);
             cue_next_image = 0;
