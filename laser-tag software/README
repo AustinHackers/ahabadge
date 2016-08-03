@@ -15,7 +15,7 @@ Load instructions Kinetis Bootloader:
 2) Boot your badge into the ROM boot-loader by holding the direction pad UP while pressing reset.
 3) It should show up as a USB-HID device.
 4) Execute:
-   blhost -u -- flash-erase-all-unsecure
+   blhost -u -- flash-erase-region 0 0x00020000
    blhost -u -- write-memory 0 hello_world.bin
 5) Reset the badge or:
    blhost -u -- reset

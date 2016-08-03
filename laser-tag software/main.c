@@ -258,6 +258,25 @@ static uint8_t laser_on;
 static uint8_t seizure_on = 1;
 static uint32_t shift0_buf[3];
 static uint32_t blank_led;
+static uint8_t image0[232 * 128 / 8];
+static uint8_t image1[232 * 128 / 8];
+
+void read_sun_raster(uint8_t *in, uint8_t *out)
+{
+    int x, y;
+    int stride = (232 + 15) / 16 * 16;
+
+    in += 32; /* skip header, don't even check it */
+    for (y = 0; y < 128; ++y) {
+        for (x = 0; x < 232; x += 8) {
+            uint8_t v = in[(y * stride + x) / 8];
+            v = ((v >> 1) & 0x55) | ((v & 0x55) << 1);
+            v = ((v >> 2) & 0x33) | ((v & 0x33) << 2);
+            v = ((v >> 4) & 0x0F) | ((v & 0x0F) << 4);
+            out[(y * 232 + x) / 8] = v;
+        }
+    }
+}
 
 void led(uint8_t red, uint8_t green, uint8_t blue)
 {
@@ -570,7 +589,8 @@ int main (void)
     EPD_Init();
 
     /* Throw up first image */
-    int ret = EPD_Draw(NULL, images[current_image]);
+    read_sun_raster(images[current_image], image0);
+    int ret = EPD_Draw(NULL, image0);
     debug_printf("EPD_Draw returned %d\r\n", ret);
     if (-1 == ret) {
         led(0xff, 0x00, 0x00);
@@ -598,7 +618,9 @@ int main (void)
             int old_image = current_image;
             current_image = (current_image + 1) % IMAGE_COUNT;
             debug_printf("drawing %d -> %d\r\n", old_image, current_image);
-            EPD_Draw(images[old_image], images[current_image]);
+            read_sun_raster(images[old_image], image0);
+            read_sun_raster(images[current_image], image1);
+            EPD_Draw(image0, image1);
             cue_next_image = 0;
         }
 #ifndef DEBUG
