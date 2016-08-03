@@ -15,9 +15,16 @@ Load instructions Kinetis Bootloader:
 2) Boot your badge into the ROM boot-loader by holding the direction pad UP while pressing reset.
 3) It should show up as a USB-HID device.
 4) Execute:
-   blhost -u -- flash-erase-region 0 0x00020000
+   blhost -u -- flash-erase-region 0 0x20000
    blhost -u -- write-memory 0 hello_world.bin
-5) Reset the badge or:
+5) Load graphics if desired:
+   blhost -u -- flash-erase-region 0x20000 0x5000
+   blhost -u -- write-memory 0x20000 aha.im1
+   blhost -u -- write-memory 0x21000 dc24.im1
+   blhost -u -- write-memory 0x22000 my_name_is.im1
+   blhost -u -- write-memory 0x23000 longhorn_lockpicking.im1
+   blhost -u -- write-memory 0x24000 threatbutt.im1
+6) Reset the badge or:
    blhost -u -- reset
 
 Load instructions for openocd:
