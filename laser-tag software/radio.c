@@ -11,6 +11,7 @@ static const gpio_output_pin_user_config_t pinReset = {
 
 static const gpio_input_pin_user_config_t pinDIO0 = {
     .pinName = GPIO_MAKE_PIN(GPIOC_IDX, 9),
+    .config.interrupt = kPortIntRisingEdge, //kPortIntLogicOne,
 };
 
 static const gpio_output_pin_user_config_t pinDIO2 = {
@@ -105,6 +106,7 @@ static const struct {
 };
 
 static spi_master_state_t spiState;
+static volatile bool irq_pending;
 
 static void delay(uint32_t ms)
 {
@@ -121,15 +123,20 @@ static spi_status_t SPI_Transfer(const uint8_t *tx, uint8_t *rx, size_t count)
 
     rc = SPI_DRV_MasterTransfer(0, NULL, tx, rx, count);
     if (rc != kStatus_SPI_Success) {
+        debug_printf("SPI_Transfer failed badly! %d\r\n", rc);
         return rc;
     }
     int i, timeout = count * 2;
     for (i = 0; i < timeout; ++i) {
-        rc = SPI_DRV_MasterGetTransferStatus(0, NULL);
+        uint32_t count;
+        rc = SPI_DRV_MasterGetTransferStatus(0, &count);
         if (rc == kStatus_SPI_Success) {
             return rc;
         }
+        debug_printf("%d bytes transfered so far\r\n", count);
     }
+    debug_printf("SPI_Transfer timed out! %d\r\n", rc);
+    SPI_DRV_MasterAbortTransfer(0);
     return rc;
 }
 
@@ -149,15 +156,21 @@ static void write_reg(uint8_t reg, uint8_t val)
     SPI_Transfer(tx, NULL, 2);
 }
 
+void set_mode(uint8_t mode)
+{
+    uint8_t reg = read_reg(REG_OPMODE);
+
+    write_reg(REG_OPMODE, (reg & 0xE3) | mode);
+}
+
 int radio_init()
 {
     PORT_HAL_SetMuxMode(g_portBase[GPIOC_IDX], 4, kPortMuxAlt2);
     PORT_HAL_SetMuxMode(g_portBase[GPIOC_IDX], 5, kPortMuxAlt2);
     PORT_HAL_SetMuxMode(g_portBase[GPIOC_IDX], 6, kPortMuxAlt2);
     PORT_HAL_SetMuxMode(g_portBase[GPIOC_IDX], 7, kPortMuxAlt2);
-    PORT_HAL_SetMuxMode(g_portBase[GPIOC_IDX], 8, kPortMuxAsGpio);
-    //PORT_HAL_SetMuxMode(g_portBase[GPIOC_IDX], 10, kPortMuxAsGpio);
     GPIO_DRV_OutputPinInit(&pinReset);
+    GPIO_DRV_InputPinInit(&pinDIO0);
     //GPIO_DRV_OutputPinInit(&pinDIO2);
     delay(1);
     GPIO_DRV_WritePinOutput(pinReset.pinName, 0);
@@ -181,27 +194,126 @@ int radio_init()
     for (i = 0; i < sizeof config / sizeof *config; ++i) {
         write_reg(config[i].reg, config[i].val);
     }
+    debug_printf("setting radio into receive mode...\r\n");
+    set_mode(RF_OPMODE_RECEIVER);
+    debug_printf("waiting for radio to enter receive mode...\r\n");
+    while (true) {
+        uint8_t reg = read_reg(REG_IRQFLAGS1);
+
+        debug_printf("IRQ Flags 1 = 0x%02X\r\n", reg);
+        if (reg & RF_IRQFLAGS1_MODEREADY) {
+            break;
+        }
+    }
+    debug_printf("radio receiving...\r\n");
+    SPI_DRV_MasterDeinit(0);
 	return 0;
 }
 
-void set_mode(uint8_t mode)
+void radio_send_test()
 {
-    uint8_t reg = read_reg(REG_OPMODE);
+    static uint8_t pkt[] = {
+        0x03, // data length
+        0xff, 0xff, // to address
+        0xff, 0xff, // from address
+        'p', 'e', 'w', // data
+    };
+    int i;
 
-    write_reg(REG_OPMODE, (reg & 0xE3) | mode);
+    SPI_DRV_MasterInit(0, &spiState);
+    uint32_t calculatedBaudRate;
+    SPI_DRV_MasterConfigureBus(0, &spiConfig, &calculatedBaudRate);
+    debug_printf("Putting radio in sandby\r\n");
+    set_mode(RF_OPMODE_STANDBY);
+    debug_printf("Waiting for sandby\r\n");
+    while (true) {
+        uint8_t reg = read_reg(REG_IRQFLAGS1);
+
+        debug_printf("IRQ Flags 1 = 0x%02X\r\n", reg);
+        if (reg & RF_IRQFLAGS1_MODEREADY) {
+            break;
+        }
+    }
+    //while ((read_reg(REG_IRQFLAGS1) & RF_IRQFLAGS1_MODEREADY) == 0);
+    debug_printf("Radio standing by\r\n");
+    write_reg(REG_DIOMAPPING1, RF_DIOMAPPING1_DIO0_00);
+    debug_printf("Filling FIFO with %d bytes\r\n", sizeof pkt);
+    for (i = 0; i < sizeof pkt; ++i) {
+        write_reg(REG_FIFO, pkt[i]);
+    }
+    debug_printf("Transmitting packet!\r\n");
+    set_mode(RF_OPMODE_TRANSMITTER);
+    SPI_DRV_MasterDeinit(0);
 }
 
-void radio_test(void)
+void handle_rx() {
+    uint8_t pkt[66];
+    int i;
+
+    set_mode(RF_OPMODE_STANDBY);
+    debug_printf("RX: ");
+    for (i = 0; i < 66 && read_reg(REG_IRQFLAGS2) & RF_IRQFLAGS2_FIFONOTEMPTY;
+            ++i) {
+        pkt[i] = read_reg(REG_FIFO);
+        debug_printf("%02X ", pkt[i]);
+    }
+    debug_printf("\r\n");
+    if (read_reg(REG_IRQFLAGS2) & RF_IRQFLAGS2_PAYLOADREADY) {
+        debug_printf("RX interrupt still active!\r\n");
+        /* I guess try to clear it */
+        write_reg(REG_PACKETCONFIG2,
+                read_reg(REG_PACKETCONFIG2) | RF_PACKET2_RXRESTART);
+        /* Or empty manually? */
+        while (read_reg(REG_IRQFLAGS2) & RF_IRQFLAGS2_PAYLOADREADY) {
+            read_reg(REG_FIFO);
+        }
+    }
+    PORT_HAL_SetPinIntMode(g_portBase[GPIO_EXTRACT_PORT(pinDIO0.pinName)],
+            GPIO_EXTRACT_PIN(pinDIO0.pinName), kPortIntRisingEdge); // kPortIntLogicOne);
+    set_mode(RF_OPMODE_RECEIVER);
+}
+
+void handle_tx() {
+    debug_printf("Packet sent!\r\n");
+    set_mode(RF_OPMODE_STANDBY);
+    write_reg(REG_DIOMAPPING1, RF_DIOMAPPING1_DIO0_01);
+    PORT_HAL_SetPinIntMode(g_portBase[GPIO_EXTRACT_PORT(pinDIO0.pinName)],
+            GPIO_EXTRACT_PIN(pinDIO0.pinName), kPortIntRisingEdge); // kPortIntLogicOne);
+    set_mode(RF_OPMODE_RECEIVER);
+}
+
+void PORTC_IRQHandler(void)
 {
-    //write_reg(REG_DATAMODUL, RF_DATAMODUL_DATAMODE_CONTINUOUSNOBSYNC);
-    set_mode(RF_OPMODE_TRANSMITTER);
-    /*
-    bool a = false;
-    while (true) {
-        GPIO_DRV_WritePinOutput(pinDIO2.pinName, a);
-        a = !a;
-        delay(100);
-    }*/
+    /* silence! we'll get to you later */
+    PORT_HAL_SetPinIntMode(g_portBase[GPIO_EXTRACT_PORT(pinDIO0.pinName)],
+            GPIO_EXTRACT_PIN(pinDIO0.pinName), 0);
+    /* Clear interrupt flag.*/
+    PORT_HAL_ClearPortIntFlag(PORTC_BASE_PTR);
+    irq_pending = true;
+    //debug_printf("PORTC interrupt!\n");
+}
+
+void radio_idle() {
+    uint8_t reg;
+
+    if (!irq_pending) {
+        return;
+    }
+    debug_printf("Handling radio interrupt\r\n");
+    irq_pending = false;
+    SPI_DRV_MasterInit(0, &spiState);
+    uint32_t calculatedBaudRate;
+    SPI_DRV_MasterConfigureBus(0, &spiConfig, &calculatedBaudRate);
+    reg = read_reg(REG_IRQFLAGS2);
+    /* Do we have a packet? */
+    if (reg & RF_IRQFLAGS2_PAYLOADREADY) {
+        handle_rx();
+    }
+    /* Did we finish sending a packet? */
+    if (reg & RF_IRQFLAGS2_PACKETSENT) {
+        handle_tx();
+    }
+    SPI_DRV_MasterDeinit(0);
 }
 
 /* vim: set expandtab ts=4 sw=4: */

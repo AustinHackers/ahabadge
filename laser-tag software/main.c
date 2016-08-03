@@ -52,6 +52,7 @@
 static int current_image = 0;
 static volatile int cue_next_image = 0;
 static uint32_t laser_pulse_length = 32;
+static bool have_radio = false;
 
 
 ////////////////////////////
@@ -322,6 +323,8 @@ static void lptmr_call_back(void)
             foo = (foo + 1) % 3;
         }
         LPUART_DRV_SendData(1, txBuff, laser_pulse_length);
+        /* pew the radio! */
+        radio_send_test();
     }
 
     /* countdown to turn off LED */
@@ -606,6 +609,7 @@ int main (void)
     ret = radio_init();
     debug_printf("radio_init returned %d\r\n", ret);
     if (0 == ret) {
+        have_radio = true;
         led(0x22, 0x00, 0x22);
     }
 
@@ -614,6 +618,9 @@ int main (void)
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {
+        if (have_radio) {
+            radio_idle();
+        }
         if (cue_next_image) {
             int old_image = current_image;
             current_image = (current_image + 1) % IMAGE_COUNT;
