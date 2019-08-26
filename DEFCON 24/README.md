@@ -15,4 +15,4 @@ Instructions for building firmware and flashing your badge is in
 
 ## Getting Help
 
-Join #ahabadges on Freenode.
+Join #aha-badges on Freenode.
