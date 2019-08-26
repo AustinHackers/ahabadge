@@ -1,6 +1,0 @@
-* A better battery solution.
-  One option is to flip the display upside down, move the MCU up, then place
-  a through-hole 2xAAA holder where the MCU is now. A Li-ion cell holder
-  would also fit and charging circuitry could be added.
-* EPD is obsolete
-* 5-way switch is obsolete
