@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name "laser-tag-eagle-import")(type "KiCad")(uri "${KIPRJMOD}/laser-tag-eagle-import.kicad_sym")(options "")(descr ""))
+  (lib (name "JS5208")(type "KiCad")(uri "${KIPRJMOD}/JS5208.kicad_sym")(options "")(descr ""))
+)
