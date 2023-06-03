@@ -115,49 +115,77 @@ static const smc_power_mode_config_t g_idlePowerMode = {
 
 /* Switch GPIO pins */
 static const gpio_input_pin_user_config_t g_switch1 = {
+#ifdef BADGE_V1
     .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 1),
+#else
+    .pinName = GPIO_MAKE_PIN(GPIOC_IDX, 1),
+#endif
     .config.isPullEnable = true,
     .config.pullSelect = kPortPullUp,
     .config.interrupt = kPortIntEitherEdge,
 };
 
 static const gpio_input_pin_user_config_t g_switch2 = {
+#ifdef BADGE_V1
     .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 2),
+#else
+    .pinName = GPIO_MAKE_PIN(GPIOD_IDX, 6),
+#endif
     .config.isPullEnable = true,
     .config.pullSelect = kPortPullUp,
     .config.interrupt = kPortIntEitherEdge,
 };
 
 static const gpio_input_pin_user_config_t g_switchUp = {
+#ifdef BADGE_V1
     .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 4),
+#else
+    .pinName = GPIO_MAKE_PIN(GPIOC_IDX, 5),
+#endif
     .config.isPullEnable = true,
     .config.pullSelect = kPortPullUp,
     .config.interrupt = kPortIntEitherEdge,
 };
 
 static const gpio_input_pin_user_config_t g_switchDown = {
+#ifdef BADGE_V1
     .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 5),
+#else
+    .pinName = GPIO_MAKE_PIN(GPIOC_IDX, 6),
+#endif
     .config.isPullEnable = true,
     .config.pullSelect = kPortPullUp,
     .config.interrupt = kPortIntEitherEdge,
 };
 
 static const gpio_input_pin_user_config_t g_switchLeft = {
+#ifdef BADGE_V1
     .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 18),
+#else
+    .pinName = GPIO_MAKE_PIN(GPIOC_IDX, 3),
+#endif
     .config.isPullEnable = true,
     .config.pullSelect = kPortPullUp,
     .config.interrupt = kPortIntEitherEdge,
 };
 
 static const gpio_input_pin_user_config_t g_switchRight = {
+#ifdef BADGE_V1
     .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 13),
+#else
+    .pinName = GPIO_MAKE_PIN(GPIOC_IDX, 4),
+#endif
     .config.isPullEnable = true,
     .config.pullSelect = kPortPullUp,
     .config.interrupt = kPortIntEitherEdge,
 };
 
 static const gpio_input_pin_user_config_t g_switchSelect = {
+#ifdef BADGE_V1
     .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 12),
+#else
+    .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 4),
+#endif
     .config.isPullEnable = true,
     .config.pullSelect = kPortPullUp,
     .config.interrupt = kPortIntEitherEdge,
@@ -392,6 +420,7 @@ void PORTA_IRQHandler(void)
     /* Clear interrupt flag.*/
     PORT_HAL_ClearPortIntFlag(PORTA_BASE_PTR);
 
+#ifdef BADGE_V1
     if (GPIO_DRV_ReadPinInput(g_switch1.pinName)) {
         TPM_DRV_PwmStop(0, &param, 3);
         PIT_DRV_StopTimer(0, 0);
@@ -423,9 +452,50 @@ void PORTA_IRQHandler(void)
         txBuff[0] = 'T';
         seizure_on = 0;
     }
+#endif
     if (!GPIO_DRV_ReadPinInput(g_switchSelect.pinName)) {
         cue_next_image = 1;
     }
+}
+
+void PORTC_IRQHandler(void)
+{
+    /* Clear interrupt flag.*/
+    PORT_HAL_ClearPortIntFlag(PORTC_BASE_PTR);
+
+#ifdef BADGE_V2
+    if (GPIO_DRV_ReadPinInput(g_switch1.pinName)) {
+        TPM_DRV_PwmStop(0, &param, 3);
+        PIT_DRV_StopTimer(0, 0);
+    } else {
+        position = 0;
+        PIT_DRV_StartTimer(0, 0);
+    }
+
+    if (GPIO_DRV_ReadPinInput(g_switch2.pinName)) {
+        LPUART_DRV_AbortSendingData(1);
+        laser_on = 0;
+    } else {
+        laser_on = 1;
+    }
+
+    if (!GPIO_DRV_ReadPinInput(g_switchUp.pinName)) {
+        txBuff[0] = 'R';
+        seizure_on = 0;
+    }
+    if (!GPIO_DRV_ReadPinInput(g_switchLeft.pinName)) {
+        txBuff[0] = 'G';
+        seizure_on = 0;
+    }
+    if (!GPIO_DRV_ReadPinInput(g_switchRight.pinName)) {
+        txBuff[0] = 'B';
+        seizure_on = 0;
+    }
+    if (!GPIO_DRV_ReadPinInput(g_switchDown.pinName)) {
+        txBuff[0] = 'T';
+        seizure_on = 0;
+    }
+#endif
 }
 
 static void lpuartTxCallback(uint32_t instance, void *state)
@@ -603,11 +673,13 @@ int main (void)
     }
     blank_led = 30;
 
+#if 0
     ret = radio_init();
     debug_printf("radio_init returned %d\r\n", ret);
     if (0 == ret) {
         led(0x22, 0x00, 0x22);
     }
+#endif
 
     /* No good can come of this */
     disk_init();
