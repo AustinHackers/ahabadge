@@ -217,7 +217,11 @@ static const cmp_comparator_config_t g_cmpConf = {
     .dmaEnable = false,
     .risingIntEnable = false,
     .fallingIntEnable = false,
+#ifdef BADGE_V1
     .plusChnMux = kCmpInputChn5,
+#else
+    .plusChnMux = kCmpInputChn1,
+#endif
     .minusChnMux = kCmpInputChnDac,
     .triggerEnable = false,
 };
@@ -272,6 +276,12 @@ static flexio_shifter_config_t g_shifterConfig = {
     .sstop = kFlexioShifterStopBitDisable,
     .sstart = kFlexioShifterStartBitDisabledLoadDataOnEnable,
 };
+
+#ifdef BADGE_V1
+static const g_buzzer_tpm_ch = 3;
+#else
+static const g_buzzer_tmp_ch = 1;
+#endif
 
 
 ///////
@@ -405,13 +415,69 @@ void PIT_IRQHandler(void)
         param.uFrequencyHZ = notes[beeps[position]];
         position = (position + 1) % sizeof(beeps);
         if (param.uFrequencyHZ)
-            TPM_DRV_PwmStart(0, &param, 3);
+            TPM_DRV_PwmStart(0, &param, g_buzzer_tpm_ch);
         else
-            TPM_DRV_PwmStop(0, &param, 3);
+            TPM_DRV_PwmStop(0, &param, g_buzzer_tpm_ch);
     }
     if (PIT_HAL_IsIntPending(g_pitBase[0], 1))
     {
         PIT_HAL_ClearIntFlag(g_pitBase[0], 1);
+    }
+}
+
+static void GPIO_transition_handler(const int port)
+{
+    if (GPIO_EXTRACT_PORT(g_switch1.pinName) == port) {
+        if (GPIO_DRV_ReadPinInput(g_switch1.pinName)) {
+            TPM_DRV_PwmStop(0, &param, g_buzzer_tpm_ch);
+            PIT_DRV_StopTimer(0, 0);
+        } else {
+            position = 0;
+            PIT_DRV_StartTimer(0, 0);
+        }
+    }
+
+    if (GPIO_EXTRACT_PORT(g_switch2.pinName) == port) {
+        if (GPIO_DRV_ReadPinInput(g_switch2.pinName)) {
+            LPUART_DRV_AbortSendingData(1);
+            laser_on = 0;
+        } else {
+            laser_on = 1;
+        }
+    }
+
+    if (GPIO_EXTRACT_PORT(g_switchUp.pinName) == port) {
+        if (!GPIO_DRV_ReadPinInput(g_switchUp.pinName)) {
+            txBuff[0] = 'R';
+            seizure_on = 0;
+        }
+    }
+
+    if (GPIO_EXTRACT_PORT(g_switchLeft.pinName) == port) {
+        if (!GPIO_DRV_ReadPinInput(g_switchLeft.pinName)) {
+            txBuff[0] = 'G';
+            seizure_on = 0;
+        }
+    }
+
+    if (GPIO_EXTRACT_PORT(g_switchRight.pinName) == port) {
+        if (!GPIO_DRV_ReadPinInput(g_switchRight.pinName)) {
+            txBuff[0] = 'B';
+            seizure_on = 0;
+        }
+    }
+
+    if (GPIO_EXTRACT_PORT(g_switchDown.pinName) == port) {
+        if (!GPIO_DRV_ReadPinInput(g_switchDown.pinName)) {
+            txBuff[0] = 'T';
+            seizure_on = 0;
+        }
+    }
+
+    if (GPIO_EXTRACT_PORT(g_switchSelect.pinName) == port) {
+        if (!GPIO_DRV_ReadPinInput(g_switchSelect.pinName)) {
+            cue_next_image = 1;
+        }
     }
 }
 
@@ -420,42 +486,7 @@ void PORTA_IRQHandler(void)
     /* Clear interrupt flag.*/
     PORT_HAL_ClearPortIntFlag(PORTA_BASE_PTR);
 
-#ifdef BADGE_V1
-    if (GPIO_DRV_ReadPinInput(g_switch1.pinName)) {
-        TPM_DRV_PwmStop(0, &param, 3);
-        PIT_DRV_StopTimer(0, 0);
-    } else {
-        position = 0;
-        PIT_DRV_StartTimer(0, 0);
-    }
-
-    if (GPIO_DRV_ReadPinInput(g_switch2.pinName)) {
-        LPUART_DRV_AbortSendingData(1);
-        laser_on = 0;
-    } else {
-        laser_on = 1;
-    }
-
-    if (!GPIO_DRV_ReadPinInput(g_switchUp.pinName)) {
-        txBuff[0] = 'R';
-        seizure_on = 0;
-    }
-    if (!GPIO_DRV_ReadPinInput(g_switchLeft.pinName)) {
-        txBuff[0] = 'G';
-        seizure_on = 0;
-    }
-    if (!GPIO_DRV_ReadPinInput(g_switchRight.pinName)) {
-        txBuff[0] = 'B';
-        seizure_on = 0;
-    }
-    if (!GPIO_DRV_ReadPinInput(g_switchDown.pinName)) {
-        txBuff[0] = 'T';
-        seizure_on = 0;
-    }
-#endif
-    if (!GPIO_DRV_ReadPinInput(g_switchSelect.pinName)) {
-        cue_next_image = 1;
-    }
+    GPIO_transition_handler(GPIOA_IDX);
 }
 
 void PORTC_IRQHandler(void)
@@ -463,39 +494,7 @@ void PORTC_IRQHandler(void)
     /* Clear interrupt flag.*/
     PORT_HAL_ClearPortIntFlag(PORTC_BASE_PTR);
 
-#ifdef BADGE_V2
-    if (GPIO_DRV_ReadPinInput(g_switch1.pinName)) {
-        TPM_DRV_PwmStop(0, &param, 3);
-        PIT_DRV_StopTimer(0, 0);
-    } else {
-        position = 0;
-        PIT_DRV_StartTimer(0, 0);
-    }
-
-    if (GPIO_DRV_ReadPinInput(g_switch2.pinName)) {
-        LPUART_DRV_AbortSendingData(1);
-        laser_on = 0;
-    } else {
-        laser_on = 1;
-    }
-
-    if (!GPIO_DRV_ReadPinInput(g_switchUp.pinName)) {
-        txBuff[0] = 'R';
-        seizure_on = 0;
-    }
-    if (!GPIO_DRV_ReadPinInput(g_switchLeft.pinName)) {
-        txBuff[0] = 'G';
-        seizure_on = 0;
-    }
-    if (!GPIO_DRV_ReadPinInput(g_switchRight.pinName)) {
-        txBuff[0] = 'B';
-        seizure_on = 0;
-    }
-    if (!GPIO_DRV_ReadPinInput(g_switchDown.pinName)) {
-        txBuff[0] = 'T';
-        seizure_on = 0;
-    }
-#endif
+    GPIO_transition_handler(GPIOC_IDX);
 }
 
 static void lpuartTxCallback(uint32_t instance, void *state)
@@ -563,10 +562,12 @@ int main (void)
 {
     /* enable clock for PORTs */
     CLOCK_SYS_EnablePortClock(PORTA_IDX);
-    CLOCK_SYS_EnablePortClock(PORTB_IDX);
     CLOCK_SYS_EnablePortClock(PORTC_IDX);
     CLOCK_SYS_EnablePortClock(PORTD_IDX);
+#ifdef BADGE_V1
+    CLOCK_SYS_EnablePortClock(PORTB_IDX);
     CLOCK_SYS_EnablePortClock(PORTE_IDX);
+#endif
 
     /* Set allowed power mode, allow all. */
     SMC_HAL_SetProtection(SMC, kAllowPowerModeAll);
@@ -578,9 +579,15 @@ int main (void)
     OSA_Init();
 
     /* Setup Debug console on LPUART0 on PTB17 */
+#ifdef BADGE_V1
     PORT_HAL_SetMuxMode(PORTB, 17, kPortMuxAlt3);
     CLOCK_SYS_SetLpuartSrc(0, kClockLpuartSrcIrc48M);
     DbgConsole_Init(0, 9600, kDebugConsoleLPUART);
+#else
+    PORT_HAL_SetMuxMode(PORTD, 5, kPortMuxAlt3);
+    CLOCK_SYS_SetLpuartSrc(0, kClockLpuartSrcIrc48M);
+    DbgConsole_Init(2, 9600, kDebugConsoleUART);
+#endif
 
     /* Initialize LPTMR */
     lptmr_state_t lptmrState;
@@ -615,12 +622,21 @@ int main (void)
     LPTMR_DRV_Start(LPTMR0_IDX);
 
     /* Setup LPUART1 */
+#ifdef BADGE_V1
     LPUART_DRV_Init(1, &g_lpuartState, &g_lpuartConfig);
     LPUART_DRV_InstallRxCallback(1, lpuartRxCallback, rxBuff, NULL, true);
     LPUART_DRV_InstallTxCallback(1, lpuartTxCallback, NULL, NULL);
     LPUART_BWR_CTRL_TXINV(g_lpuartBase[1], 1);
     PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 0, kPortMuxAlt3);
     PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 1, kPortMuxAlt3);
+#else
+    LPUART_DRV_Init(0, &g_lpuartState, &g_lpuartConfig);
+    LPUART_DRV_InstallRxCallback(0, lpuartRxCallback, rxBuff, NULL, true);
+    LPUART_DRV_InstallTxCallback(0, lpuartTxCallback, NULL, NULL);
+    LPUART_BWR_CTRL_TXINV(g_lpuartBase[0], 1);
+    PORT_HAL_SetMuxMode(g_portBase[GPIOA_IDX], 1, kPortMuxAlt2);
+    PORT_HAL_SetMuxMode(g_portBase[GPIOA_IDX], 2, kPortMuxAlt2);
+#endif
 
     /* Setup FlexIO for the WS2812B */
     FLEXIO_Type *fiobase = g_flexioBase[0];
@@ -628,7 +644,11 @@ int main (void)
     FLEXIO_DRV_Init(0, &g_flexioConfig);
     FLEXIO_HAL_ConfigureTimer(fiobase, 0, &g_timerConfig);
     FLEXIO_HAL_ConfigureShifter(fiobase, 0, &g_shifterConfig);
+#ifdef BADGE_V1
     PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 20, kPortMuxAlt6);
+#else
+    PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 4, kPortMuxAlt6);
+#endif
     FLEXIO_DRV_Start(0);
 
     FLEXIO_HAL_SetShifterStatusDmaCmd(fiobase, 1, true);
@@ -636,8 +656,12 @@ int main (void)
             &g_fioChan);
     DMA_DRV_RegisterCallback(&g_fioChan, fioDmaCallback, NULL);
 
-    /* Connect buzzer to TPM0_CH3 */
+    /* Config buzzer on TPM0 */
+#ifdef BADGE_V1
     PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 30, kPortMuxAlt3);
+#else
+    PORT_HAL_SetMuxMode(g_portBase[GPIOC_IDX], 2, kPortMuxAlt4);
+#endif
     tpm_general_config_t tmpConfig = {
         .isDBGMode = false,
         .isGlobalTimeBase = false,
