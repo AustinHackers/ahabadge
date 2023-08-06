@@ -48,9 +48,9 @@
 #define SD_CARD_APP                         (0)
 
 /* Length of Each Logical Address Block */
-#define LENGTH_OF_EACH_LAB                  (512)
+#define LENGTH_OF_EACH_LAB                  (1024) // 1k to align with flash
 /* total number of logical blocks present */
-#define TOTAL_LOGICAL_ADDRESS_BLOCKS_NORMAL (8)
+#define TOTAL_LOGICAL_ADDRESS_BLOCKS_NORMAL (6) // 6k to fit board v2 images
 /* Net Disk Size */
 #define DISK_SIZE_NORMAL (TOTAL_LOGICAL_ADDRESS_BLOCKS_NORMAL * LENGTH_OF_EACH_LAB)
 
@@ -58,9 +58,6 @@
 
 #define SUPPORT_DISK_LOCKING_MECHANISM      (0) /*1: TRUE; 0:FALSE*/
 
-#define MSD_RECV_BUFFER_NUM                 (1)
-#define MSD_RECV_BUFFER_SIZE                (512)
-#define MSD_SEND_BUFFER_SIZE                (512)
 /*****************************************************************************
  * Global variables
  *****************************************************************************/
@@ -71,11 +68,8 @@
 typedef struct _disk_variable_struct
 {
     msd_handle_t app_handle;
-    uint32_t start_app;
     uint16_t speed;
-    uint8_t *storage_disk;
-    uint8_t disk_lock;
-    uint8_t read_write_error;
+    bool writing;
 } disk_struct_t;
 
 /*****************************************************************************

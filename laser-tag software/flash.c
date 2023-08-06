@@ -35,48 +35,39 @@ int flash_init()
         sizeof ram_fn,
         (intptr_t)FlashCommandSequence);
 
-    /* Our images are in the 2nd block and take up 4096 bytes */
+    /* Our images are in the 2nd block and take up 6k bytes */
     int i;
     for (i = 0; i < IMAGE_COUNT; ++i) {
         images[i] = (uint8_t *)flash_config.PFlashBase
-            + FSL_FEATURE_FLASH_PFLASH_BLOCK_SIZE + i * 4096;
+            + FSL_FEATURE_FLASH_PFLASH_BLOCK_SIZE + i * 1024 * 6;
     }
     return 0;
 }
 
 #define SECTOR_SIZE (FSL_FEATURE_FLASH_PFLASH_BLOCK_SECTOR_SIZE)
-#define MIN(a, b)   ((a) < (b) ? (a) : (b))
-uint8_t RMW_buffer[SECTOR_SIZE];
 
-int flash_write(uint32_t addr, uint8_t *data, uint32_t len)
+int flash_write_sector(uint32_t addr, uint8_t *data)
 {
-    uint32_t sector;
-    uint32_t end = addr + len;
-
-    for (sector = addr / SECTOR_SIZE * SECTOR_SIZE;
-            sector < end;
-            data += SECTOR_SIZE - (addr - sector),
-                len -= SECTOR_SIZE - (addr - sector),
-                sector += SECTOR_SIZE,
-                addr = sector) {
-        uint32_t rc;
-
-        memcpy(RMW_buffer, (void *)sector, SECTOR_SIZE);
-        memcpy(&RMW_buffer[addr - sector],
-                data,
-                MIN(SECTOR_SIZE - (addr - sector), len));
-        rc = FlashEraseSector(&flash_config, sector, SECTOR_SIZE,
-                pFlashCommandSequence);
-        if (FTFx_OK != rc) {
-            debug_printf("Error erasing sector 0x%08x: %u\r\n", sector, rc);
-            return -1;
-        }
-        rc = FlashProgram(&flash_config, sector, SECTOR_SIZE, RMW_buffer,
-                pFlashCommandSequence);
-        if (FTFx_OK != rc) {
-            debug_printf("Error programming sector 0x%08x: %u\r\n", sector, rc);
-            return -1;
-        }
+    debug_printf("flash_write_sector to 0x%08x\r\n", addr);
+    if (addr % SECTOR_SIZE) {
+        debug_printf("bad addr\r\n");
+        return -1;
+    }
+    if (memcmp((void *)addr, data, SECTOR_SIZE) == 0) {
+        debug_printf("No change\r\n");
+        return 0;
+    }
+    uint32_t rc = FlashEraseSector(&flash_config, addr, SECTOR_SIZE,
+        pFlashCommandSequence);
+    if (FTFx_OK != rc) {
+        debug_printf("Error erasing sector 0x%08x: %u\r\n", addr, rc);
+        return -1;
+    }
+    rc = FlashProgram(&flash_config, addr, SECTOR_SIZE, data,
+        pFlashCommandSequence);
+    if (FTFx_OK != rc) {
+        debug_printf("Error programming sector 0x%08x: %u\r\n", addr, rc);
+        return -1;
     }
     return 0;
 }

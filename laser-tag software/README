@@ -7,7 +7,8 @@ Build instructions for Ubuntu:
 2) cd ../KSDK_1.2.0/usb/usb_core/device/build/armgcc/usbd_sdk_frdmkl27z_bm
    ./build_all.sh
    cd -
-3) ./build_debug.sh -or- ./build_release.sh
+3) ./build_debug.sh -DBADGE_V=2 -or- ./build_release.sh -DBADGE_V=2
+   or -DBADGE_V=1 for V1 hardware
 
 Load instructions Kinetis Bootloader:
 0) Download the Kinetis Bootloader[0]. (registration required)
@@ -18,12 +19,12 @@ Load instructions Kinetis Bootloader:
    blhost -u -- flash-erase-region 0 0x20000
    blhost -u -- write-memory 0 hello_world.bin
 5) Load graphics if desired:
-   blhost -u -- flash-erase-region 0x20000 0x5000
+   blhost -u -- flash-erase-region 0x20000 0x7800
    blhost -u -- write-memory 0x20000 aha.im1
-   blhost -u -- write-memory 0x21000 dc24.im1
-   blhost -u -- write-memory 0x22000 my_name_is.im1
-   blhost -u -- write-memory 0x23000 longhorn_lockpicking.im1
-   blhost -u -- write-memory 0x24000 threatbutt.im1
+   blhost -u -- write-memory 0x21800 dc24.im1
+   blhost -u -- write-memory 0x23000 my_name_is.im1
+   blhost -u -- write-memory 0x24800 longhorn_lockpicking.im1
+   blhost -u -- write-memory 0x26000 threatbutt.im1
 6) Reset the badge or:
    blhost -u -- reset
 
@@ -38,18 +39,10 @@ Load instructions for openocd:
    gdb) monitor reset
 
 Creating graphics:
-0) Create a 232 x 128 black and white (not greyscale) image
+0) V1: Create a 232 x 128 black and white (not greyscale) image
+   V2: Create a 264 x 176 black and white (not greyscale) image
 1) Use gimp to convert it to "SUN Rasterfile image" with the extension .im1
 2) Choose Standard Data Formatting, not RunLength Encoded
-3) Check that the image file size is 3872 bytes
-
-Load images with blhost:
-   blhost -u -- flash-erase-region 0x20000 0x5000
-   blhost -u -- write-memory 0x20000 image0.im1
-   blhost -u -- write-memory 0x21000 image1.im1
-   blhost -u -- write-memory 0x22000 image2.im1
-   blhost -u -- write-memory 0x23000 image3.im1
-   blhost -u -- write-memory 0x24000 image4.im1
 
 Load images with dd:
 0) Plug the badge in to your computer's USB port
@@ -62,4 +55,4 @@ Load images with dd:
    dd if=image3.im1 of=/dev/sde
    dd if=image4.im1 of=/dev/sdf
 
-[0] http://www.nxp.com/products/microcontrollers-and-processors/arm-processors/kinetis-cortex-m/kinetis-symbols-footprints-and-models/kinetis-bootloader:KBOOT
+[0] https://www.nxp.com/kboot

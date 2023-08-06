@@ -1,4 +1,5 @@
 #include "epaper.h"
+#include "lptmr.h"
 #include "fsl_debug_console.h"
 #include "fsl_gpio_driver.h"
 #include "fsl_spi_master_driver.h"
@@ -10,43 +11,66 @@ typedef enum {       /* Image pixel -> Display pixel */
     EPD_normal       /* B -> B, W -> W (New Image) */
 } EPD_stage;
 
-static const gpio_output_pin_user_config_t pinDischarge = {
-    .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 19),
+#ifdef BADGE_V2
+static const gpio_output_pin_user_config_t pinBorder = {
+    .pinName = GPIO_MAKE_PIN(GPIOD_IDX, 7),
     .config.outputLogic = 0,
 };
 
+static const gpio_output_pin_user_config_t pinReset = {
+    .pinName = GPIO_MAKE_PIN(GPIOA_IDX, 1),
+    .config.outputLogic = 0,
+};
+#endif
+
 static const gpio_output_pin_user_config_t pinCS = {
+#ifdef BADGE_V1
     .pinName = GPIO_MAKE_PIN(GPIOD_IDX, 4),
+#else
+    .pinName = GPIO_MAKE_PIN(GPIOD_IDX, 0),
+#endif
     .config.outputLogic = 1,
 };
 
 static const spi_master_user_config_t spiConfig = {
-    .bitsPerSec = 20000000, /* max is 20 MHz */
+    .bitsPerSec = 20000000, /* max G2 COG supports is 20 MHz */
     .polarity = kSpiClockPolarity_ActiveHigh,
     .phase = kSpiClockPhase_FirstEdge,
     .direction = kSpiMsbFirst,
     .bitCount = kSpi8BitMode,
 };
 
+static const int LINES_PER_DISPLAY = EPD_H;
+static const int BYTES_PER_SCAN = EPD_H / 4 / 2;
+static const int BYTES_PER_LINE = EPD_W / 8;
+
+#ifdef BADGE_V1
 static const uint8_t channel_select[] = {
     0x00, 0x00, 0x1f, 0xe0, 0x00, 0x00, 0x00, 0xff
 };
-
-static const int LINES_PER_DISPLAY = 128;
-static const int BYTES_PER_SCAN = 128 / 4 / 2;
-static const int BYTES_PER_LINE = 232 / 8;
+static const int SPI_UNIT = 1;
+#else
+static const uint8_t channel_select[] = {
+    0x00, 0x00, 0x00, 0x7f, 0xff, 0xfe, 0x00, 0x00
+};
+static const int SPI_UNIT = 0;
+#endif
 
 static spi_master_state_t spiState;
 
 void EPD_Init()
 {
-    PORT_HAL_SetMuxMode(g_portBase[GPIOA_IDX], 19, kPortMuxAsGpio);
-    PORT_HAL_SetMuxMode(g_portBase[GPIOA_IDX], 20, kPortMuxAsGpio);
-    PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 4, kPortMuxAsGpio);
+#ifdef BADGE_V1
     PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 5, kPortMuxAlt2);
     PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 6, kPortMuxAlt2);
     PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 7, kPortMuxAlt2);
-    GPIO_DRV_OutputPinInit(&pinDischarge);
+#else
+    PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 1, kPortMuxAlt2);
+    PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 2, kPortMuxAlt2);
+    PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 3, kPortMuxAlt2);
+    GPIO_DRV_OutputPinInit(&pinBorder);
+    GPIO_DRV_OutputPinInit(&pinReset);
+#endif
     GPIO_DRV_OutputPinInit(&pinCS);
 }
 
@@ -54,13 +78,13 @@ static spi_status_t SPI_Transfer(const uint8_t *tx, uint8_t *rx, size_t count)
 {
     spi_status_t rc;
 
-    rc = SPI_DRV_MasterTransfer(1, NULL, tx, rx, count);
+    rc = SPI_DRV_MasterTransfer(SPI_UNIT, NULL, tx, rx, count);
     if (rc != kStatus_SPI_Success) {
         return rc;
     }
     int i, timeout = count * 4;
     for (i = 0; i < timeout; ++i) {
-        rc = SPI_DRV_MasterGetTransferStatus(1, NULL);
+        rc = SPI_DRV_MasterGetTransferStatus(SPI_UNIT, NULL);
         if (rc == kStatus_SPI_Success) {
             return rc;
         }
@@ -114,11 +138,7 @@ static uint8_t EPD_ReadCogID()
 
 static void EPD_Delay(uint32_t ms)
 {
-    for (; ms > 0; --ms) {
-        /* XXX This is really stupid */
-        volatile int i;
-        for (i = 0; i < 306 * 12; ++i);
-    }
+    delay_ms(ms);
 }
 
 static void EPD_line(int line, const uint8_t *data, uint8_t fixed_value,
@@ -127,6 +147,7 @@ static void EPD_line(int line, const uint8_t *data, uint8_t fixed_value,
     size_t len = BYTES_PER_SCAN * 2 + BYTES_PER_LINE * 2 + 1;
     uint8_t buf[len], *p = buf;
     int i;
+#ifdef BADGE_V1
     for (i = 0; i < BYTES_PER_SCAN; ++i) {
         if (0 != (line & 0x01) && line / 8 == i) {
             *p++ = 0xc0 >> (line & 0x06);
@@ -178,6 +199,75 @@ static void EPD_line(int line, const uint8_t *data, uint8_t fixed_value,
     } else {
         *p++ = 0x00;
     }
+#else
+    /* zero byte */
+    *p++ = 0;
+
+    /* "Odd" pixels counting down */
+    for (i = BYTES_PER_LINE; i > 0; --i) {
+        if (data) {
+            /* i is off-by-one to match datasheet's 1-based counting */
+            uint8_t pixels = data[i - 1];
+            /* Take even pixels (1-based counting again) */
+            pixels = pixels & 0x55;
+            switch (stage) {
+            case EPD_compensate:
+                pixels = 0xaa | (pixels ^ 0x55);
+                break;
+            case EPD_white:
+                pixels = 0x55 + (pixels ^ 0x55);
+                break;
+            case EPD_inverse:
+                pixels = 0x55 | ((pixels ^ 0x55) << 1);
+                break;
+            case EPD_normal:
+                pixels = 0xaa | pixels;
+                break;
+            }
+            *p++ = pixels;
+        } else {
+            *p++ = fixed_value;
+        }
+    }
+    
+    /* All scanlines counting down */
+    for (i = BYTES_PER_SCAN * 2; i > 0; --i) {
+        if (line / 4 == i - 1) {
+            *p++ = 0x03 << ((line & 0x03) * 2);
+        } else {
+            *p++ = 0x00;
+        }
+    }
+
+    /* "Even" pixels counting up */
+    for (i = 1; i <= BYTES_PER_LINE; ++i) {
+        if (data) {
+            /* i is off-by-one to match datasheet's 1-based counting */
+            uint8_t pixels = data[i - 1];
+            /* Take odd pixels in reverse order (yes odd) */
+            pixels = (pixels & 0xaa) >> 1;
+            pixels = ((pixels & 0xcc) >> 2) | ((pixels & 0x33) << 2);
+            pixels = ((pixels & 0xf0) >> 4) | ((pixels & 0x0f) << 4);
+            switch (stage) {
+            case EPD_compensate:
+                pixels = 0xaa | (pixels ^ 0x55);
+                break;
+            case EPD_white:
+                pixels = 0x55 + (pixels ^ 0x55);
+                break;
+            case EPD_inverse:
+                pixels = 0x55 | ((pixels ^ 0x55) << 1);
+                break;
+            case EPD_normal:
+                pixels = 0xaa | pixels;
+                break;
+            }
+            *p++ = pixels;
+        } else {
+            *p++ = fixed_value;
+        }
+    }
+#endif
 
     EPD_WriteCommandBuffer(0x0a, buf, len);
 
@@ -202,11 +292,11 @@ static void EPD_frame(const uint8_t *data, uint8_t fixed_value, EPD_stage stage)
 static void EPD_frame_repeat(const uint8_t *data, uint8_t fixed_value,
         EPD_stage stage)
 {
-    /* TODO this needs to repeat for about 630ms */
-    int i;
-    for (i = 0; i < 6; ++i) {
+    /* this needs to repeat for about 630ms */
+    uint32_t until = get_ms() + 630;
+    do {
         EPD_frame(data, fixed_value, stage);
-    }
+    } while (get_ms() < until);
 }
 
 int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
@@ -214,10 +304,23 @@ int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
     int rc = 0;
 
     /* Configure SPI1 */
-    SPI_DRV_MasterInit(1, &spiState);
+    SPI_DRV_MasterInit(SPI_UNIT, &spiState);
     uint32_t calculatedBaudRate;
-    SPI_DRV_MasterConfigureBus(1, &spiConfig, &calculatedBaudRate);
+    SPI_DRV_MasterConfigureBus(SPI_UNIT, &spiConfig, &calculatedBaudRate);
     debug_printf("EPD baud rate %u Hz\r\n", calculatedBaudRate);
+
+#ifdef BADGE_V2
+    /* Turn off BORDER_CONTROL */
+    GPIO_DRV_WritePinOutput(pinBorder.pinName, 1);
+
+    /* Reset */
+    GPIO_DRV_WritePinOutput(pinReset.pinName, 1);
+    EPD_Delay(5);
+    GPIO_DRV_WritePinOutput(pinReset.pinName, 0);
+    EPD_Delay(5);
+    GPIO_DRV_WritePinOutput(pinReset.pinName, 1);
+    EPD_Delay(5);
+#endif
 
     /* read the COG ID */
     uint8_t id = EPD_ReadCogID();
@@ -265,11 +368,11 @@ int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
     for (i = 0; i < 4; ++i) {
         /* charge pump positive voltage on - VGH/VDL on */
         EPD_WriteCommandByte(0x05, 0x01);
-        EPD_Delay(240);
+        EPD_Delay(150);
 
         /* charge pump negative voltage on - VGL/VDL on */
         EPD_WriteCommandByte(0x05, 0x03);
-        EPD_Delay(40);
+        EPD_Delay(90);
 
         /* charge pump Vcom on - Vcom driver on */
         EPD_WriteCommandByte(0x05, 0x0f);
@@ -287,7 +390,7 @@ int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
     }
 
     /* output enable to disable */
-    EPD_WriteCommandByte(0x02, 0x40);
+    EPD_WriteCommandByte(0x02, 0x06);
 
     /* Draw something */
     /* TODO I'd like to call a callback at this point with a "graphics context"
@@ -298,10 +401,29 @@ int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
      * pushing bits to the display.
      */
     EPD_frame_repeat(old_image, 0xff, EPD_compensate);
-    EPD_frame_repeat(old_image, 0xff, EPD_white);
-    EPD_frame_repeat(new_image, 0xaa, EPD_inverse);
-    EPD_frame_repeat(new_image, 0xaa, EPD_normal);
+    EPD_frame_repeat(old_image, 0xaa, EPD_white);
+    EPD_frame_repeat(new_image, 0, EPD_inverse);
+    EPD_frame_repeat(new_image, 0, EPD_normal);
 
+    /* Write a "nothing" frame */
+    EPD_frame(NULL, 0x00, EPD_normal);
+
+    /* Write a dummy line */
+    EPD_line(-1, NULL, 0x00, EPD_normal);
+    EPD_Delay(25);
+
+#ifdef BADGE_V2
+    /* Turn on BORDER_CONTROL */
+    GPIO_DRV_WritePinOutput(pinBorder.pinName, 0);
+    EPD_Delay(100);
+
+    /* Turn off BORDER_CONTROL */
+    GPIO_DRV_WritePinOutput(pinBorder.pinName, 1);
+#else
+    EPD_Delay(75);
+#endif
+
+out:
     /* ??? */
     EPD_WriteCommandByte(0x0b, 0x00);
 
@@ -313,7 +435,7 @@ int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
 
     /* power off charge pump neg voltage */
     EPD_WriteCommandByte(0x05, 0x01);
-    EPD_Delay(120);
+    EPD_Delay(300);
 
     /* discharge internal */
     EPD_WriteCommandByte(0x04, 0x80);
@@ -325,13 +447,15 @@ int EPD_Draw(const uint8_t *old_image, const uint8_t *new_image)
     EPD_WriteCommandByte(0x07, 0x01);
     EPD_Delay(50);
 
-    /* discharge external */
-    GPIO_DRV_WritePinOutput(pinDischarge.pinName, 1);
-    EPD_Delay(150);
-    GPIO_DRV_WritePinOutput(pinDischarge.pinName, 0);
+#ifdef BADGE_V2
+    /* Turn on BORDER_CONTROL */
+    GPIO_DRV_WritePinOutput(pinBorder.pinName, 0);
 
-out:
-    SPI_DRV_MasterDeinit(1);
+    /* TODO should RESET go low to save power? */
+    GPIO_DRV_WritePinOutput(pinReset.pinName, 0);
+#endif
+
+    SPI_DRV_MasterDeinit(SPI_UNIT);
     return rc;
 }
 

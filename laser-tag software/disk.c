@@ -66,13 +66,10 @@
  ****************************************************************************/
 /* Add all the variables needed for disk.c to this structure */
 extern usb_desc_request_notify_struct_t desc_callback;
-usb_application_callback_struct_t msc_application_callback;
-usb_vendor_req_callback_struct_t vend_req_callback;
-usb_class_specific_callback_struct_t class_specific_callback;
 
 msc_config_struct_t g_msd_config;
 disk_struct_t g_disk;
-uint8_t sector_buffer[MSD_RECV_BUFFER_SIZE];
+uint8_t sector_buffer[LENGTH_OF_EACH_LAB];
 
 /*****************************************************************************
  * Local Types - None
@@ -115,7 +112,6 @@ void USB_App_Device_Callback(uint8_t event_type, void* val, void* arg)
 {
     if (event_type == USB_DEV_EVENT_BUS_RESET)
     {
-        g_disk.start_app = FALSE;
         if (USB_OK == USB_Class_MSC_Get_Speed(g_disk.app_handle, &g_disk.speed))
         {
             USB_Desc_Set_Speed(g_disk.app_handle, g_disk.speed);
@@ -123,7 +119,6 @@ void USB_App_Device_Callback(uint8_t event_type, void* val, void* arg)
     }
     else if (event_type == USB_DEV_EVENT_ENUM_COMPLETE)
     {
-        g_disk.start_app = TRUE;
     }
     else if (event_type == USB_DEV_EVENT_ERROR)
     {
@@ -140,7 +135,7 @@ void USB_App_Device_Callback(uint8_t event_type, void* val, void* arg)
     {
         if (NULL != val)
         {
-            *((uint32_t *)val) = (uint32_t)DISK_SIZE_NORMAL;
+            *((uint32_t *)val) = (uint32_t)sizeof(sector_buffer);
         }
     }
 
@@ -169,22 +164,19 @@ uint8_t USB_App_Class_Callback
 ) 
 {
     lba_app_struct_t* lba_data_ptr;
-    uint8_t * prevent_removal_ptr;
     device_lba_info_struct_t* device_lba_info_ptr;
     uint8_t error = USB_OK;
-
-    if (g_disk.read_write_error)
-    {
-        return USBERR_ERROR;
-    }
 
     switch(event_type)
     {
     case USB_DEV_EVENT_DATA_RECEIVED:
         lba_data_ptr = (lba_app_struct_t*) size;
-        flash_write((intptr_t)images[lba_data_ptr->lun] + lba_data_ptr->offset,
-                sector_buffer,
-                MSD_RECV_BUFFER_SIZE);
+        debug_printf("USB_DEV_EVENT_DATA_RECEIVED lun %u size %u offset 0x%08x\r\n",
+                lba_data_ptr->lun, lba_data_ptr->size, lba_data_ptr->offset);
+        flash_write_sector((intptr_t)images[lba_data_ptr->lun] + lba_data_ptr->offset,
+                sector_buffer);
+        debug_printf("finished flash write\r\n");
+        g_disk.writing = FALSE;
         break;
     case USB_DEV_EVENT_SEND_COMPLETE:
         lba_data_ptr = (lba_app_struct_t*) size;
@@ -196,29 +188,36 @@ uint8_t USB_App_Class_Callback
 
         if(data != NULL)
         {
+            debug_printf("USB_MSC_DEVICE_READ_REQUEST lun %u size %u offset 0x%08x\r\n",
+                    lba_data_ptr->lun, lba_data_ptr->size, lba_data_ptr->offset);
             *data = images[lba_data_ptr->lun] + lba_data_ptr->offset;
         }
         break;
     case USB_MSC_DEVICE_WRITE_REQUEST:
         lba_data_ptr = (lba_app_struct_t*) size;
-        if(data != NULL)
-        {
-            *data = sector_buffer;
+        if(data != NULL) {
+            if (g_disk.writing) {
+                debug_printf("USB_MSC_DEVICE_WRITE_REQUEST busy\r\n");
+                *data = NULL;
+                // this is ignored!
+                //error = USBERR_ENDPOINT_STALLED;
+            } else if (lba_data_ptr->size > sizeof(sector_buffer)) {
+                debug_printf("USB_MSC_DEVICE_WRITE_REQUEST too big %u > %u\r\n",
+                        lba_data_ptr->size, sizeof(sector_buffer));
+                *data = NULL;
+            } else {
+                debug_printf("USB_MSC_DEVICE_WRITE_REQUEST size %u offset 0x%08x\r\n",
+                        lba_data_ptr->size, lba_data_ptr->offset);
+                g_disk.writing = TRUE;
+                *data = sector_buffer;
+            }
+        } else {
+            debug_printf("USB_MSC_DEVICE_WRITE_REQUEST no data\r\n");
         }
         break;
     case USB_MSC_DEVICE_FORMAT_COMPLETE:
         break;
     case USB_MSC_DEVICE_REMOVAL_REQUEST:
-        prevent_removal_ptr = (uint8_t *) size;
-        if (SUPPORT_DISK_LOCKING_MECHANISM)
-        {
-            g_disk.disk_lock = *prevent_removal_ptr;
-        }
-        else if ((!SUPPORT_DISK_LOCKING_MECHANISM) && (!(*prevent_removal_ptr)))
-        {
-            /*there is no support for disk locking and removal of medium is enabled*/
-            /* code to be added here for this condition, if required */
-        }
         break;
     case USB_MSC_DEVICE_GET_INFO:
         device_lba_info_ptr = (device_lba_info_struct_t*) size;
@@ -251,12 +250,9 @@ void disk_init()
 
     OS_Mem_zero(&g_msd_config, sizeof(msc_config_struct_t));
 
-    msc_application_callback.callback = USB_App_Device_Callback;
-    msc_application_callback.arg = &g_disk.app_handle;
-
     /* Register the callbacks to lower layers */
-    g_msd_config.msc_application_callback = msc_application_callback;
-    g_msd_config.vendor_req_callback = vend_req_callback;
+    g_msd_config.msc_application_callback.callback = USB_App_Device_Callback;
+    g_msd_config.msc_application_callback.arg = &g_disk.app_handle;
     g_msd_config.class_specific_callback.callback = USB_App_Class_Callback;
     g_msd_config.class_specific_callback.arg = &g_disk.app_handle;
     g_msd_config.desc_callback_ptr = &desc_callback;

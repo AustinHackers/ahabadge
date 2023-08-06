@@ -43,8 +43,10 @@
 #include <stdlib.h>
 #include "fsl_debug_console.h"
 
+#ifndef BIG_ENDIAN
 #define BIG_ENDIAN           0
 #define LITTLE_ENDIAN        1
+#endif
 
 #define ENDIANNESS           LITTLE_ENDIAN
 

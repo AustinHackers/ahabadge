@@ -32,6 +32,7 @@
 #include "disk.h"
 #include "epaper.h"
 #include "flash.h"
+#include "lptmr.h"
 #include "fsl_clock_manager.h"
 #include "fsl_cmp_driver.h"
 #include "fsl_dac_driver.h"
@@ -39,15 +40,20 @@
 #include "fsl_dma_driver.h"
 #include "fsl_flexio_driver.h"
 #include "fsl_gpio_driver.h"
-#include "fsl_lptmr_driver.h"
 #include "fsl_lpuart_driver.h"
 #include "fsl_os_abstraction.h"
 #include "fsl_pit_driver.h"
 #include "fsl_smc_hal.h"
 #include "fsl_tpm_driver.h"
-#include "radio.h"
-#include "text.h"
+#include "fsl_rcm_hal.h"
 
+#ifdef BADGE_V1
+#warning "Building for hardware v1"
+#else
+#warning "Building for hardware v2"
+#endif
+
+#define USE_HIRC 1
 
 static int current_image = 0;
 static volatile int cue_next_image = 0;
@@ -97,8 +103,14 @@ static const clock_manager_user_config_t g_defaultClockConfigRun = {
     .simConfig =
     {   
         .er32kSrc  = kClockEr32kSrcOsc0,  // ERCLK32K selection, use OSC.
-        .outdiv1   = 0U,
-        .outdiv4   = 1U,
+        /* 
+         * 1-1 works
+         * 1-3 works
+         * 2-1 USB almost works
+         * 2-3 USB doesn't work
+         */
+        .outdiv1   = 1U, // 48MHz / 2 = 24MHz
+        .outdiv4   = 3U, // 24MHz / 4 = 6MHz
     },
     .oscerConfig =
     {
@@ -110,7 +122,11 @@ static const clock_manager_user_config_t g_defaultClockConfigRun = {
 /* Idle the CPU in Very Low Power Wait (VLPW) */
 /* This should be the lowest power mode where the PIT still functions. */
 static const smc_power_mode_config_t g_idlePowerMode = {
+#if USE_HIRC
+    .powerModeName = kPowerModeWait,
+#else
     .powerModeName = kPowerModeVlpw,
+#endif
 };
 
 /* Switch GPIO pins */
@@ -191,16 +207,6 @@ static const gpio_input_pin_user_config_t g_switchSelect = {
     .config.interrupt = kPortIntEitherEdge,
 };
 
-/* LPTMR configurations */
-static const lptmr_user_config_t g_lptmrConfig = {
-    .timerMode = kLptmrTimerModeTimeCounter,
-    .freeRunningEnable = false,
-    .prescalerEnable = true,
-    .prescalerClockSource = kClockLptmrSrcLpoClk,
-    .prescalerValue = kLptmrPrescalerDivide2,
-    .isInterruptEnabled = true,
-};
-
 /* PIT config */
 static const pit_user_config_t g_pitChan0 = {
     .periodUs = 193000,
@@ -233,9 +239,13 @@ static cmp_dac_config_t g_cmpDacConf = {
     .dacValue = 32,
 };
 
-/* LPUART0 config */
+/* Laser LPUART config */
 static lpuart_user_config_t g_lpuartConfig = {
+#if USE_HIRC
     .clockSource = kClockLpuartSrcIrc48M,
+#else
+    .clockSource = kClockLpuartSrcMcgIrClk,
+#endif
     .baudRate = 9600,
     .parityMode = kLpuartParityEven,
     .stopBitCount = kLpuartOneStopBit,
@@ -246,9 +256,23 @@ static lpuart_user_config_t g_lpuartConfig = {
 static flexio_user_config_t g_flexioConfig = {
     .useInt = false,
     .onDozeEnable = true,
-    .onDebugEnable = false,
+    .onDebugEnable = true,
     .fastAccessEnable = true,
 };
+
+/*
+ * Run FLEXIO at 4MHz and clock out a bit every 0.25 us.
+ * We use 5 bits for each NZR symbol.
+ * For an NZR zero we clock out one 1 bit (0.25 us) and four 0 bits (1 us).
+ * For an NZR one we clock out four 1 bits (1 us) and one 0 bit (0.25 us).
+ * This is within the WS2812B spec for "short" time of 0.2 to 0.5 us and
+ * "long" time of 0.75 to 1.05 us.
+ */
+#if USE_HIRC
+static const int flexio_clk_div = 12;
+#else
+static const int flexio_clk_div = 2;
+#endif
 
 static flexio_timer_config_t g_timerConfig = {
     .trgsel = FLEXIO_HAL_TIMER_TRIGGER_SEL_SHIFTnSTAT(0),
@@ -263,7 +287,7 @@ static flexio_timer_config_t g_timerConfig = {
     .timena = kFlexioTimerEnableOnTriggerHigh,
     .tstop = kFlexioTimerStopBitDisabled,
     .tstart = kFlexioTimerStartBitDisabled,
-    .timcmp = (32 * 2 - 1) << 8 | (10 - 1), // 32 bits at 2.4 MHz
+    .timcmp = (30 * 2 - 1) << 8 | (flexio_clk_div / 2 - 1), // 30 bits at 4 Mbps
 };
 
 static flexio_shifter_config_t g_shifterConfig = {
@@ -278,9 +302,11 @@ static flexio_shifter_config_t g_shifterConfig = {
 };
 
 #ifdef BADGE_V1
-static const g_buzzer_tpm_ch = 3;
+static const int g_buzzer_tpm_ch = 3;
+static const int g_laser_LPUART_UNIT = 1;
 #else
-static const g_buzzer_tmp_ch = 1;
+static const int g_buzzer_tpm_ch = 1;
+static const int g_laser_LPUART_UNIT = 0;
 #endif
 
 
@@ -294,42 +320,66 @@ static uint8_t rxBuff[1];
 static uint8_t txBuff[] = { 'R' };
 static uint8_t laser_on;
 static uint8_t seizure_on = 1;
-static uint32_t shift0_buf[3];
+static uint32_t shift0_buf[4];
 static uint32_t blank_led;
-static uint8_t image0[232 * 128 / 8];
-static uint8_t image1[232 * 128 / 8];
+static uint8_t image0[EPD_W * EPD_H / 8];
+static uint8_t image1[EPD_W * EPD_H / 8];
 
-void read_sun_raster(uint8_t *in, uint8_t *out)
+int read_sun_raster(uint8_t *in, uint8_t *out)
 {
-    int x, y;
-    int stride = (232 + 15) / 16 * 16;
-
-    in += 32; /* skip header, don't even check it */
-    for (y = 0; y < 128; ++y) {
-        for (x = 0; x < 232; x += 8) {
+    struct {
+        uint32_t magic;
+        uint32_t width;
+        uint32_t height;
+        uint32_t depth;
+    } *hdr = (void *)in;
+    if (hdr->magic != __builtin_bswap32(0x59a66a95))
+        return -1;
+    if (hdr->depth != __builtin_bswap32(1))
+        return -2;
+    uint32_t w = __builtin_bswap32(hdr->width);
+    uint32_t stride = (w + 15) / 16 * 16;
+    if (w > EPD_W)
+        w = EPD_W;
+    uint32_t h = __builtin_bswap32(hdr->height);
+    if (h > EPD_H)
+        h = EPD_H;
+    in += 32; /* skip header */
+    for (uint32_t y = 0; y < h; ++y) {
+        for (uint32_t x = 0; x < w; x += 8) {
             uint8_t v = in[(y * stride + x) / 8];
             v = ((v >> 1) & 0x55) | ((v & 0x55) << 1);
             v = ((v >> 2) & 0x33) | ((v & 0x33) << 2);
             v = ((v >> 4) & 0x0F) | ((v & 0x0F) << 4);
-            out[(y * 232 + x) / 8] = v;
+            out[(y * w + x) / 8] = v;
         }
     }
+    return 0;
 }
 
 void led(uint8_t red, uint8_t green, uint8_t blue)
 {
-    FLEXIO_Type *fiobase = g_flexioBase[0];
-    uint32_t color = (green << 16) | (red << 8) | blue;
+    uint32_t color = ((uint32_t)green << 16) | ((uint32_t)red << 8) | blue;
     int i;
     for (i = 0; i < 24; ++i) {
-        shift0_buf[i / 10] <<= 3;
-        shift0_buf[i / 10] |= 4 | ((color >> (22 - i)) & 2);
+        shift0_buf[i / 6] <<= 5;
+        if ((color >> (23 - i)) & 1)
+            shift0_buf[i / 6] |= 0x1e;
+        else
+            shift0_buf[i / 6] |= 0x10;
     }
-    shift0_buf[2] <<= 3 * 6;
+    // the high 30 bits of each "word" are clocked out
+    shift0_buf[0] <<= 2;
+    shift0_buf[1] <<= 2;
+    shift0_buf[2] <<= 2;
+    shift0_buf[3] <<= 2;
 
-    DMA_DRV_ConfigTransfer(&g_fioChan, kDmaMemoryToPeripheral, 4,
+    DMA_DRV_ConfigTransfer(&g_fioChan,
+            kDmaMemoryToPeripheral,
+            sizeof(shift0_buf[0]),
             (intptr_t)&shift0_buf,
-            (intptr_t)&FLEXIO_SHIFTBUFBIS_REG(fiobase, 0), sizeof(shift0_buf));
+            (intptr_t)&FLEXIO_SHIFTBUFBIS_REG(FLEXIO, 0),
+            sizeof(shift0_buf));
     DMA_DRV_StartChannel(&g_fioChan);
 }
 
@@ -359,15 +409,15 @@ static void lptmr_call_back(void)
             txBuff[0] = colors[foo];
             foo = (foo + 1) % 3;
         }
-        LPUART_DRV_SendData(1, txBuff, laser_pulse_length);
+        LPUART_DRV_SendData(g_laser_LPUART_UNIT, txBuff, laser_pulse_length);
     }
 
     /* countdown to turn off LED */
     if (blank_led) {
-        if (blank_led == 1) {
+        --blank_led;
+        if (blank_led == 0) {
             led(0, 0, 0);
         }
-        blank_led--;
     }
 }
 
@@ -425,59 +475,55 @@ void PIT_IRQHandler(void)
     }
 }
 
-static void GPIO_transition_handler(const int port)
+static void GPIO_transition_handler()
 {
-    if (GPIO_EXTRACT_PORT(g_switch1.pinName) == port) {
-        if (GPIO_DRV_ReadPinInput(g_switch1.pinName)) {
-            TPM_DRV_PwmStop(0, &param, g_buzzer_tpm_ch);
-            PIT_DRV_StopTimer(0, 0);
-        } else {
-            position = 0;
-            PIT_DRV_StartTimer(0, 0);
-        }
+#ifdef DEBUG
+    debug_printf("Switches: %c%c%c%c%c%c%c\r\n",
+            GPIO_DRV_ReadPinInput(g_switch1.pinName) ? ' ' : '1',
+            GPIO_DRV_ReadPinInput(g_switch2.pinName) ? ' ' : '2',
+            GPIO_DRV_ReadPinInput(g_switchUp.pinName) ? ' ' : 'U',
+            GPIO_DRV_ReadPinInput(g_switchDown.pinName) ? ' ' : 'D',
+            GPIO_DRV_ReadPinInput(g_switchLeft.pinName) ? ' ' : 'L',
+            GPIO_DRV_ReadPinInput(g_switchRight.pinName) ? ' ' : 'R',
+            GPIO_DRV_ReadPinInput(g_switchSelect.pinName) ? ' ' : 'S');
+#endif
+    if (GPIO_DRV_ReadPinInput(g_switch1.pinName)) {
+        TPM_DRV_PwmStop(0, &param, g_buzzer_tpm_ch);
+        PIT_DRV_StopTimer(0, 0);
+    } else {
+        position = 0;
+        PIT_DRV_StartTimer(0, 0);
     }
 
-    if (GPIO_EXTRACT_PORT(g_switch2.pinName) == port) {
-        if (GPIO_DRV_ReadPinInput(g_switch2.pinName)) {
-            LPUART_DRV_AbortSendingData(1);
-            laser_on = 0;
-        } else {
-            laser_on = 1;
-        }
+    if (GPIO_DRV_ReadPinInput(g_switch2.pinName)) {
+        LPUART_DRV_AbortSendingData(g_laser_LPUART_UNIT);
+        laser_on = 0;
+    } else {
+        laser_on = 1;
     }
 
-    if (GPIO_EXTRACT_PORT(g_switchUp.pinName) == port) {
-        if (!GPIO_DRV_ReadPinInput(g_switchUp.pinName)) {
-            txBuff[0] = 'R';
-            seizure_on = 0;
-        }
+    if (!GPIO_DRV_ReadPinInput(g_switchUp.pinName)) {
+        txBuff[0] = 'R';
+        seizure_on = 0;
     }
 
-    if (GPIO_EXTRACT_PORT(g_switchLeft.pinName) == port) {
-        if (!GPIO_DRV_ReadPinInput(g_switchLeft.pinName)) {
-            txBuff[0] = 'G';
-            seizure_on = 0;
-        }
+    if (!GPIO_DRV_ReadPinInput(g_switchLeft.pinName)) {
+        txBuff[0] = 'G';
+        seizure_on = 0;
     }
 
-    if (GPIO_EXTRACT_PORT(g_switchRight.pinName) == port) {
-        if (!GPIO_DRV_ReadPinInput(g_switchRight.pinName)) {
-            txBuff[0] = 'B';
-            seizure_on = 0;
-        }
+    if (!GPIO_DRV_ReadPinInput(g_switchRight.pinName)) {
+        txBuff[0] = 'B';
+        seizure_on = 0;
     }
 
-    if (GPIO_EXTRACT_PORT(g_switchDown.pinName) == port) {
-        if (!GPIO_DRV_ReadPinInput(g_switchDown.pinName)) {
-            txBuff[0] = 'T';
-            seizure_on = 0;
-        }
+    if (!GPIO_DRV_ReadPinInput(g_switchDown.pinName)) {
+        txBuff[0] = 'T';
+        seizure_on = 0;
     }
 
-    if (GPIO_EXTRACT_PORT(g_switchSelect.pinName) == port) {
-        if (!GPIO_DRV_ReadPinInput(g_switchSelect.pinName)) {
-            cue_next_image = 1;
-        }
+    if (!GPIO_DRV_ReadPinInput(g_switchSelect.pinName)) {
+        cue_next_image = 1;
     }
 }
 
@@ -486,15 +532,16 @@ void PORTA_IRQHandler(void)
     /* Clear interrupt flag.*/
     PORT_HAL_ClearPortIntFlag(PORTA_BASE_PTR);
 
-    GPIO_transition_handler(GPIOA_IDX);
+    GPIO_transition_handler();
 }
 
-void PORTC_IRQHandler(void)
+void PORTCD_IRQHandler(void)
 {
     /* Clear interrupt flag.*/
     PORT_HAL_ClearPortIntFlag(PORTC_BASE_PTR);
+    PORT_HAL_ClearPortIntFlag(PORTD_BASE_PTR);
 
-    GPIO_transition_handler(GPIOC_IDX);
+    GPIO_transition_handler();
 }
 
 static void lpuartTxCallback(uint32_t instance, void *state)
@@ -515,16 +562,22 @@ static void lpuartRxCallback(uint32_t instance, void *lpuartState)
     LPUART_WR_STAT(base, (stat & 0x3e000000) |
             LPUART_STAT_NF_MASK | LPUART_STAT_FE_MASK | LPUART_STAT_PF_MASK);
     if (rxBuff[0] == 'R') {
+        seizure_on = 0;
+        txBuff[0] = rxBuff[0];
         led(0xff, 0x00, 0x00);
         blank_led = 30;
         return;
     }
     if (rxBuff[0] == 'G') {
+        seizure_on = 0;
+        txBuff[0] = rxBuff[0];
         led(0x00, 0xff, 0x00);
         blank_led = 30;
         return;
     }
     if (rxBuff[0] == 'B') {
+        seizure_on = 0;
+        txBuff[0] = rxBuff[0];
         led(0x00, 0x00, 0xff);
         blank_led = 30;
         return;
@@ -555,12 +608,19 @@ static void fioDmaCallback(void *param, dma_channel_status_t status)
     DMA_DRV_StopChannel(&g_fioChan);
 }
 
+void HardFault_Handler(void)
+{
+    //debug_printf("Hard Fault!\r\n");
+    for(;;);
+}
+
 /*!
  * @brief Main function
  */
 int main (void)
 {
     /* enable clock for PORTs */
+    // XXX GPIO_DRV_InputPinInit() already does this!
     CLOCK_SYS_EnablePortClock(PORTA_IDX);
     CLOCK_SYS_EnablePortClock(PORTC_IDX);
     CLOCK_SYS_EnablePortClock(PORTD_IDX);
@@ -573,27 +633,32 @@ int main (void)
     SMC_HAL_SetProtection(SMC, kAllowPowerModeAll);
 
     /* Set system clock configuration. */
+#if USE_HIRC
     CLOCK_SYS_SetConfiguration(&g_defaultClockConfigRun);
+#else
+    CLOCK_SYS_SetConfiguration(&g_defaultClockConfigVlpr);
+#endif
 
-    /* Break everything */
-    OSA_Init();
-
-    /* Setup Debug console on LPUART0 on PTB17 */
+    /* Setup Debug console */
 #ifdef BADGE_V1
     PORT_HAL_SetMuxMode(PORTB, 17, kPortMuxAlt3);
+#if USE_HIRC
     CLOCK_SYS_SetLpuartSrc(0, kClockLpuartSrcIrc48M);
+#else
+    CLOCK_SYS_SetLpuartSrc(0, kClockLpuartSrcMcgIrClk);
+#endif
     DbgConsole_Init(0, 9600, kDebugConsoleLPUART);
 #else
     PORT_HAL_SetMuxMode(PORTD, 5, kPortMuxAlt3);
-    CLOCK_SYS_SetLpuartSrc(0, kClockLpuartSrcIrc48M);
     DbgConsole_Init(2, 9600, kDebugConsoleUART);
+#endif
+#ifdef DEBUG
+    debug_printf("Debug console initialized\r\n");
+    debug_printf("Reset src = 0x%x\r\n", RCM_HAL_GetSrcStatus(RCM, kRcmSrcAll));
 #endif
 
     /* Initialize LPTMR */
-    lptmr_state_t lptmrState;
-    LPTMR_DRV_Init(LPTMR0_IDX, &lptmrState, &g_lptmrConfig);
-    LPTMR_DRV_SetTimerPeriodUs(LPTMR0_IDX, 100000);
-    LPTMR_DRV_InstallCallback(LPTMR0_IDX, lptmr_call_back);
+    lptmr_init(lptmr_call_back);
 
     /* Initialize DMA */
     dma_state_t dma_state;
@@ -606,7 +671,6 @@ int main (void)
     /* Initialize CMP */
     CMP_DRV_Init(0, &g_cmpState, &g_cmpConf);
     CMP_DRV_ConfigDacChn(0, &g_cmpDacConf);
-    PORT_HAL_SetMuxMode(g_portBase[GPIOC_IDX], 0, kPortMuxAlt5);
     CMP_DRV_Start(0);
 
     /* Buttons */
@@ -619,48 +683,46 @@ int main (void)
     GPIO_DRV_InputPinInit(&g_switchSelect);
 
     /* Start LPTMR */
-    LPTMR_DRV_Start(LPTMR0_IDX);
+    lptmr_start();
 
-    /* Setup LPUART1 */
+    /* Setup Laser UART */
+    LPUART_DRV_Init(g_laser_LPUART_UNIT, &g_lpuartState, &g_lpuartConfig);
+    LPUART_DRV_InstallRxCallback(g_laser_LPUART_UNIT, lpuartRxCallback, rxBuff, NULL, true);
+    LPUART_DRV_InstallTxCallback(g_laser_LPUART_UNIT, lpuartTxCallback, NULL, NULL);
+    LPUART_BWR_CTRL_TXINV(g_lpuartBase[g_laser_LPUART_UNIT], 1);
+    SIM_HAL_SetLpuartRxSrcMode(SIM, g_laser_LPUART_UNIT, kSimLpuartRxsrcCmp0);
 #ifdef BADGE_V1
-    LPUART_DRV_Init(1, &g_lpuartState, &g_lpuartConfig);
-    LPUART_DRV_InstallRxCallback(1, lpuartRxCallback, rxBuff, NULL, true);
-    LPUART_DRV_InstallTxCallback(1, lpuartTxCallback, NULL, NULL);
-    LPUART_BWR_CTRL_TXINV(g_lpuartBase[1], 1);
-    PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 0, kPortMuxAlt3);
-    PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 1, kPortMuxAlt3);
+    PORT_HAL_SetMuxMode(PORTE, 0, kPortMuxAlt3);
 #else
-    LPUART_DRV_Init(0, &g_lpuartState, &g_lpuartConfig);
-    LPUART_DRV_InstallRxCallback(0, lpuartRxCallback, rxBuff, NULL, true);
-    LPUART_DRV_InstallTxCallback(0, lpuartTxCallback, NULL, NULL);
-    LPUART_BWR_CTRL_TXINV(g_lpuartBase[0], 1);
-    PORT_HAL_SetMuxMode(g_portBase[GPIOA_IDX], 1, kPortMuxAlt2);
-    PORT_HAL_SetMuxMode(g_portBase[GPIOA_IDX], 2, kPortMuxAlt2);
+    PORT_HAL_SetMuxMode(PORTA, 2, kPortMuxAlt2);
 #endif
 
     /* Setup FlexIO for the WS2812B */
-    FLEXIO_Type *fiobase = g_flexioBase[0];
+#if USE_HIRC
     CLOCK_SYS_SetFlexioSrc(0, kClockFlexioSrcIrc48M);
-    FLEXIO_DRV_Init(0, &g_flexioConfig);
-    FLEXIO_HAL_ConfigureTimer(fiobase, 0, &g_timerConfig);
-    FLEXIO_HAL_ConfigureShifter(fiobase, 0, &g_shifterConfig);
-#ifdef BADGE_V1
-    PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 20, kPortMuxAlt6);
 #else
-    PORT_HAL_SetMuxMode(g_portBase[GPIOD_IDX], 4, kPortMuxAlt6);
+    CLOCK_SYS_SetFlexioSrc(0, kClockFlexioSrcMcgIrClk);
+#endif
+    FLEXIO_DRV_Init(0, &g_flexioConfig);
+    FLEXIO_HAL_ConfigureTimer(FLEXIO, 0, &g_timerConfig);
+    FLEXIO_HAL_ConfigureShifter(FLEXIO, 0, &g_shifterConfig);
+#ifdef BADGE_V1
+    PORT_HAL_SetMuxMode(PORTE, 20, kPortMuxAlt6);
+#else
+    PORT_HAL_SetMuxMode(PORTD, 4, kPortMuxAlt6);
 #endif
     FLEXIO_DRV_Start(0);
 
-    FLEXIO_HAL_SetShifterStatusDmaCmd(fiobase, 1, true);
+    FLEXIO_HAL_SetShifterStatusDmaCmd(FLEXIO, 1, true);
     DMA_DRV_RequestChannel(kDmaAnyChannel, kDmaRequestMux0FlexIOChannel0,
             &g_fioChan);
     DMA_DRV_RegisterCallback(&g_fioChan, fioDmaCallback, NULL);
 
     /* Config buzzer on TPM0 */
 #ifdef BADGE_V1
-    PORT_HAL_SetMuxMode(g_portBase[GPIOE_IDX], 30, kPortMuxAlt3);
+    PORT_HAL_SetMuxMode(PORTE, 30, kPortMuxAlt3);
 #else
-    PORT_HAL_SetMuxMode(g_portBase[GPIOC_IDX], 2, kPortMuxAlt4);
+    PORT_HAL_SetMuxMode(PORTC, 2, kPortMuxAlt4);
 #endif
     tpm_general_config_t tmpConfig = {
         .isDBGMode = false,
@@ -671,7 +733,11 @@ int main (void)
         .triggerSource = kTpmTrigSel0,
     };
     TPM_DRV_Init(0, &tmpConfig);
+#if USE_HIRC
     TPM_DRV_SetClock(0, kTpmClockSourceModuleHighFreq, kTpmDividedBy8);
+#else
+    TPM_DRV_SetClock(0, kTpmClockSourceModuleMCGIRCLK, kTpmDividedBy1);
+#endif
 
     /* Blank LED just in case, saves power */
     led(0x00, 0x00, 0x00);
@@ -683,9 +749,12 @@ int main (void)
     EPD_Init();
 
     /* Throw up first image */
-    read_sun_raster(images[current_image], image0);
-    int ret = EPD_Draw(NULL, image0);
-    debug_printf("EPD_Draw returned %d\r\n", ret);
+    int ret = read_sun_raster(images[current_image], image0);
+    debug_printf("read_sun_raster returned %d\r\n", ret);
+    if (0 == ret) {
+        ret = EPD_Draw(NULL, image0);
+        debug_printf("EPD_Draw returned %d\r\n", ret);
+    }
     if (-1 == ret) {
         led(0xff, 0x00, 0x00);
     } else if (-2 == ret) {
@@ -697,29 +766,31 @@ int main (void)
     }
     blank_led = 30;
 
-#if 0
-    ret = radio_init();
-    debug_printf("radio_init returned %d\r\n", ret);
-    if (0 == ret) {
-        led(0x22, 0x00, 0x22);
-    }
-#endif
-
+#if USE_HIRC
     /* No good can come of this */
     disk_init();
+#endif
 
     /* We're done, everything else is triggered through interrupts */
     for(;;) {
         if (cue_next_image) {
-            int old_image = current_image;
-            current_image = (current_image + 1) % IMAGE_COUNT;
-            debug_printf("drawing %d -> %d\r\n", old_image, current_image);
-            read_sun_raster(images[old_image], image0);
-            read_sun_raster(images[current_image], image1);
-            EPD_Draw(image0, image1);
             cue_next_image = 0;
+            int old_image = current_image;
+            ret = read_sun_raster(images[old_image], image0);
+            if (0 == ret) {
+                do {
+                    current_image = (current_image + 1) % IMAGE_COUNT;
+                    ret = read_sun_raster(images[current_image], image1);
+                } while (ret != 0 && current_image != old_image);
+                debug_printf("drawing %d -> %d\r\n", old_image, current_image);
+                EPD_Draw(image0, image1);
+            }
         }
-#ifndef DEBUG
+#if !USE_HIRC
+        SMC_HAL_SetMode(SMC, &g_idlePowerMode);
+#else
+        /* This doesn't seem to save any power in HIRC and instead messes up
+         * FLEXIO */
         //SMC_HAL_SetMode(SMC, &g_idlePowerMode);
 #endif
     }

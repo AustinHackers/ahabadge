@@ -782,11 +782,11 @@ uint8_t USB_Desc_Set_Speed
 
 usb_desc_request_notify_struct_t desc_callback =
 {
-    USB_Desc_Get_Descriptor,
-    USB_Desc_Get_Interface,
-    USB_Desc_Set_Interface,
-    USB_Set_Configuration,
-    USB_Desc_Get_Entity
+    .get_desc = USB_Desc_Get_Descriptor,
+    .get_desc_interface = USB_Desc_Get_Interface,
+    .set_desc_interface = USB_Desc_Set_Interface,
+    .set_configuration = USB_Set_Configuration,
+    .get_desc_entity = USB_Desc_Get_Entity,
 };
 
 /* vim: set expandtab ts=4 sw=4: */

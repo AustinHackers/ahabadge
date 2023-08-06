@@ -7,6 +7,6 @@
 extern uint8_t *images[IMAGE_COUNT];
 
 int flash_init();
-int flash_write(uint32_t addr, uint8_t *data, uint32_t len);
+int flash_write_sector(uint32_t addr, uint8_t *data);
 
 #endif

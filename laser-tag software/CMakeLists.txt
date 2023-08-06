@@ -56,17 +56,16 @@ SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}  -DNDEBUG")
 SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}  -DFRDM_KL27Z")
 SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}  -DFREEDOM")
 
-option(BADGE_V1 "Badge Hardware V1" OFF)
-option(BADGE_V2 "Badge Hardware V2" ON)
+option(BADGE_V "Badge Hardware Version" "1")
 
-if(BADGE_V1)
+if(BADGE_V EQUAL "1")
     SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}  -DCPU_MKL27Z256VLH4")
     SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}  -DCPU_MKL27Z256VLH4")
     SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}  -DBADGE_V1")
     SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}  -DBADGE_V1")
 endif()
 
-if(BADGE_V2)
+if(BADGE_V EQUAL "2")
     SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}  -DCPU_MKL27Z256VFT4")
     SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}  -DCPU_MKL27Z256VFT4")
     SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}  -DBADGE_V2")
@@ -180,13 +179,10 @@ ADD_EXECUTABLE(hello_world
     "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/include/SSD_FTFx_Internal.h"
     "${ProjDirPath}/../KSDK_1.2.0/platform/drivers/src/flash/C90TFS/drvsrc/include/SSD_Types.h"
     "${ProjDirPath}/main.c"
+    "${ProjDirPath}/lptmr.c"
+    "${ProjDirPath}/lptmr.h"
     "${ProjDirPath}/epaper.c"
     "${ProjDirPath}/epaper.h"
-    "${ProjDirPath}/text.c"
-    "${ProjDirPath}/text.h"
-    "${ProjDirPath}/radio.c"
-    "${ProjDirPath}/radio.h"
-    "${ProjDirPath}/RFM69registers.h"
     "${ProjDirPath}/disk.c"
     "${ProjDirPath}/disk.h"
     "${ProjDirPath}/usb_descriptor.c"
