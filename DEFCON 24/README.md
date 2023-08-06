@@ -11,8 +11,8 @@ If you have a v0 or v1 badge install a 10uF cap between pins 4 and 8
 ## Getting Started
 
 Instructions for building firmware and flashing your badge is in
-[laser-tag software/README](laser-tag software/README).
+[DEFCON 24/laser-tag software/README](DEFCON%2024/laser-tag%20software/README).
 
 ## Getting Help
 
-Join #aha-badges on Freenode.
+Open an Issue but don't expect much.
